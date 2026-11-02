@@ -35,8 +35,18 @@ function getVersion(): string {
   return 'dev';
 }
 
+const devBackend = process.env.CPA_DEV_BACKEND;
+const devProxy = devBackend
+  ? Object.fromEntries(
+      ['/v0', '/v1', '/v8'].map((prefix) => [prefix, { target: devBackend }])
+    )
+  : undefined;
+
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: devProxy
+  },
   plugins: [
     react(),
     viteSingleFile({
