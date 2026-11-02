@@ -1,60 +1,54 @@
 @use '../../styles/mixins' as *;
 
 .container {
-  --log-control-height: 40px;
+  --log-control-height: 32px;
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   min-width: 0;
   min-height: 0;
 }
 
 .pageHeader {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px 24px;
   flex: none;
-}
-
-.pageTitle {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 28px;
-  line-height: 1.3;
-  font-weight: 700;
-  letter-spacing: -0.025em;
 }
 
 .tabBar {
   display: inline-flex;
-  gap: 4px;
-  padding: 3px;
-  border-radius: 10px;
-  background: var(--bg-tertiary);
+  align-items: center;
+  gap: 2px;
+  height: var(--control-h);
+  box-sizing: border-box;
+  padding: 1px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
 }
 
 .tabItem {
   @include button-reset;
-  padding: 8px 14px;
-  border-radius: 7px;
+  height: var(--control-h-sm);
+  padding: 0 10px;
+  border-radius: var(--radius-xs);
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
+  white-space: nowrap;
   cursor: pointer;
+  transition: color var(--dur-press) var(--ease-out-strong);
 }
 
 .tabActive {
-  background: var(--bg-primary);
+  background: var(--surface-1);
   color: var(--text-primary);
-  box-shadow: 0 1px 3px var(--border-color);
+  box-shadow: var(--shadow-xs);
 }
 
 .container button:focus-visible,
 .structuredFilters button:focus-visible,
 .logPanel:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
 
@@ -78,20 +72,38 @@
   overflow: hidden;
   padding: 0;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--bg-primary);
-  box-shadow: none;
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-xs);
 }
 
 .logCard {
   position: relative;
 
   > :global(.error-box),
-  > :global(.status-badge) {
+  > .callout {
     flex: none;
-    margin: 8px 12px;
+    margin: 12px 12px 0;
     max-height: 15vh;
     overflow: auto;
+  }
+}
+
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--warning-subtle);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 20px;
+
+  svg {
+    flex: none;
+    margin-top: 2px;
+    color: var(--warning-fg);
   }
 }
 
@@ -100,9 +112,10 @@
   align-items: center;
   flex: none;
   flex-wrap: wrap;
-  gap: 12px;
-  padding: 16px;
-  border-bottom: 1px solid var(--border-color);
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-1);
 
   :global(.form-group) {
     margin: 0;
@@ -121,13 +134,13 @@
   box-sizing: border-box;
   height: var(--log-control-height);
   min-height: var(--log-control-height);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  background: var(--surface-1);
   font-size: 13px;
   font-weight: 500;
   line-height: 1;
-  box-shadow: none;
+  box-shadow: var(--shadow-xs);
 }
 
 .searchInput:global(.input) {
@@ -152,7 +165,7 @@
   display: grid;
   place-items: center;
   width: 28px;
-  height: 28px;
+  height: var(--control-h-sm);
   color: var(--text-secondary);
   cursor: pointer;
 }
@@ -200,9 +213,9 @@
     display: flex;
   }
   &[aria-pressed='true'] {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    background: color-mix(in srgb, var(--primary-color) 10%, var(--bg-primary));
+    color: var(--accent-text);
+    border-color: var(--accent-border);
+    background: var(--accent-subtle);
   }
 }
 
@@ -279,6 +292,19 @@
   > :global(.hint) {
     padding: 24px;
   }
+
+  /* Unwrapped lines scroll sideways; fade the right edge so cut-off text reads as scrollable. */
+  &:has(.logPanel:not(.wrapped))::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 28px;
+    background: linear-gradient(to right, transparent, var(--surface-1));
+    pointer-events: none;
+  }
 }
 
 .logPanel {
@@ -289,7 +315,8 @@
   position: relative;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
-  background: var(--bg-primary);
+  background: var(--surface-1);
+  mask-image: linear-gradient(to bottom, transparent, black 12px);
 }
 
 .statusBar {
@@ -299,13 +326,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px 20px;
-  padding: 7px 12px;
-  border-top: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  font-size: 11px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  font-size: 12px;
   line-height: 1.5;
   font-variant-numeric: tabular-nums;
-  background: var(--bg-secondary);
+  background: var(--surface-2);
 }
 .readStatus {
   display: flex;
@@ -320,7 +347,8 @@
   flex: none;
 }
 .readStatus[data-live='true'] .statusDot {
-  background: var(--success-color);
+  background: var(--success);
+  box-shadow: 0 0 0 3px var(--success-subtle);
 }
 .bufferStatus {
   text-align: right;
@@ -366,7 +394,7 @@
   color: var(--text-secondary);
 }
 .logList {
-  padding-block: 8px;
+  padding-block: 12px 8px;
   width: max-content;
   min-width: 100%;
 }
@@ -395,9 +423,9 @@
 .rawLog,
 .logRow,
 .errorLogContent {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
-  line-height: 1.65;
+  line-height: 1.7;
   font-variant-numeric: tabular-nums;
 }
 .rawLog {
@@ -411,21 +439,20 @@
   display: grid;
   grid-template-columns: 160px minmax(0, 1fr);
   gap: 16px;
-  padding: 4px 12px 4px 16px;
+  padding: 3px 12px 3px 14px;
   border-left: 2px solid transparent;
   color: var(--text-primary);
-  &:nth-child(even) {
-    background: color-mix(in srgb, var(--bg-secondary) 20%, transparent);
-  }
 }
 .rowWarn {
-  border-left-color: var(--warning-color);
+  border-left-color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 4%, transparent);
 }
 .rowError {
-  border-left-color: var(--error-color);
+  border-left-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 5%, transparent);
 }
 .timestamp {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   white-space: nowrap;
   padding-top: 2px;
 }
@@ -446,48 +473,53 @@
   line-height: 20px;
 }
 .badge {
-  padding: 0 5px;
-  border-radius: 4px;
-  font-weight: 600;
+  padding: 0 6px;
+  border-radius: var(--radius-xs);
+  font-weight: 500;
 }
 .pill {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
 }
 .source {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   max-width: 220px;
   @include text-ellipsis;
 }
 .requestIdBadge {
   font-family: inherit;
-  color: var(--primary-color);
+  color: var(--text-secondary);
   background: transparent;
   border: 1px solid var(--border-color);
   cursor: pointer;
+
+  &:hover {
+    color: var(--accent-text);
+    border-color: var(--accent-border);
+  }
 }
 .statusSuccess {
-  color: var(--success-badge-text);
-  background: var(--success-badge-bg);
+  color: var(--success-text);
+  background: var(--success-subtle);
 }
 .statusInfo,
 .levelInfo {
-  color: var(--info-color);
-  background: color-mix(in srgb, var(--info-color) 8%, transparent);
+  color: var(--text-secondary);
+  background: var(--fill-active);
 }
 .statusWarn,
 .levelWarn {
-  color: var(--warning-text);
-  background: var(--warning-bg);
+  color: var(--warning-fg);
+  background: var(--warning-subtle);
 }
 .statusError,
 .levelError {
-  color: var(--failure-badge-text);
-  background: var(--failure-badge-bg);
+  color: var(--danger-text);
+  background: var(--danger-subtle);
 }
 .levelDebug,
 .levelTrace {
-  color: var(--text-secondary);
-  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  background: transparent;
 }
 .statusBadge {
   font-variant-numeric: tabular-nums;
@@ -496,7 +528,7 @@
   color: var(--text-primary);
 }
 .path {
-  font-weight: 600;
+  font-weight: 500;
   overflow-wrap: anywhere;
 }
 .message {
@@ -506,6 +538,7 @@
 }
 .copyButton:global(.btn) {
   position: sticky;
+  z-index: 2;
   right: 4px;
   flex: none;
   margin-left: auto;
@@ -522,6 +555,20 @@
 .errorCard {
   padding: 16px;
 }
+
+.errorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: none;
+}
+
+.errorDescription {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
 .errorBody {
   gap: 12px;
 }
@@ -536,11 +583,15 @@
   }
   :global(.item-title) {
     overflow-wrap: anywhere;
-    font-family: ui-monospace, monospace;
+    font-family: var(--font-mono);
     font-size: 13px;
   }
   :global(.item-actions) {
     flex-wrap: wrap;
+  }
+  > :global(.empty-state) {
+    border: 0;
+    background: none;
   }
 }
 .errorLogViewer {
@@ -588,7 +639,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .logRow:hover {
-    background: color-mix(in srgb, var(--primary-color) 5%, var(--bg-primary));
+    background: var(--fill-hover);
   }
   .copyButton {
     opacity: 0;
@@ -601,7 +652,7 @@
     color: var(--text-primary);
   }
   .filterChip:hover:not(:disabled) {
-    border-color: var(--primary-color);
+    border-color: var(--border-strong);
   }
 }
 
@@ -619,40 +670,78 @@
     --log-control-height: 36px;
     gap: 16px;
   }
-  .pageHeader {
-    gap: 8px 12px;
-  }
-  .pageTitle {
-    font-size: 18px;
-  }
-  .tabItem {
-    padding: 6px 8px;
-    font-size: 12px;
-  }
   .filters {
     padding: 12px;
     gap: 8px;
   }
   .searchWrapper {
-    flex-basis: calc(100% - 200px);
+    flex-basis: 100%;
+  }
+  .levelSelect {
+    flex: 1 1 auto;
+  }
+  .filterPanelLabel {
+    display: none;
+  }
+  .filterPanelToggle:global(.btn) {
+    width: var(--log-control-height);
+    padding: 0;
   }
   .toolbar {
-    gap: 4px;
     padding-left: 0;
   }
-  .wrapped .logRow {
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding: 5px 32px 5px 8px;
+  .logList {
+    width: auto;
   }
-  .wrapped .timestamp {
-    font-size: 10px;
+  .logRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 8px;
+    padding: 6px 36px 6px 10px;
+
+    &::after {
+      content: '';
+      order: 1;
+      flex-basis: 100%;
+    }
+  }
+  .rowMain {
+    display: contents;
+  }
+  .timestamp {
+    padding-top: 0;
+    line-height: 20px;
+  }
+  .timestampDate,
+  .source,
+  .ip {
+    display: none;
+  }
+  .methodBadge,
+  .path,
+  .message {
+    order: 2;
+  }
+  .methodBadge {
+    padding-left: 0;
+  }
+  .path,
+  .message {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: normal;
+  }
+  .copyButton:global(.btn) {
+    position: absolute;
+    top: 4px;
+    right: 4px;
   }
   .statusBar {
     gap: 4px;
     padding: 6px 8px;
     flex-wrap: wrap;
-    font-size: 10px;
+    font-size: 11px;
   }
   .readStatus {
     flex-wrap: wrap;
@@ -663,18 +752,15 @@
   .errorCard {
     padding: 12px;
   }
+  .errorHeader {
+    align-items: flex-start;
+  }
 }
 
 @media (max-height: 480px) {
   .container {
     --log-control-height: 36px;
     gap: 12px;
-  }
-  .pageHeader {
-    gap: 8px;
-  }
-  .pageTitle {
-    font-size: 18px;
   }
   .statusBar {
     padding-block: 3px;
