@@ -12,8 +12,9 @@
   height: 48px;
   padding: 0 6px 0 2px;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-xs);
   color: var(--text-primary);
   cursor: grab;
   transition:
@@ -46,8 +47,7 @@
 }
 
 .serving {
-  border-color: color-mix(in srgb, var(--viz-success) 55%, var(--border-color));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--viz-success) 18%, transparent);
+  border-color: var(--border-color);
 }
 
 .muted {
@@ -135,11 +135,10 @@
 
 .share {
   flex-shrink: 0;
-  font-family: $font-mono;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  color: var(--viz-success);
+  color: var(--text-secondary);
 }
 
 .chip {
@@ -201,7 +200,7 @@
   max-width: 240px;
   padding: 4px;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   background: var(--floating-surface);
   box-shadow: var(--floating-shadow);
   cursor: default;

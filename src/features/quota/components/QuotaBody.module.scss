@@ -54,7 +54,7 @@
 }
 
 .quotaReset {
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
 }
 
 /* Countdown beside the absolute reset time. The separator is a pseudo-element
@@ -143,7 +143,7 @@
   & + & {
     margin-top: 3px;
     padding-top: 9px;
-    border-top: 1px dashed color-mix(in srgb, var(--border-color) 80%, transparent);
+    border-top: 1px solid var(--border-subtle);
   }
 }
 
@@ -155,18 +155,15 @@
 }
 
 .antigravityQuotaGroupTitle {
-  font-family: $font-mono;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-tertiary);
 }
 
 .antigravityQuotaGroupDescription {
   font-size: 11px;
   line-height: 1.4;
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
 }
 
 @include mobile {

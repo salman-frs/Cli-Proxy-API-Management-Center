@@ -10,11 +10,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 11px;
-  padding: 15px 16px;
-  border-radius: 14px;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
-  background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-xs);
   transition:
     transform var(--dur-hover, 200ms) var(--ease-out-strong, ease-out),
     border-color var(--dur-hover, 200ms) var(--ease-out-strong, ease-out),
@@ -23,22 +24,20 @@
 
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-hover);
-    box-shadow: 0 12px 26px -14px rgb(0 0 0 / 0.16);
+    border-color: var(--border-strong);
   }
 }
 
 /* 首次数据到达时的一次性级联入场；切 tab / 翻页 / 刷新不重播 */
 .cardEnter {
-  animation: quota-card-in 0.45s var(--ease-out-strong, ease-out) both;
+  animation: quota-card-in 0.3s var(--ease-out-strong) both;
   animation-delay: var(--card-delay, 0s);
 }
 
 @keyframes quota-card-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 16px, 0);
+    transform: translate3d(0, 6px, 0);
   }
 }
 
@@ -79,8 +78,7 @@
   min-width: 0;
   font-family: $font-mono;
   font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-weight: 500;
   color: var(--text-primary);
   @include text-ellipsis;
 }
@@ -106,9 +104,9 @@
   min-height: 76px;
   padding: 12px 10px;
   cursor: pointer;
-  border: 1px dashed var(--border-color);
-  border-radius: 10px;
-  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
   color: var(--text-tertiary);
   transition:
     transform var(--dur-press, 160ms) var(--ease-out-strong, ease-out),
@@ -125,15 +123,14 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .idleBody:hover:not(:disabled) {
-    border-color: color-mix(in srgb, var(--primary-color) 35%, var(--border-color));
-    border-style: solid;
+    border-color: var(--border-strong);
     color: var(--text-secondary);
   }
 }
@@ -144,8 +141,7 @@
 }
 
 .idleHint {
-  font-family: $font-mono;
-  font-size: 11.5px;
+  font-size: 12.5px;
   line-height: 1.5;
   text-align: center;
 }
@@ -216,12 +212,12 @@
 /* ---------- error ---------- */
 
 .errorStrip {
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1.5;
-  color: var(--viz-failure);
-  background: color-mix(in srgb, var(--viz-failure) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--viz-failure) 32%, transparent);
-  border-radius: 9px;
+  color: var(--danger-text);
+  background: var(--danger-subtle);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm);
   padding: 8px 10px;
   overflow-wrap: anywhere;
 }
@@ -242,11 +238,12 @@
   gap: 5px;
   cursor: pointer;
   border: 1px solid var(--border-color);
-  border-radius: $radius-full;
-  background: none;
-  padding: 5px 11px;
-  font-size: 11.5px;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  padding: 0 10px;
+  height: 28px;
+  font-size: 12.5px;
+  font-weight: 500;
   line-height: 1.4;
   color: var(--text-secondary);
   white-space: nowrap;
@@ -266,15 +263,15 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .actionPill:hover:not(:disabled) {
-    border-color: var(--border-hover);
-    background: color-mix(in srgb, var(--bg-tertiary) 55%, transparent);
+    border-color: var(--border-strong);
+    background: var(--surface-3);
     color: var(--text-primary);
   }
 }

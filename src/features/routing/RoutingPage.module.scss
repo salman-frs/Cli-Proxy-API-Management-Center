@@ -17,32 +17,13 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 .page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   width: 100%;
   min-width: 0;
   /* While the floating save bar is up, leave room to scroll the last row above it. */
   padding-bottom: calc(
     var(--routing-action-bar-height, 0px) + 16px + env(safe-area-inset-bottom, 0px)
   );
-}
-
-/* ---------- header ---------- */
-
-.header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px 24px;
-  flex-wrap: wrap;
-}
-
-.title {
-  margin: 0;
-  font-size: clamp(26px, 3.2vw, 30px);
-  line-height: 1.15;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
 }
 
 /* ---------- layout ---------- */
@@ -130,8 +111,8 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 }
 
 .entryDot {
-  background: var(--viz-success);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--viz-success) 16%, transparent);
+  background: var(--success);
+  box-shadow: 0 0 0 3px var(--success-subtle);
 }
 
 .exhaustedDot {
@@ -178,10 +159,10 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 }
 
 .modelField:global(.input) {
-  height: 36px;
+  height: var(--control-h);
   padding-top: 0;
   padding-bottom: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: var(--bg-primary);
   font-size: 13px;
 }
@@ -225,7 +206,7 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
   justify-content: center;
   height: 40px;
   border: 1px dashed var(--border-primary);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   font-size: 12px;
   color: var(--text-tertiary);
   transition:
@@ -235,8 +216,8 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 }
 
 .gapHover .gapDrop {
-  border-color: var(--viz-success);
-  background: color-mix(in srgb, var(--viz-success) 6%, transparent);
+  border-color: var(--accent);
+  background: var(--accent-subtle);
   color: var(--text-primary);
 }
 
@@ -249,7 +230,7 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
   gap: 12px;
   padding: 14px $tier-pad $tier-pad;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   background: var(--bg-primary);
   transition:
     border-color var(--dur-hover) var(--ease-out-strong),
@@ -258,8 +239,8 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 }
 
 .tierHover {
-  border-color: var(--viz-success);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--viz-success) 12%, transparent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
 }
 
 .tierHead {
@@ -299,8 +280,7 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 
 .tierPriority,
 .tierPriorityChanged {
-  font-family: $font-mono;
-  font-size: 11.5px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: var(--text-tertiary);
 }
@@ -347,16 +327,16 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
 }
 
 .tierActive {
-  border-color: color-mix(in srgb, var(--viz-success) 38%, var(--border-color));
+  border-color: var(--border-strong);
 
   .tierIndex {
-    background: var(--viz-success);
-    color: #fff;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-fg);
   }
 
   .tierState {
-    color: var(--viz-success);
-    font-weight: 600;
+    color: var(--success-text);
+    font-weight: 500;
   }
 }
 
@@ -402,7 +382,7 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
   flex-direction: column;
   padding: 20px;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   background: var(--bg-primary);
 
   @media (max-width: $layout-stack) {
@@ -465,7 +445,7 @@ $label-x: $tier-pad + 1px + $index-size + 10px; // where tier names begin
   flex-direction: column;
   gap: 2px;
   padding: 3px;
-  border-radius: 11px;
+  border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--text-primary) 5%, transparent);
 }
 
