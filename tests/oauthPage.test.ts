@@ -184,16 +184,10 @@ describe('OAuth provider gallery', () => {
     }
   });
 
-  test('overrides per-pool animations with equal specificity under reduced motion', () => {
+  test('stops the sponsor card entrance and waiting pulse under reduced motion', () => {
     const styles = readFileSync('src/features/oauth/components/SponsorCard.module.scss', 'utf8');
-    const reducedMotionStart = styles.indexOf('@media (prefers-reduced-motion: reduce)');
-    const poolAnimationStart = styles.indexOf(".pool[data-pool='#{$name}']");
-    expect(poolAnimationStart).toBeGreaterThanOrEqual(0);
-    expect(reducedMotionStart).toBeGreaterThan(poolAnimationStart);
-    // 属性选择器与每个光池的动画规则保持同等优先级；仅 .pool 无法覆盖动画。
-    expect(styles.slice(reducedMotionStart)).toMatch(
-      /\.pool\[data-pool\]\s*,[^{}]*\{\s*animation:\s*none;/
-    );
+    const reducedMotion = styles.slice(styles.indexOf('@media (prefers-reduced-motion: reduce)'));
+    expect(reducedMotion).toMatch(/\.card,\s*\.site\[data-status='waiting'\] \.statusDot\s*\{\s*animation: none;/);
   });
 
   test('keeps both Kimi registration links as safe external links', async () => {

@@ -4,11 +4,7 @@ import type { ProviderFlowState } from '../hooks/useOAuthFlows';
 import { BrandGlyph } from './BrandGlyph';
 import styles from './SponsorCard.module.scss';
 
-/** 与磁贴级联同一起点：让位给页头 140ms。 */
-const CARD_ENTER_DELAY = '140ms';
-
-/** 三团光池：各自独立漂移，没有共同的旋转中心。 */
-const LIGHT_POOLS = ['a', 'b', 'c'] as const;
+const CARD_ENTER_DELAY = '80ms';
 
 export interface SponsorCardSite {
   id: string;
@@ -49,9 +45,6 @@ export function SponsorCard({
   onOpen,
 }: SponsorCardProps) {
   const titleId = useId();
-  const pools = LIGHT_POOLS.map((pool) => (
-    <span key={pool} className={styles.pool} data-pool={pool} />
-  ));
 
   return (
     <div
@@ -60,15 +53,8 @@ export function SponsorCard({
       aria-labelledby={titleId}
       style={{ '--card-delay': CARD_ENTER_DELAY } as CSSProperties}
     >
-      <div className={styles.field} aria-hidden="true">
-        {pools}
-      </div>
-      <div className={styles.rim} aria-hidden="true">
-        {pools}
-      </div>
-
       <div className={styles.head}>
-        <BrandGlyph src={icon} size={40} className={styles.glyph} />
+        <BrandGlyph src={icon} size={36} className={styles.glyph} />
         <div className={styles.headText}>
           <p className={styles.title} id={titleId}>
             {title}
@@ -138,7 +124,7 @@ function SiteEntry({
           <IconExternalLink size={12} aria-hidden="true" />
         </a>
         <span className={styles.trail} aria-hidden="true">
-          <IconPlus size={15} />
+          <IconPlus size={14} />
         </span>
       </div>
     </div>

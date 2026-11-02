@@ -9,7 +9,7 @@
 /* ---------- 壳层：局部改写全局 modal 的头/体/脚与动效 ---------- */
 
 :global(.modal).dialog {
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   transform-origin: 50% 45%;
 
   /* 全局 modal 是回弹放大 + 收缩到 0；这里换成 Premium 档：无回弹、退出更快 */
@@ -98,8 +98,8 @@
 }
 
 .headingTitle {
-  font-size: 17px;
-  font-weight: 650;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.015em;
   color: var(--text-primary);
@@ -107,10 +107,7 @@
 }
 
 .headingCaption {
-  font-family: $font-mono;
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-size: 12.5px;
   color: var(--text-tertiary);
 }
 
@@ -253,12 +250,10 @@
 
 .optional {
   padding: 1px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
-  font-family: $font-mono;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.03em;
   line-height: 1.5;
   color: var(--text-tertiary);
 }
@@ -398,11 +393,11 @@
   justify-content: center;
   gap: 7px;
   flex-shrink: 0;
-  height: 36px;
-  padding: 0 16px;
-  border-radius: 999px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   white-space: nowrap;
   transition:
@@ -501,10 +496,8 @@
   gap: 9px;
   min-width: 0;
   margin: 0;
-  font-family: $font-mono;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.01em;
   color: var(--text-primary);
 }
 
@@ -636,10 +629,6 @@
 /* ---------- 赞助商对话框（Kimi）：延续卡片的品牌蓝 ---------- */
 
 :global(.modal).sponsorDialog {
-  background:
-    radial-gradient(90% 60% at 100% 0%, sponsor-tint(12%), transparent 60%), var(--bg-primary);
-
-  /* 与赞助卡一致：图标自带圆角方块，直接铺满，不再套一层描边容器 */
   .headingGlyph {
     border: 0;
     background: none;
@@ -651,12 +640,6 @@
     height: 44px;
   }
 
-  .primary {
-    background: #{$sponsor-blue-strong};
-    color: #fff;
-  }
-
-  .primary:focus-visible,
   .inlineLink:focus-visible {
     outline-color: #{$sponsor-blue};
   }
@@ -666,15 +649,6 @@
     text-decoration-color: sponsor-tint(40%);
   }
 }
-
-@media (hover: hover) and (pointer: fine) {
-  :global(.modal).sponsorDialog .primary:hover:not(:disabled) {
-    background: #{$sponsor-blue-strong-hover};
-    box-shadow: 0 10px 22px -10px sponsor-tint(70%);
-  }
-}
-
-/* ---------- 窄屏 ---------- */
 
 @include mobile {
   :global(.modal).dialog {

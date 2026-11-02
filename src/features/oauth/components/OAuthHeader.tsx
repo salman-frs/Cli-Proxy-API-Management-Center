@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { PageHeader } from '@/components/ui/PageHeader';
 import styles from './OAuthHeader.module.scss';
 
 export interface OAuthHeaderProps {
@@ -15,34 +16,26 @@ export function OAuthHeader({ providerCount, waitingCount, addedCount }: OAuthHe
   const { t } = useTranslation();
 
   return (
-    <header className={styles.header}>
-      <h1 className={styles.title} data-reveal>
-        {t('nav.oauth', { defaultValue: 'OAuth' })}
-      </h1>
-      <p className={styles.meta} data-reveal>
-        <span>{t('auth_login.meta_providers', { count: providerCount })}</span>
-        {waitingCount > 0 && (
-          <>
-            <span className={styles.metaDot} aria-hidden="true">
-              ·
-            </span>
+    <PageHeader
+      title={t('nav.oauth', { defaultValue: 'OAuth' })}
+      description={t('auth_login.page_description')}
+      meta={
+        <>
+          <span>{t('auth_login.meta_providers', { count: providerCount })}</span>
+          {waitingCount > 0 && (
             <span className={styles.metaWaiting}>
               <span className={styles.pulse} aria-hidden="true" />
               {t('auth_login.meta_waiting', { count: waitingCount })}
             </span>
-          </>
-        )}
-        {addedCount > 0 && (
-          <>
-            <span className={styles.metaDot} aria-hidden="true">
-              ·
-            </span>
+          )}
+          {addedCount > 0 && (
             <span className={styles.metaAdded}>
+              <span className={styles.addedDot} aria-hidden="true" />
               {t('auth_login.meta_added', { count: addedCount })}
             </span>
-          </>
-        )}
-      </p>
-    </header>
+          )}
+        </>
+      }
+    />
   );
 }

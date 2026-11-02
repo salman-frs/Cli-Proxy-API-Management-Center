@@ -8,8 +8,6 @@
  * ============================================================ */
 
 $sponsor-blue: #1783ff;
-$sponsor-blue-strong: #0a6fe6;
-$sponsor-blue-strong-hover: #0862cc;
 
 @function sponsor-ink() {
   @return color-mix(in srgb, #{$sponsor-blue} 74%, var(--text-primary));

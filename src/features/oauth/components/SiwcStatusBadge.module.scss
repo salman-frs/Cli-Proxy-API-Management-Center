@@ -10,8 +10,8 @@
   border: 1px solid color-mix(in srgb, var(--siwc-tone) 26%, transparent);
   border-radius: $radius-full;
   background: color-mix(in srgb, var(--siwc-tone) 9%, transparent);
-  font-family: $font-mono;
-  font-size: 11px;
+  font-family: $font-family;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.35;
   white-space: nowrap;
