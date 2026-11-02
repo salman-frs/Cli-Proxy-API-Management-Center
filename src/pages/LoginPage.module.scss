@@ -9,50 +9,42 @@
   overflow: hidden;
   background: var(--login-bg);
   color: var(--text-primary);
-
-  // 移动端顶部点阵横幅的高度
-  --hero-band: clamp(200px, 38dvh, 340px);
 }
 
-.brandPanel {
-  position: relative;
-  flex: 1.15 1 0;
-  min-width: 0;
-  height: 100%;
-  overflow: hidden;
-
-  // 移动端：点阵收为页面顶部的横幅，铺在品牌栏之后、向下淡入底色，表单在其下方
-  @media (max-width: $breakpoint-mobile) {
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 0;
-    height: var(--hero-band);
-    pointer-events: none;
-  }
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--login-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--login-grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center -1px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 38%, black 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 38%, black 0%, transparent 72%);
 }
 
 .formPanel {
-  flex: 1 1 0;
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
   min-width: min(400px, 100%);
-  max-width: 640px;
   height: 100%;
   min-height: 0;
   display: grid;
   // 列必须允许收缩到 0，否则长文案/固定宽度控件会把列撑出面板
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr;
-  padding: clamp(20px, 3.5vh, 36px) clamp(24px, 4vw, 56px);
+  padding: clamp(16px, 3vh, 28px) clamp(20px, 3vw, 40px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
 
   @media (max-width: $breakpoint-mobile) {
-    position: relative;
-    z-index: 1;
     min-width: 0;
-    max-width: none;
-    padding: 20px 24px;
+    padding: 16px 20px;
   }
 }
 
@@ -168,7 +160,45 @@
   margin-block: auto;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  animation: headingRise 480ms var(--ease-out-strong) 120ms both;
+}
+
+.headingLogo {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 1px var(--border-color),
+    0 8px 24px -8px rgba(0, 0, 0, 0.35);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.keyHint {
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 12.5px;
+  line-height: 1.55;
+  text-align: center;
+  color: var(--text-tertiary);
+  animation: chromeFade 400ms ease 360ms both;
 }
 
 @keyframes headingRise {
@@ -184,12 +214,11 @@
 
 .title {
   margin: 0;
-  animation: headingRise 480ms var(--ease-out-strong) 160ms both;
-  font-size: clamp(26px, 2.2vw, 32px);
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--login-title);
 }
 
 @media (max-height: 680px) {
@@ -204,15 +233,11 @@
 
 @media (max-height: 560px) {
   .title {
-    font-size: 24px;
+    font-size: 20px;
   }
-}
 
-// 移动端：表单落在顶部点阵横幅下缘附近，点阵在标题之上，不压住输入区。
-// 放在矮屏规则之后以覆盖其 padding；极矮屏（<560px）直接从顶部排布，交给滚动兜底。
-@media (max-width: $breakpoint-mobile) and (min-height: 560px) {
-  .main {
-    padding-top: calc(var(--hero-band) - 128px);
+  .headingLogo {
+    display: none;
   }
 }
 
@@ -247,7 +272,7 @@
 }
 
 .container[data-phase='exiting'] {
-  .brandPanel,
+  .backdrop,
   .topBar {
     animation: exitToBase 320ms cubic-bezier(0.4, 0, 0.2, 1) both;
   }
@@ -257,7 +282,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .brandPanel,
+    .backdrop,
     .topBar,
     .main > * {
       animation: exitToBase 150ms ease both;

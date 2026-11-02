@@ -14,7 +14,6 @@ import { isSupportedLanguage } from '@/utils/language';
 import { INLINE_LOGO_JPEG } from '@/assets/logoInline';
 import type { ApiError } from '@/types';
 import { LegacyBackendError } from '@/services/api/legacyBackendProbe';
-import { DotMatrixHero } from './login/DotMatrixHero';
 import { LoginForm } from './login/LoginForm';
 import { resolveLoginRedirect } from '@/router/loginRedirect';
 import styles from './LoginPage.module.scss';
@@ -246,9 +245,7 @@ export function LoginPage() {
 
   return (
     <div className={styles.container} data-phase={phase === 'exiting' ? 'exiting' : undefined}>
-      <div className={styles.brandPanel}>
-        <DotMatrixHero />
-      </div>
+      <div className={styles.backdrop} aria-hidden="true" />
 
       <div className={styles.formPanel}>
         {/* 自动登录启动页自带大徽标与品牌名，此时不再渲染顶栏，避免重复 */}
@@ -288,7 +285,11 @@ export function LoginPage() {
             </div>
           ) : (
             <div className={styles.column}>
-              <h1 className={styles.title}>{t('splash.subtitle')}</h1>
+              <div className={styles.heading}>
+                <img src={INLINE_LOGO_JPEG} alt="" className={styles.headingLogo} />
+                <h1 className={styles.title}>{t('login.title')}</h1>
+                <p className={styles.subtitle}>{t('login.subtitle')}</p>
+              </div>
               <LoginForm
                 apiBase={apiBase}
                 detectedBase={detectedBase}
@@ -306,6 +307,7 @@ export function LoginPage() {
                 onRememberPasswordChange={setRememberPassword}
                 onSubmit={handleSubmit}
               />
+              <p className={styles.keyHint}>{t('login.key_hint')}</p>
             </div>
           )}
         </main>

@@ -9,38 +9,38 @@
 @mixin login-tokens-light {
   color-scheme: light;
 
-  --login-bg: #faf9f5;
-  --login-dot-color: #1c1917;
-  --login-title: #1c1917;
+  --login-bg: #f6f6f7;
+  --login-grid: rgba(23, 23, 23, 0.05);
+  --login-title: #171717;
 
-  --login-text: #1c1917;
-  --login-text-muted: #57534e;
-  --login-text-faint: #8a847e;
+  --login-text: #171717;
+  --login-text-muted: #5f5f66;
+  --login-text-faint: #808088;
 
-  --login-field-bg: rgba(28, 25, 23, 0.025);
+  --login-field-bg: #ffffff;
   --login-field-bg-focus: #ffffff;
-  --login-readout-bg: rgba(28, 25, 23, 0.045);
-  --login-border: rgba(28, 25, 23, 0.12);
-  --login-border-hover: rgba(28, 25, 23, 0.24);
-  --login-focus-border: rgba(28, 25, 23, 0.55);
-  --login-focus-ring: rgba(28, 25, 23, 0.07);
-  --login-hover-bg: rgba(28, 25, 23, 0.06);
-  --login-outline: rgba(28, 25, 23, 0.5);
+  --login-readout-bg: rgba(23, 23, 23, 0.04);
+  --login-border: rgba(23, 23, 23, 0.12);
+  --login-border-hover: rgba(23, 23, 23, 0.24);
+  --login-focus-border: #006bff;
+  --login-focus-ring: rgba(0, 107, 255, 0.12);
+  --login-hover-bg: rgba(23, 23, 23, 0.05);
+  --login-outline: rgba(0, 107, 255, 0.6);
 
-  --login-submit-bg: #1c1917;
-  --login-submit-hover: #000000;
-  --login-submit-fg: #fafaf9;
+  --login-submit-bg: #171717;
+  --login-submit-hover: #383838;
+  --login-submit-fg: #fafafa;
 
-  --login-error: #b3402f;
+  --login-error: #c4282d;
 
   --login-dropdown-bg: #ffffff;
-  --login-dropdown-hover: rgba(28, 25, 23, 0.05);
-  --login-dropdown-active: rgba(28, 25, 23, 0.08);
-  --login-dropdown-border: rgba(28, 25, 23, 0.1);
-  --login-dropdown-shadow: 0 16px 36px rgba(28, 25, 23, 0.12);
+  --login-dropdown-hover: rgba(23, 23, 23, 0.05);
+  --login-dropdown-active: rgba(23, 23, 23, 0.08);
+  --login-dropdown-border: rgba(23, 23, 23, 0.08);
+  --login-dropdown-shadow: 0 0 0 1px rgba(23, 23, 23, 0.08), 0 12px 32px rgba(23, 23, 23, 0.12);
 
-  --login-loader-track: rgba(28, 25, 23, 0.1);
-  --login-loader-bar: #1c1917;
+  --login-loader-track: rgba(23, 23, 23, 0.1);
+  --login-loader-bar: #171717;
 
   // 共享组件 token
   --bg-secondary: var(--login-bg);
@@ -50,10 +50,6 @@
   --text-tertiary: var(--login-text-faint);
   --border-color: var(--login-border);
   --border-hover: var(--login-border-hover);
-  --primary-color: #1c1917;
-  --primary-hover: #000000;
-  --primary-active: #292524;
-  --primary-contrast: #ffffff;
   --shadow: none;
   --shadow-lg: var(--login-dropdown-shadow);
 }
@@ -61,50 +57,46 @@
 @mixin login-tokens-dark {
   color-scheme: dark;
 
-  --login-bg: #000000;
-  --login-dot-color: #e2e8f0;
-  --login-title: #ffffff;
+  --login-bg: #08080a;
+  --login-grid: rgba(237, 237, 239, 0.045);
+  --login-title: #ededef;
 
-  --login-text: #f5f5f4;
-  --login-text-muted: #a3a3a3;
-  --login-text-faint: #6b6b6b;
+  --login-text: #ededef;
+  --login-text-muted: #a1a1aa;
+  --login-text-faint: #75757e;
 
-  --login-field-bg: rgba(255, 255, 255, 0.03);
-  --login-field-bg-focus: rgba(255, 255, 255, 0.05);
-  --login-readout-bg: rgba(255, 255, 255, 0.045);
-  --login-border: rgba(255, 255, 255, 0.1);
-  --login-border-hover: rgba(255, 255, 255, 0.22);
-  --login-focus-border: rgba(255, 255, 255, 0.5);
-  --login-focus-ring: rgba(255, 255, 255, 0.06);
-  --login-hover-bg: rgba(255, 255, 255, 0.06);
-  --login-outline: rgba(255, 255, 255, 0.55);
+  --login-field-bg: rgba(237, 237, 239, 0.03);
+  --login-field-bg-focus: rgba(237, 237, 239, 0.05);
+  --login-readout-bg: rgba(237, 237, 239, 0.045);
+  --login-border: rgba(237, 237, 239, 0.1);
+  --login-border-hover: rgba(237, 237, 239, 0.2);
+  --login-focus-border: #3b8bff;
+  --login-focus-ring: rgba(59, 139, 255, 0.18);
+  --login-hover-bg: rgba(237, 237, 239, 0.06);
+  --login-outline: rgba(59, 139, 255, 0.7);
 
-  --login-submit-bg: #f5f5f4;
-  --login-submit-hover: #ffffff;
+  --login-submit-bg: #ededef;
+  --login-submit-hover: #fafafa;
   --login-submit-fg: #0a0a0a;
 
-  --login-error: #f2a59a;
+  --login-error: #ff7a7e;
 
-  --login-dropdown-bg: #111111;
-  --login-dropdown-hover: rgba(255, 255, 255, 0.07);
-  --login-dropdown-active: rgba(255, 255, 255, 0.1);
-  --login-dropdown-border: rgba(255, 255, 255, 0.1);
-  --login-dropdown-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  --login-dropdown-bg: #18181b;
+  --login-dropdown-hover: rgba(237, 237, 239, 0.07);
+  --login-dropdown-active: rgba(237, 237, 239, 0.1);
+  --login-dropdown-border: rgba(237, 237, 239, 0.08);
+  --login-dropdown-shadow: 0 0 0 1px rgba(237, 237, 239, 0.08), 0 16px 40px rgba(0, 0, 0, 0.7);
 
-  --login-loader-track: rgba(255, 255, 255, 0.1);
-  --login-loader-bar: #f5f5f4;
+  --login-loader-track: rgba(237, 237, 239, 0.1);
+  --login-loader-bar: #ededef;
 
   --bg-secondary: var(--login-bg);
-  --bg-primary: #0e0e0e;
+  --bg-primary: #131316;
   --text-primary: var(--login-text);
   --text-secondary: var(--login-text-muted);
   --text-tertiary: var(--login-text-faint);
   --border-color: var(--login-border);
   --border-hover: var(--login-border-hover);
-  --primary-color: #f5f5f4;
-  --primary-hover: #ffffff;
-  --primary-active: #e7e5e4;
-  --primary-contrast: #0a0a0a;
   --shadow: none;
   --shadow-lg: var(--login-dropdown-shadow);
 }
