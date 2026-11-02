@@ -1,0 +1,37 @@
+.logo {
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: var(--radius-xs);
+}
+
+.themeSurface {
+  box-sizing: border-box;
+  padding: 15%;
+  border-radius: var(--radius-xs);
+  background: #000;
+
+  [data-theme='dark'] & {
+    background: #fff;
+  }
+}
+
+.darkOnly {
+  display: none;
+
+  [data-theme='dark'] & {
+    display: block;
+  }
+}
+
+.lightOnly {
+  [data-theme='dark'] & {
+    display: none;
+  }
+}
+
+.invertOnDark {
+  [data-theme='dark'] & {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}

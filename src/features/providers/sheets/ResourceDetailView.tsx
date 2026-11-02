@@ -58,7 +58,7 @@ export function ResourceDetailView({ resource, usageByProvider }: ResourceDetail
     };
 
     return (
-      <div>
+      <div className={styles.detailView}>
         <div className={styles.detailHeader}>
           <div className={styles.sectionTitle}>{resource.name ?? resource.identifier}</div>
           <p className={styles.sectionDesc}>
@@ -79,7 +79,7 @@ export function ResourceDetailView({ resource, usageByProvider }: ResourceDetail
           ))}
         </div>
 
-        <dl className={styles.dl} style={{ marginTop: 16 }}>
+        <dl className={styles.dl}>
           <div>
             <dt className={styles.dt}>{t('providersPage.detail.fields.identifier')}</dt>
             <dd className={styles.dd}>{firstKey ? maskApiKey(firstKey) : resource.identifier}</dd>
@@ -121,7 +121,7 @@ export function ResourceDetailView({ resource, usageByProvider }: ResourceDetail
   const apiKeyEntries = openaiConfig?.apiKeyEntries ?? [];
 
   return (
-    <div>
+    <div className={styles.detailView}>
       <div className={styles.detailHeader}>
         <div className={styles.sectionTitle}>{resource.name ?? resource.identifier}</div>
       </div>
@@ -172,18 +172,16 @@ export function ResourceDetailView({ resource, usageByProvider }: ResourceDetail
         </div>
       ) : null}
 
-      <div style={{ marginTop: 16 }}>
-        <Collapsible label={t('providersPage.detail.metadataTitle')}>
-          <dl className={styles.dl}>
-            {metadata.map(([key, value]) => (
-              <div key={key}>
-                <dt className={styles.dt}>{t(`providersPage.detail.fields.${key}`)}</dt>
-                <dd className={styles.dd}>{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </Collapsible>
-      </div>
+      <Collapsible label={t('providersPage.detail.metadataTitle')}>
+        <dl className={styles.dl}>
+          {metadata.map(([key, value]) => (
+            <div key={key}>
+              <dt className={styles.dt}>{t(`providersPage.detail.fields.${key}`)}</dt>
+              <dd className={styles.dd}>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </Collapsible>
     </div>
   );
 }

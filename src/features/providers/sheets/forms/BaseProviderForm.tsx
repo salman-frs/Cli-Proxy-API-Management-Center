@@ -495,8 +495,10 @@ export function BaseProviderForm({
 
   return (
     <form id={formId} className={styles.form} onSubmit={handleSubmit} noValidate>
-      {/* 基础字段 */}
-      <div className={styles.section}>
+      <section className={styles.formSection} aria-labelledby={`${fid}-connection`}>
+        <h3 id={`${fid}-connection`} className={styles.formSectionTitle}>
+          {t('providersPage.form.sections.connection')}
+        </h3>
         {descriptor.supportsName ? (
           <div className={styles.field}>
             <label className={styles.label} htmlFor={`${fid}-name`}>
@@ -561,12 +563,6 @@ export function BaseProviderForm({
           <div className={styles.field}>
             <label className={styles.label} htmlFor={`${fid}-baseUrl`}>
               {t('providersPage.form.baseUrl')}
-              {descriptor.baseUrlRequired ? (
-                <span className={styles.labelHint}>
-                  {' '}
-                  · {t('providersPage.form.baseUrlRequiredHint')}
-                </span>
-              ) : null}
             </label>
             <input
               id={`${fid}-baseUrl`}
@@ -576,6 +572,11 @@ export function BaseProviderForm({
               placeholder="https://api.example.com"
               disabled={mutating}
             />
+            {descriptor.baseUrlRequired ? (
+              <span className={styles.labelHint}>
+                {t('providersPage.form.baseUrlRequiredHint')}
+              </span>
+            ) : null}
           </div>
         ) : null}
 
@@ -595,6 +596,93 @@ export function BaseProviderForm({
           </div>
         ) : null}
 
+        {descriptor.supportsTestModel ? (
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor={`${fid}-testModel`}>
+              {t('providersPage.form.testModel')}
+            </label>
+            <div className={styles.controlWithAction}>
+              <Select
+                id={`${fid}-testModel`}
+                value={form.testModel ?? ''}
+                options={testModelOptions}
+                onChange={(value) => updateField('testModel', value)}
+                disabled={mutating}
+                ariaLabel={t('providersPage.form.testModel')}
+              />
+              {singleConnectivity ? (
+                <button
+                  type="button"
+                  className={styles.controlBtn}
+                  disabled={mutating || connectivity.isTestingAny}
+                  onClick={() => void singleConnectivity.run()}
+                >
+                  {singleConnectivity.status.state === 'loading' ? (
+                    <span className={`${styles.statusIcon} ${styles.statusIconLoading}`}>
+                      <IconLoader2 size={14} />
+                    </span>
+                  ) : (
+                    <ConnectivityStatusIcon state={singleConnectivity.status.state} />
+                  )}
+                  <span>{t('providersPage.connectivity.test')}</span>
+                </button>
+              ) : null}
+            </div>
+            {singleConnectivity?.status.state === 'success' ? (
+              <span className={styles.connectivityHintSuccess}>
+                {t('providersPage.connectivity.success')}
+              </span>
+            ) : (
+              <span className={styles.labelHint}>{t('providersPage.form.testModelHint')}</span>
+            )}
+            {singleConnectivity?.status.state === 'error' ? (
+              <div className={styles.connectivityError}>{singleConnectivity.status.message}</div>
+            ) : null}
+          </div>
+        ) : null}
+
+        {descriptor.supportsApiKeyEntries && form.apiKeyEntries ? (
+          <Collapsible
+            label={t('providersPage.form.apiKeyEntriesSection')}
+            hint={`${
+              apiKeyEntries.filter((e) => e.apiKey.trim() || e.existingApiKey?.trim()).length
+            }`}
+            defaultOpen
+          >
+            <ApiKeyEntriesEditor
+              entries={apiKeyEntries}
+              removeDisabled={actualApiKeyEntries.length === 0}
+              mutating={mutating}
+              statuses={connectivity.openaiStatuses}
+              isTestingAny={connectivity.isTestingAny}
+              onUpdate={(idx, patch) =>
+                updateField(
+                  'apiKeyEntries',
+                  apiKeyEntries.map((it, i) => (i === idx ? { ...it, ...patch } : it))
+                )
+              }
+              onAdd={() => {
+                const next = [...actualApiKeyEntries, emptyApiKeyEntry()];
+                updateField('apiKeyEntries', next);
+                return next.length - 1;
+              }}
+              onRemove={(idx) =>
+                updateField(
+                  'apiKeyEntries',
+                  actualApiKeyEntries.filter((_, i) => i !== idx)
+                )
+              }
+              onTest={(idx) => void connectivity.runOpenAIKey(idx)}
+              onTestAll={() => void connectivity.runOpenAIAllKeys()}
+            />
+          </Collapsible>
+        ) : null}
+      </section>
+
+      <section className={styles.formSection} aria-labelledby={`${fid}-routing`}>
+        <h3 id={`${fid}-routing`} className={styles.formSectionTitle}>
+          {t('providersPage.form.sections.routing')}
+        </h3>
         {descriptor.supportsPrefix ? (
           <div className={styles.fieldRow}>
             <div className={styles.field}>
@@ -654,49 +742,6 @@ export function BaseProviderForm({
           </div>
         ) : null}
 
-        {descriptor.supportsTestModel ? (
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor={`${fid}-testModel`}>
-              {t('providersPage.form.testModel')}
-              <span className={styles.labelHint}> · {t('providersPage.form.testModelHint')}</span>
-            </label>
-            <Select
-              id={`${fid}-testModel`}
-              value={form.testModel ?? ''}
-              options={testModelOptions}
-              onChange={(value) => updateField('testModel', value)}
-              disabled={mutating}
-              ariaLabel={t('providersPage.form.testModel')}
-            />
-            {singleConnectivity ? (
-              <div className={styles.connectivityRow}>
-                <button
-                  type="button"
-                  className={styles.connectivityBtn}
-                  disabled={mutating || connectivity.isTestingAny}
-                  onClick={() => void singleConnectivity.run()}
-                >
-                  {singleConnectivity.status.state === 'loading' ? (
-                    <span className={`${styles.statusIcon} ${styles.statusIconLoading}`}>
-                      <IconLoader2 size={14} />
-                    </span>
-                  ) : null}
-                  <span>{t('providersPage.connectivity.test')}</span>
-                </button>
-                <ConnectivityStatusIcon state={singleConnectivity.status.state} />
-                {singleConnectivity.status.state === 'success' ? (
-                  <span className={styles.connectivityHintSuccess}>
-                    {t('providersPage.connectivity.success')}
-                  </span>
-                ) : null}
-              </div>
-            ) : null}
-            {singleConnectivity?.status.state === 'error' ? (
-              <div className={styles.connectivityError}>{singleConnectivity.status.message}</div>
-            ) : null}
-          </div>
-        ) : null}
-
         {descriptor.supportsWebsockets ? (
           <label className={styles.checkboxRow}>
             <input
@@ -727,266 +772,237 @@ export function BaseProviderForm({
             </span>
           </label>
         ) : null}
-      </div>
+      </section>
 
-      <ProviderBehaviorEditor
-        brand={brand}
-        value={form}
-        onChange={(patch) => setForm((current) => ({ ...current, ...patch }))}
-        disabled={mutating}
-      />
-      <RuntimePolicyEditor
-        value={form.runtimePolicy ?? readRuntimePolicy()}
-        onChange={(value) => updateField('runtimePolicy', value)}
-        disabled={mutating}
-        supportsErrors={descriptor.supportsRequestScopedErrors}
-      />
-
-      {/* 高级折叠区 */}
-      {descriptor.supportsApiKeyEntries && form.apiKeyEntries ? (
-        <Collapsible
-          label={t('providersPage.form.apiKeyEntriesSection')}
-          hint={`${
-            apiKeyEntries.filter((e) => e.apiKey.trim() || e.existingApiKey?.trim()).length
-          }`}
-          defaultOpen
-        >
-          <ApiKeyEntriesEditor
-            entries={apiKeyEntries}
-            removeDisabled={actualApiKeyEntries.length === 0}
-            mutating={mutating}
-            statuses={connectivity.openaiStatuses}
-            isTestingAny={connectivity.isTestingAny}
-            onUpdate={(idx, patch) =>
-              updateField(
-                'apiKeyEntries',
-                apiKeyEntries.map((it, i) => (i === idx ? { ...it, ...patch } : it))
-              )
-            }
-            onAdd={() => {
-              const next = [...actualApiKeyEntries, emptyApiKeyEntry()];
-              updateField('apiKeyEntries', next);
-              return next.length - 1;
-            }}
-            onRemove={(idx) =>
-              updateField(
-                'apiKeyEntries',
-                actualApiKeyEntries.filter((_, i) => i !== idx)
-              )
-            }
-            onTest={(idx) => void connectivity.runOpenAIKey(idx)}
-            onTestAll={() => void connectivity.runOpenAIAllKeys()}
-          />
-        </Collapsible>
-      ) : null}
-
-      {descriptor.supportsHeaders ? (
-        <Collapsible label={t('providersPage.form.headersSection')}>
-          <div className={styles.entriesList}>
-            {headersList.map((entry, idx) => (
-              <div
-                key={idx}
-                style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 8 }}
-              >
-                <input
-                  className={styles.input}
-                  placeholder="X-Custom-Header"
-                  value={entry.key}
-                  onChange={(e) =>
-                    updateField(
-                      'headers',
-                      headersList.map((it, i) => (i === idx ? { ...it, key: e.target.value } : it))
-                    )
-                  }
-                  disabled={mutating}
-                />
-                <input
-                  className={styles.input}
-                  placeholder="value"
-                  value={entry.value}
-                  onChange={(e) =>
-                    updateField(
-                      'headers',
-                      headersList.map((it, i) =>
-                        i === idx ? { ...it, value: e.target.value } : it
-                      )
-                    )
-                  }
-                  disabled={mutating}
-                />
-                <button
-                  type="button"
-                  className={styles.removeBtn}
-                  disabled={mutating || headersList.length <= 1}
-                  onClick={() =>
-                    updateField(
-                      'headers',
-                      headersList.filter((_, i) => i !== idx)
-                    )
-                  }
-                >
-                  <IconX size={12} />
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className={styles.addBtn}
-              disabled={mutating}
-              onClick={() => updateField('headers', [...headersList, emptyHeader()])}
-            >
-              <IconPlus size={12} />
-              <span>{t('providersPage.form.addHeader')}</span>
-            </button>
-          </div>
-        </Collapsible>
-      ) : null}
-
-      {descriptor.supportsModels ? (
-        <Collapsible
-          label={t('providersPage.form.modelsSection')}
-          hint={`${existingModelNames.size}`}
-        >
-          <div className={styles.entriesList}>
-            {discovery.available ? (
-              <div className={styles.entriesToolbar}>
-                <button
-                  type="button"
-                  className={styles.connectivityBtn}
-                  onClick={openDiscovery}
-                  disabled={mutating}
-                >
-                  <IconDownload size={14} />
-                  <span>{t('providersPage.discovery.openButton')}</span>
-                </button>
-              </div>
-            ) : null}
-            {discovery.available && discoveryOpen ? (
-              <ModelDiscoveryPanel
-                loading={discovery.loading}
-                error={discovery.error}
-                models={discovery.models}
-                hasFetched={discovery.hasFetched}
-                existingNames={existingModelNames}
-                mutating={mutating}
-                onApply={applyDiscoveredModels}
-                onReload={() => void discovery.fetch()}
-                onClose={closeDiscovery}
-              />
-            ) : null}
-            <ModelEntriesEditor
-              providerBrand={brand}
-              models={modelsList}
-              supportsImage={supportsModelImage}
-              supportsThinking
-              mutating={mutating}
-              removeDisabled={false}
-              onUpdate={updateModelEntry}
-              onAdd={() => updateField('models', [...modelsList, emptyModel()])}
-              onRemove={removeModelEntry}
-            />
-          </div>
-        </Collapsible>
-      ) : null}
-
-      {descriptor.supportsExcludedModels ? (
-        <Collapsible label={t('providersPage.form.excludedSection')}>
+      <section className={styles.formSection} aria-labelledby={`${fid}-advanced`}>
+        <h3 id={`${fid}-advanced`} className={styles.formSectionTitle}>
+          {t('providersPage.form.sections.advanced')}
+        </h3>
+        {isClaudeLikeBrand(brand) ? (
           <div className={styles.field}>
-            <ExcludedModelsPicker
-              value={excludedRules}
-              onChange={(next) => updateField('excludedModelsText', formatExcludedRulesText(next))}
-              candidates={excludedCandidates}
-              catalogState={excludedCatalogState}
-              onRetryCatalog={discovery.available ? () => void discovery.fetch() : undefined}
+            <label id={`${fid}-fingerprint-profile-label`} className={styles.label}>
+              {t('providersPage.form.fingerprintProfile')}
+            </label>
+            <Select
+              id={`${fid}-fingerprint-profile`}
+              value={form.fingerprintProfile ?? ''}
+              options={[
+                {
+                  value: '',
+                  label: t('providersPage.form.fingerprintProfileDefault'),
+                },
+                {
+                  value: 'claude-code-cli',
+                  label: t('providersPage.form.fingerprintProfileClaudeCodeCli'),
+                },
+              ]}
+              onChange={(value) => updateField('fingerprintProfile', value)}
               disabled={mutating}
-              // `'*'` = 该 provider 已停用，唯一所有者是下面的 Disabled 开关。
-              // 传进来后 picker 双向过滤它，用户手打 `*` 也会被拦下并解释原因。
-              reservedRules={DISABLE_ALL_RULES}
-              reservedRuleMessage={t('providersPage.form.excludedDisabledNote')}
+              ariaLabelledBy={`${fid}-fingerprint-profile-label`}
             />
+            <small className={styles.labelHint}>
+              {t('providersPage.form.fingerprintProfileHint')}
+            </small>
           </div>
-        </Collapsible>
-      ) : null}
-
-      {isClaudeLikeBrand(brand) ? (
-        <div className={styles.field}>
-          <label id={`${fid}-fingerprint-profile-label`} className={styles.label}>
-            {t('providersPage.form.fingerprintProfile')}
-          </label>
-          <Select
-            id={`${fid}-fingerprint-profile`}
-            value={form.fingerprintProfile ?? ''}
-            options={[
-              {
-                value: '',
-                label: t('providersPage.form.fingerprintProfileDefault'),
-              },
-              {
-                value: 'claude-code-cli',
-                label: t('providersPage.form.fingerprintProfileClaudeCodeCli'),
-              },
-            ]}
-            onChange={(value) => updateField('fingerprintProfile', value)}
+        ) : null}
+        <div className={styles.collapsibleStack}>
+          <ProviderBehaviorEditor
+            brand={brand}
+            value={form}
+            onChange={(patch) => setForm((current) => ({ ...current, ...patch }))}
             disabled={mutating}
-            ariaLabelledBy={`${fid}-fingerprint-profile-label`}
           />
-          <small className={styles.labelHint}>
-            {t('providersPage.form.fingerprintProfileHint')}
-          </small>
-        </div>
-      ) : null}
+          <RuntimePolicyEditor
+            value={form.runtimePolicy ?? readRuntimePolicy()}
+            onChange={(value) => updateField('runtimePolicy', value)}
+            disabled={mutating}
+            supportsErrors={descriptor.supportsRequestScopedErrors}
+          />
+          {descriptor.supportsHeaders ? (
+            <Collapsible label={t('providersPage.form.headersSection')}>
+              <div className={styles.entriesList}>
+                {headersList.map((entry, idx) => (
+                  <div key={idx} className={styles.modelAliasRow}>
+                    <input
+                      className={`${styles.input} ${styles.monoInput}`}
+                      placeholder="X-Custom-Header"
+                      value={entry.key}
+                      onChange={(e) =>
+                        updateField(
+                          'headers',
+                          headersList.map((it, i) =>
+                            i === idx ? { ...it, key: e.target.value } : it
+                          )
+                        )
+                      }
+                      disabled={mutating}
+                    />
+                    <input
+                      className={`${styles.input} ${styles.monoInput}`}
+                      placeholder="value"
+                      value={entry.value}
+                      onChange={(e) =>
+                        updateField(
+                          'headers',
+                          headersList.map((it, i) =>
+                            i === idx ? { ...it, value: e.target.value } : it
+                          )
+                        )
+                      }
+                      disabled={mutating}
+                    />
+                    <button
+                      type="button"
+                      className={styles.removeBtn}
+                      aria-label={t('providersPage.actions.delete')}
+                      title={t('providersPage.actions.delete')}
+                      disabled={mutating || headersList.length <= 1}
+                      onClick={() =>
+                        updateField(
+                          'headers',
+                          headersList.filter((_, i) => i !== idx)
+                        )
+                      }
+                    >
+                      <IconX size={14} />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className={styles.addBtn}
+                  disabled={mutating}
+                  onClick={() => updateField('headers', [...headersList, emptyHeader()])}
+                >
+                  <IconPlus size={12} />
+                  <span>{t('providersPage.form.addHeader')}</span>
+                </button>
+              </div>
+            </Collapsible>
+          ) : null}
 
-      {descriptor.supportsCloak && form.cloak ? (
-        <Collapsible label={t('providersPage.form.cloakSection')}>
-          <div className={styles.section}>
-            <div className={styles.field}>
-              <label className={styles.label}>{t('providersPage.form.cloakMode')}</label>
-              <input
-                className={styles.input}
-                value={form.cloak.mode}
-                onChange={(e) => updateCloak('mode', e.target.value)}
-                placeholder="auto / always / never"
-                disabled={mutating}
-              />
-            </div>
-            <label className={styles.checkboxRow}>
-              <input
-                type="checkbox"
-                className={styles.checkboxBox}
-                checked={form.cloak.strictMode}
-                disabled={mutating}
-                onChange={(e) => updateCloak('strictMode', e.target.checked)}
-              />
-              <span className={styles.checkboxText}>
-                <span>{t('providersPage.form.cloakStrict')}</span>
-              </span>
-            </label>
-            <label className={styles.checkboxRow}>
-              <input
-                type="checkbox"
-                className={styles.checkboxBox}
-                checked={form.cloak.cacheUserId}
-                disabled={mutating}
-                onChange={(e) => updateCloak('cacheUserId', e.target.checked)}
-              />
-              <span className={styles.checkboxText}>
-                <span>{t('providersPage.form.cloakCacheUserId')}</span>
-                <small>{t('providersPage.form.cloakCacheUserIdHint')}</small>
-              </span>
-            </label>
-            <div className={styles.field}>
-              <label className={styles.label}>{t('providersPage.form.cloakSensitiveWords')}</label>
-              <textarea
-                className={styles.textarea}
-                rows={3}
-                value={form.cloak.sensitiveWordsText}
-                onChange={(e) => updateCloak('sensitiveWordsText', e.target.value)}
-                disabled={mutating}
-              />
-            </div>
-          </div>
-        </Collapsible>
-      ) : null}
+          {descriptor.supportsModels ? (
+            <Collapsible
+              label={t('providersPage.form.modelsSection')}
+              hint={`${existingModelNames.size}`}
+            >
+              <div className={styles.entriesList}>
+                {discovery.available ? (
+                  <div className={styles.entriesToolbar}>
+                    <button
+                      type="button"
+                      className={styles.connectivityBtn}
+                      onClick={openDiscovery}
+                      disabled={mutating}
+                    >
+                      <IconDownload size={14} />
+                      <span>{t('providersPage.discovery.openButton')}</span>
+                    </button>
+                  </div>
+                ) : null}
+                {discovery.available && discoveryOpen ? (
+                  <ModelDiscoveryPanel
+                    loading={discovery.loading}
+                    error={discovery.error}
+                    models={discovery.models}
+                    hasFetched={discovery.hasFetched}
+                    existingNames={existingModelNames}
+                    mutating={mutating}
+                    onApply={applyDiscoveredModels}
+                    onReload={() => void discovery.fetch()}
+                    onClose={closeDiscovery}
+                  />
+                ) : null}
+                <ModelEntriesEditor
+                  providerBrand={brand}
+                  models={modelsList}
+                  supportsImage={supportsModelImage}
+                  supportsThinking
+                  mutating={mutating}
+                  removeDisabled={false}
+                  onUpdate={updateModelEntry}
+                  onAdd={() => updateField('models', [...modelsList, emptyModel()])}
+                  onRemove={removeModelEntry}
+                />
+              </div>
+            </Collapsible>
+          ) : null}
+
+          {descriptor.supportsExcludedModels ? (
+            <Collapsible label={t('providersPage.form.excludedSection')}>
+              <div className={styles.field}>
+                <ExcludedModelsPicker
+                  value={excludedRules}
+                  onChange={(next) =>
+                    updateField('excludedModelsText', formatExcludedRulesText(next))
+                  }
+                  candidates={excludedCandidates}
+                  catalogState={excludedCatalogState}
+                  onRetryCatalog={discovery.available ? () => void discovery.fetch() : undefined}
+                  disabled={mutating}
+                  // `'*'` = 该 provider 已停用，唯一所有者是下面的 Disabled 开关。
+                  // 传进来后 picker 双向过滤它，用户手打 `*` 也会被拦下并解释原因。
+                  reservedRules={DISABLE_ALL_RULES}
+                  reservedRuleMessage={t('providersPage.form.excludedDisabledNote')}
+                />
+              </div>
+            </Collapsible>
+          ) : null}
+          {descriptor.supportsCloak && form.cloak ? (
+            <Collapsible label={t('providersPage.form.cloakSection')}>
+              <div className={styles.section}>
+                <div className={styles.field}>
+                  <label className={styles.label}>{t('providersPage.form.cloakMode')}</label>
+                  <input
+                    className={styles.input}
+                    value={form.cloak.mode}
+                    onChange={(e) => updateCloak('mode', e.target.value)}
+                    placeholder="auto / always / never"
+                    disabled={mutating}
+                  />
+                </div>
+                <label className={styles.checkboxRow}>
+                  <input
+                    type="checkbox"
+                    className={styles.checkboxBox}
+                    checked={form.cloak.strictMode}
+                    disabled={mutating}
+                    onChange={(e) => updateCloak('strictMode', e.target.checked)}
+                  />
+                  <span className={styles.checkboxText}>
+                    <span>{t('providersPage.form.cloakStrict')}</span>
+                  </span>
+                </label>
+                <label className={styles.checkboxRow}>
+                  <input
+                    type="checkbox"
+                    className={styles.checkboxBox}
+                    checked={form.cloak.cacheUserId}
+                    disabled={mutating}
+                    onChange={(e) => updateCloak('cacheUserId', e.target.checked)}
+                  />
+                  <span className={styles.checkboxText}>
+                    <span>{t('providersPage.form.cloakCacheUserId')}</span>
+                    <small>{t('providersPage.form.cloakCacheUserIdHint')}</small>
+                  </span>
+                </label>
+                <div className={styles.field}>
+                  <label className={styles.label}>
+                    {t('providersPage.form.cloakSensitiveWords')}
+                  </label>
+                  <textarea
+                    className={styles.textarea}
+                    rows={3}
+                    value={form.cloak.sensitiveWordsText}
+                    onChange={(e) => updateCloak('sensitiveWordsText', e.target.value)}
+                    disabled={mutating}
+                  />
+                </div>
+              </div>
+            </Collapsible>
+          ) : null}
+        </div>
+      </section>
 
       {error ? <div className={styles.errorBox}>{error}</div> : null}
     </form>

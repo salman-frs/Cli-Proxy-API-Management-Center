@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useId, useImperativeHandle, useState, type Ref } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/Button';
 import { Sheet } from '@/components/ui/Sheet';
-import { IconLoader2, IconPencil } from '@/components/ui/icons';
+import { IconPencil } from '@/components/ui/icons';
 import type { ProviderRecentUsageMap } from '@/components/providers/utils';
 import { useNotificationStore } from '@/stores';
+import { ProviderLogo } from '../components/ProviderLogo';
 import { PROVIDER_DESCRIPTORS } from '../descriptors';
 import { isMultiProtocolSponsorBrand } from '../sponsorDefinitions';
 import type { ProviderBrand, ProviderEntryFormInput, ProviderResource } from '../types';
@@ -96,16 +98,21 @@ export function ProviderSheet({
     });
   }, [confirmDiscardIfDirty, onClose]);
 
-  const titleText =
+  const providerName = t(`providersPage.providerNames.${state.brand}`);
+  const modeLabel =
     state.mode === 'create'
-      ? `${t('providersPage.form.createEyebrow')} · ${t(
-          `providersPage.providerNames.${state.brand}`
-        )}`
+      ? t('providersPage.form.createEyebrow')
       : state.mode === 'edit'
-        ? `${t('providersPage.form.editEyebrow')} · ${t(
-            `providersPage.providerNames.${state.brand}`
-          )}`
-        : `${t('providersPage.detail.title')} · ${t(`providersPage.providerNames.${state.brand}`)}`;
+        ? t('providersPage.form.editEyebrow')
+        : t('providersPage.detail.title');
+  const title = (
+    <span className={styles.sheetTitle}>
+      <ProviderLogo brand={state.brand} size={18} />
+      <span>
+        {modeLabel} · {providerName}
+      </span>
+    </span>
+  );
 
   const handleCreate = useCallback(
     async (input: ProviderEntryFormInput) => {
@@ -173,55 +180,27 @@ export function ProviderSheet({
 
   const footer =
     state.mode === 'detail' ? (
-      state.resource ? (
-        <>
-          <button
-            type="button"
-            className={`${styles.footerBtn} ${styles.footerBtnGhost}`}
-            onClick={onClose}
-          >
-            {t('providersPage.actions.cancel')}
-          </button>
-          <button
-            type="button"
-            className={`${styles.footerBtn} ${styles.footerBtnPrimary}`}
-            onClick={onSwitchToEdit}
-            disabled={formMutating}
-          >
+      <>
+        <Button type="button" variant="secondary" onClick={onClose}>
+          {t('providersPage.actions.cancel')}
+        </Button>
+        {state.resource ? (
+          <Button type="button" onClick={onSwitchToEdit} disabled={formMutating}>
             <IconPencil size={14} />
             {t('providersPage.actions.edit')}
-          </button>
-        </>
-      ) : (
-        <button
-          type="button"
-          className={`${styles.footerBtn} ${styles.footerBtnPrimary}`}
-          onClick={onClose}
-        >
-          {t('providersPage.actions.cancel')}
-        </button>
-      )
+          </Button>
+        ) : null}
+      </>
     ) : (
       <>
-        <button
-          type="button"
-          className={`${styles.footerBtn} ${styles.footerBtnGhost}`}
-          onClick={handleCancelClick}
-          disabled={submitting}
-        >
+        <Button type="button" variant="secondary" onClick={handleCancelClick} disabled={submitting}>
           {t('providersPage.actions.cancel')}
-        </button>
-        <button
-          type="submit"
-          form={formId}
-          className={`${styles.footerBtn} ${styles.footerBtnPrimary}`}
-          disabled={submitDisabled}
-        >
-          {submitting ? <IconLoader2 size={14} /> : null}
+        </Button>
+        <Button type="submit" form={formId} disabled={submitDisabled} loading={submitting}>
           {state.mode === 'create'
             ? t('providersPage.actions.create')
             : t('providersPage.actions.save')}
-        </button>
+        </Button>
       </>
     );
 
@@ -230,28 +209,8 @@ export function ProviderSheet({
       open={state.open}
       onClose={onClose}
       size={descriptor.sheetSize}
-      eyebrow={
-        state.mode === 'detail'
-          ? t('providersPage.detail.title')
-          : state.mode === 'create'
-            ? t('providersPage.form.createEyebrow')
-            : t('providersPage.form.editEyebrow')
-      }
-      title={titleText}
-      description={t('providersPage.table.description', {
-        route:
-          state.brand === 'openaiCompatibility'
-            ? '/ai-providers/openai'
-            : state.brand === 'apikeyFun'
-              ? '/quick-start'
-              : state.brand === 'fennoAI'
-                ? '/ai-providers/fennoai'
-                : state.brand === 'qiniuCloud'
-                  ? '/ai-providers/qiniu'
-                  : state.brand === 'kimi'
-                    ? '/ai-providers/kimi'
-                    : `/ai-providers/${state.brand}`,
-      })}
+      title={title}
+      ariaLabel={`${modeLabel} · ${providerName}`}
       footer={footer}
       closeDisabled={submitting}
       confirmClose={confirmDiscardIfDirty}

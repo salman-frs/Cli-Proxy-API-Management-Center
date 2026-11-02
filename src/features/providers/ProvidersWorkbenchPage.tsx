@@ -2,7 +2,10 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePageTransitionLayer } from '@/components/common/PageTransitionLayer';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
+import { Button } from '@/components/ui/Button';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { IconPlus } from '@/components/ui/icons';
 import { useAuthStore, useNotificationStore } from '@/stores';
 import { useProviderRecentRequests } from '@/components/providers/hooks/useProviderRecentRequests';
 import {
@@ -12,7 +15,6 @@ import {
   type ProviderRecentUsageMap,
 } from '@/components/providers/utils';
 import type { OpenAIProviderConfig } from '@/types';
-import { ProviderHeaderCard } from './components/ProviderHeaderCard';
 import { ProviderCategoryList } from './components/ProviderCategoryList';
 import { ProviderResourcePanel } from './components/ProviderResourcePanel';
 import type { ProviderPanelControls } from './components/ProviderResourcePanel';
@@ -279,12 +281,7 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
   const updatedAtLabel = workbench.snapshot
     ? formatDateTime(workbench.snapshot.fetchedAt, i18n.language)
     : t('providersPage.modelCatalog.notLoaded');
-  const headerTitle =
-    fixedBrand === 'apikeyFun'
-      ? quickStartResource
-        ? APIKEY_FUN_DISPLAY_NAME
-        : t('nav.quick_start')
-      : undefined;
+  const isQuickStart = fixedBrand === 'apikeyFun';
   const errorBanner = workbench.errorMessage ? (
     <div className="error-box">{workbench.errorMessage}</div>
   ) : null;
@@ -372,14 +369,52 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
     closeSheet();
   }, [closeSheet, showNotification, t]);
 
-  // 加载状态
+  const renderHeader = (canCreate: boolean) => (
+    <PageHeader
+      title={isQuickStart ? t('nav.quick_start') : t('providersPage.header.title')}
+      description={
+        isQuickStart
+          ? t('providersPage.quickStart.description', { provider: APIKEY_FUN_DISPLAY_NAME })
+          : t('providersPage.header.description')
+      }
+      meta={
+        isQuickStart ? undefined : (
+          <>
+            <span>
+              {t('providersPage.header.activeResources', {
+                active: totalActive,
+                total: totalResources,
+              })}
+            </span>
+            <span className={styles.metaDot} aria-hidden="true">
+              ·
+            </span>
+            <span>{t('providersPage.header.providerFamilies', { count: providerFamilies })}</span>
+            <span className={styles.metaDot} aria-hidden="true">
+              ·
+            </span>
+            <span>{t('providersPage.header.updatedAt', { time: updatedAtLabel })}</span>
+          </>
+        )
+      }
+      actions={
+        fixedBrand ? null : (
+          <Button type="button" onClick={openCreate} disabled={!canCreate}>
+            <IconPlus size={14} />
+            {t('providersPage.actions.new')}
+          </Button>
+        )
+      }
+    />
+  );
+
   if (!workbench.snapshot && workbench.isPending) {
     return (
       <div className={styles.page}>
-        <Skeleton height={120} />
-        <div className={styles.layout}>
-          <Skeleton height={420} />
-          <Skeleton height={420} />
+        <Skeleton height={64} />
+        <div className={`${styles.layout} ${fixedBrand ? styles.layoutSingle : ''}`.trim()}>
+          {fixedBrand ? null : <Skeleton height={360} />}
+          <Skeleton height={360} />
         </div>
       </div>
     );
@@ -388,19 +423,7 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
   if (!activeGroup) {
     return (
       <div className={styles.page}>
-        <ProviderHeaderCard
-          title={headerTitle}
-          totalActive={0}
-          totalResources={0}
-          providerFamilies={0}
-          updatedAtLabel={updatedAtLabel}
-          isFetching={workbench.isFetching}
-          onRefresh={() => void handleRefresh()}
-          onNew={() => {}}
-          isNewDisabled
-          showNewAction={!fixedBrand}
-          showSummary={fixedBrand !== 'apikeyFun'}
-        />
+        {renderHeader(false)}
         {errorBanner}
       </div>
     );
@@ -408,21 +431,7 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
 
   return (
     <div className={styles.page}>
-      <ProviderHeaderCard
-        title={headerTitle}
-        totalActive={totalActive}
-        totalResources={totalResources}
-        providerFamilies={providerFamilies}
-        updatedAtLabel={updatedAtLabel}
-        isFetching={workbench.isFetching}
-        isNewDisabled={disableMutations}
-        showNewAction={!fixedBrand}
-        showSummary={fixedBrand !== 'apikeyFun'}
-        newLabel={t('providersPage.actions.new')}
-        variant={fixedBrand === 'apikeyFun' ? 'quickStart' : undefined}
-        onRefresh={() => void handleRefresh()}
-        onNew={openCreate}
-      />
+      {renderHeader(!disableMutations)}
 
       {errorBanner}
 
@@ -447,7 +456,7 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
             }}
           />
         ) : null}
-        {fixedBrand === 'apikeyFun' ? (
+        {isQuickStart ? (
           <div className={styles.quickStartStack}>
             <SponsorCampaignCard />
             <SponsorQuickStartPanel
@@ -461,6 +470,7 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
             group={activeGroup}
             filter={filter}
             onFilterChange={(value) => updateActiveFilterState({ filter: value })}
+            onClearFilters={() => updateActiveFilterState({ filter: '', selectedModels: [] })}
             filteredResources={visibleResources}
             selectedId={sheetState.open ? (sheetState.resource?.id ?? null) : null}
             disableMutations={disableMutations}

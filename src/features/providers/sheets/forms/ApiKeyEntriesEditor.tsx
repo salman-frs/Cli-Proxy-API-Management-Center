@@ -177,10 +177,12 @@ export function ApiKeyEntriesEditor({
                 <button
                   type="button"
                   className={styles.removeBtn}
+                  aria-label={t('providersPage.actions.delete')}
+                  title={t('providersPage.actions.delete')}
                   disabled={mutating || removeDisabled}
                   onClick={() => handleRemove(idx)}
                 >
-                  <IconX size={12} />
+                  <IconX size={14} />
                 </button>
               </div>
             </div>

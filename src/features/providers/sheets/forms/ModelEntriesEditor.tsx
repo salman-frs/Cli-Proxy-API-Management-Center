@@ -127,7 +127,7 @@ export function ModelEntriesEditor({
                   disabled={mutating || removeDisabled}
                   onClick={() => handleRemove(idx)}
                 >
-                  <IconX size={12} />
+                  <IconX size={14} />
                 </button>
               </div>
             </div>

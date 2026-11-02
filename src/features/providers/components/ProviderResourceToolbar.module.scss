@@ -1,4 +1,3 @@
-@use '../../../styles/mixins' as *;
 @use '../../../styles/variables' as *;
 
 .root {
@@ -11,34 +10,54 @@
 .sortGroup {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .label {
+  padding-right: 4px;
   font-size: 12px;
-  color: var(--muted-foreground);
+  color: var(--text-tertiary);
   white-space: nowrap;
 }
 
-.dirBtn {
+.sortSelect {
+  min-width: 120px;
+}
+
+.iconControl {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-md);
+  height: var(--control-h-sm);
   border: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
   color: var(--text-secondary);
   cursor: pointer;
   transition:
-    background-color $transition-fast,
-    color $transition-fast;
+    background-color var(--dur-hover) var(--ease-out-strong),
+    border-color var(--dur-hover) var(--ease-out-strong),
+    color var(--dur-hover) var(--ease-out-strong);
 
-  &:hover {
-    background: var(--bg-tertiary);
+  &:hover:not(:disabled) {
+    border-color: var(--border-strong);
     color: var(--text-primary);
   }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.dirBtn {
+  @extend .iconControl;
+  width: var(--control-h-sm);
 }
 
 .filterGroup {
@@ -46,29 +65,22 @@
 }
 
 .filterTrigger {
-  display: inline-flex;
-  align-items: center;
+  @extend .iconControl;
   gap: 6px;
-  height: 30px;
-  padding: 0 11px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 13px;
-  cursor: pointer;
-  transition:
-    background-color $transition-fast,
-    border-color $transition-fast;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filterTriggerActive {
+  border-color: var(--accent-border);
+  background: var(--accent-subtle);
+  color: var(--accent-text);
 
   &:hover:not(:disabled) {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    border-color: var(--accent);
+    color: var(--accent-text);
   }
 }
 
@@ -76,38 +88,46 @@
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  min-width: 220px;
-  max-width: 320px;
   z-index: $z-dropdown;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-popover);
 }
 
 .filterToolbar {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+  gap: 2px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .filterToolbarBtn {
-  padding: 3px 9px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
   color: var(--text-secondary);
   font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+    background: var(--fill-hover);
+    color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 
   &:disabled {
@@ -120,31 +140,31 @@
   padding: 12px;
   text-align: center;
   font-size: 13px;
-  color: var(--muted-foreground);
+  color: var(--text-tertiary);
 }
 
 .filterList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-height: 220px;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
+  max-height: 240px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
 }
 
 .filterItem {
-  padding: 4px 6px;
-  border-radius: var(--radius-sm);
+  padding: 5px 6px;
+  border-radius: var(--radius-xs);
 
   &:hover {
-    background: var(--bg-tertiary);
+    background: var(--fill-hover);
   }
 }
 
 .filterItemLabel {
-  font-family: $font-mono;
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   word-break: break-all;
 }

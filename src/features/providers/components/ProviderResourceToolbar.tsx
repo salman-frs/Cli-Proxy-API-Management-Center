@@ -80,6 +80,8 @@ export function ProviderResourceToolbar({
           onChange={(value) => onSortBy(value as ProviderSortBy)}
           ariaLabel={t('providersPage.toolbar.sortBy')}
           size="sm"
+          fullWidth={false}
+          className={styles.sortSelect}
         />
         <button
           type="button"
@@ -103,16 +105,23 @@ export function ProviderResourceToolbar({
       <div className={styles.filterGroup} ref={containerRef}>
         <button
           type="button"
-          className={styles.filterTrigger}
+          className={[
+            styles.filterTrigger,
+            selectedModels.size > 0 ? styles.filterTriggerActive : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
           onClick={() => setFilterOpen((v) => !v)}
           disabled={availableModels.length === 0}
+          aria-expanded={filterOpen}
+          aria-haspopup="dialog"
         >
           <IconSlidersHorizontal size={14} />
           <span>{filterLabel}</span>
           <IconChevronDown size={12} />
         </button>
         {filterOpen ? (
-          <div className={styles.filterPanel}>
+          <div className={styles.filterPanel} role="dialog" aria-label={filterLabel}>
             <div className={styles.filterToolbar}>
               <button
                 type="button"
