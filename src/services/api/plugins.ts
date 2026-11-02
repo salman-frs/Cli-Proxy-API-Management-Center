@@ -27,6 +27,29 @@ const asString = (value: unknown): string => {
 
 const asBoolean = (value: unknown): boolean => value === true;
 
+const HTML_ESCAPES: Record<string, string> = {
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&#34;': '"',
+  '&#39;': "'",
+};
+
+// The backend HTML-escapes every string in plugin list and store responses (Go html.EscapeString).
+// React escapes on render, so undo it once on read or users see literal entities such as &#39;.
+const unescapeHtmlStrings = (value: unknown): unknown => {
+  if (typeof value === 'string') {
+    return value.replace(/&(?:amp|lt|gt|#34|#39);/g, (entity) => HTML_ESCAPES[entity]);
+  }
+  if (Array.isArray(value)) return value.map(unescapeHtmlStrings);
+  if (isRecord(value)) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, unescapeHtmlStrings(item)])
+    );
+  }
+  return value;
+};
+
 const normalizePluginOAuthProvider = (value: unknown): string | undefined => {
   const provider = normalizeManagementOAuthProviderKey(asString(value));
   return isManagementOAuthProviderKey(provider) ? provider : undefined;
@@ -261,7 +284,7 @@ export interface PluginStoreInstallOptions {
 export const pluginsApi = {
   async list(): Promise<PluginListResponse> {
     const data = await apiClient.get('/plugins');
-    return normalizePluginList(data);
+    return normalizePluginList(unescapeHtmlStrings(data));
   },
 
   updateEnabled: (id: string, enabled: boolean) =>
@@ -296,7 +319,7 @@ export const pluginsApi = {
 export const pluginStoreApi = {
   async list(): Promise<PluginStoreResponse> {
     const data = await apiClient.get('/plugins/store');
-    return normalizeStoreList(data);
+    return normalizeStoreList(unescapeHtmlStrings(data));
   },
 
   async install(
