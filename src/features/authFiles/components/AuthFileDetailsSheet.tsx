@@ -21,6 +21,7 @@ import { MAX_CREDENTIAL_WEIGHT } from '@/utils/credentialWeight';
 import { AuthFileExcludedModelsField } from './AuthFileExcludedModelsField';
 import { AuthFilePolicyFields } from './AuthFilePolicyFields';
 import { credentialPolicyError, readCredentialPolicy } from '../credentialPolicy';
+import { formatMaskedJson, maskSecrets } from '../secretMask';
 import styles from './AuthFileDetailsSheet.module.scss';
 
 /** API 边界归一化补写的派生字段——INFO 视图里只展示后端原始形状，避免重复噪音。 */
@@ -91,15 +92,7 @@ export function AuthFileDetailsSheet(props: AuthFileDetailsSheetProps) {
     [confirmClose, editor?.saving, navigate]
   );
 
-  const formatJsonText = (text: string) => {
-    if (!text) return '';
-    try {
-      return JSON.stringify(JSON.parse(text), null, 2);
-    } catch {
-      return text;
-    }
-  };
-  const previewText = formatJsonText(updatedText);
+  const previewText = formatMaskedJson(updatedText);
   const invalidContentPreview = editor?.invalidContentPreview ?? '';
   const fileInfoText = editor?.fileInfoText ?? '';
   const displayInfoText = useMemo(() => {
@@ -111,7 +104,7 @@ export function AuthFileDetailsSheet(props: AuthFileDetailsSheetProps) {
         DERIVED_INFO_KEYS.forEach((key) => {
           delete record[key];
         });
-        return JSON.stringify(record, null, 2);
+        return JSON.stringify(maskSecrets(record), null, 2);
       }
     } catch {
       /* 非 JSON 原样展示 */
