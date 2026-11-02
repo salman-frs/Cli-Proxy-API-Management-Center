@@ -19,14 +19,13 @@ $quota-font-size: 11.5px;
   gap: 9px;
   padding: 10px 11px;
   font-size: $quota-font-size;
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-  background: color-mix(in srgb, var(--bg-secondary) 55%, transparent);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-2);
 }
 
 .quotaMessage {
-  font-family: $font-mono;
-  font-size: $quota-font-size;
+  font-size: 12.5px;
   font-weight: 400;
   line-height: 1.5;
   color: var(--text-tertiary);
@@ -42,7 +41,7 @@ button.quotaMessageAction {
   transition: color $transition-fast;
 
   &:hover:not(:disabled) {
-    color: var(--primary-hover);
+    color: var(--text-primary);
   }
 
   &:disabled {
@@ -55,7 +54,7 @@ button.quotaMessageAction {
   font-size: $quota-font-size;
   font-weight: 500;
   line-height: 1.5;
-  color: var(--danger-color);
+  color: var(--danger-text);
   overflow-wrap: anywhere;
 }
 
@@ -113,12 +112,12 @@ button.quotaMessageAction {
 }
 
 .quotaPercent {
-  font-weight: 650;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
 .quotaReset {
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
 }
 
 /* Compact host: same contract class as QuotaBody.module.scss, tighter gutter. */
@@ -237,7 +236,7 @@ button.quotaMessageAction {
   & + & {
     margin-top: 3px;
     padding-top: 8px;
-    border-top: 1px dashed color-mix(in srgb, var(--border-color) 80%, transparent);
+    border-top: 1px solid var(--border-subtle);
   }
 }
 
@@ -249,18 +248,15 @@ button.quotaMessageAction {
 }
 
 .antigravityQuotaGroupTitle {
-  font-family: $font-mono;
-  font-size: $quota-font-size;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-tertiary);
 }
 
 .antigravityQuotaGroupDescription {
   font-size: $quota-font-size;
   font-weight: 400;
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
 }
 
 /* ---------- Codex 重置积分 ---------- */
@@ -270,16 +266,13 @@ button.quotaMessageAction {
   flex-direction: column;
   gap: 4px;
   padding: 8px 9px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
 }
 
 .codexResetCreditsTitle {
-  font-family: $font-mono;
-  font-size: $quota-font-size;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-tertiary);
 }
 
@@ -321,7 +314,7 @@ button.quotaMessageAction {
 .codexResetCreditsError {
   font-size: $quota-font-size;
   font-weight: 500;
-  color: var(--danger-color);
+  color: var(--danger-text);
   overflow-wrap: anywhere;
 }
 

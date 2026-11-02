@@ -79,7 +79,12 @@ export function OAuthModelAliasCard(props: OAuthModelAliasCardProps) {
               {t('oauth_model_alias.view_mode_diagram')}
             </Button>
           </div>
-          <Button size="sm" onClick={onAdd} disabled={disableControls || modelAliasError !== null}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onAdd}
+            disabled={disableControls || modelAliasError !== null}
+          >
             {t('oauth_model_alias.add')}
           </Button>
         </div>
@@ -103,7 +108,10 @@ export function OAuthModelAliasCard(props: OAuthModelAliasCardProps) {
           <EmptyState title={t('common.loading')} />
         ) : viewMode === 'diagram' ? (
           Object.keys(modelAlias).length === 0 ? (
-            <EmptyState title={t('oauth_model_alias.list_empty_all')} />
+            <EmptyState
+              title={t('oauth_model_alias.list_empty_all')}
+              description={t('oauth_model_alias.list_empty_desc')}
+            />
           ) : (
             <div className={styles.aliasChartSection}>
               <div className={styles.aliasChartHeader}>
@@ -135,7 +143,10 @@ export function OAuthModelAliasCard(props: OAuthModelAliasCardProps) {
             </div>
           )
         ) : Object.keys(modelAlias).length === 0 ? (
-          <EmptyState title={t('oauth_model_alias.list_empty_all')} />
+          <EmptyState
+            title={t('oauth_model_alias.list_empty_all')}
+            description={t('oauth_model_alias.list_empty_desc')}
+          />
         ) : (
           <div className={styles.list}>
             {Object.entries(modelAlias).map(([provider, mappings]) => (

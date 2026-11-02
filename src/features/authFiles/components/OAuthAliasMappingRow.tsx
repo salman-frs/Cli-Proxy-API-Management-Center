@@ -33,7 +33,7 @@ export function OAuthAliasMappingRow({
   return (
     <div className={styles.mappingRow} role="group" aria-label={rowLabel}>
       <span className={styles.mappingNumber} aria-hidden="true">
-        {String(index + 1).padStart(2, '0')}
+        {index + 1}
       </span>
       <div className={styles.mappingFields}>
         <AutocompleteInput

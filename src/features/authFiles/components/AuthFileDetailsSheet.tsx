@@ -21,6 +21,7 @@ import { MAX_CREDENTIAL_WEIGHT } from '@/utils/credentialWeight';
 import { AuthFileExcludedModelsField } from './AuthFileExcludedModelsField';
 import { AuthFilePolicyFields } from './AuthFilePolicyFields';
 import { credentialPolicyError, readCredentialPolicy } from '../credentialPolicy';
+import { stripJsonExtension } from '../identity';
 import { formatMaskedJson, maskSecrets } from '../secretMask';
 import styles from './AuthFileDetailsSheet.module.scss';
 
@@ -36,6 +37,22 @@ const DERIVED_INFO_KEYS = [
   // 'email' 不在此列：后端原始键名与 camelCase 同形，删掉会藏起真实数据。
   'projectId',
 ];
+
+const readText = (record: Record<string, unknown> | null, key: string): string => {
+  const value = record?.[key];
+  return typeof value === 'string' ? value.trim() : '';
+};
+
+const parseRecord = (text: string): Record<string, unknown> | null => {
+  try {
+    const parsed = JSON.parse(text) as unknown;
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : null;
+  } catch {
+    return null;
+  }
+};
 
 export type AuthFileDetailsSheetProps = {
   disableControls: boolean;
@@ -95,22 +112,22 @@ export function AuthFileDetailsSheet(props: AuthFileDetailsSheetProps) {
   const previewText = formatMaskedJson(updatedText);
   const invalidContentPreview = editor?.invalidContentPreview ?? '';
   const fileInfoText = editor?.fileInfoText ?? '';
+  const fileInfo = useMemo(() => parseRecord(fileInfoText), [fileInfoText]);
   const displayInfoText = useMemo(() => {
-    if (!fileInfoText) return '';
-    try {
-      const parsed = JSON.parse(fileInfoText) as unknown;
-      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        const record = parsed as Record<string, unknown>;
-        DERIVED_INFO_KEYS.forEach((key) => {
-          delete record[key];
-        });
-        return JSON.stringify(maskSecrets(record), null, 2);
-      }
-    } catch {
-      /* 非 JSON 原样展示 */
-    }
-    return fileInfoText;
-  }, [fileInfoText]);
+    if (!fileInfo) return fileInfoText;
+    const record = { ...fileInfo };
+    DERIVED_INFO_KEYS.forEach((key) => {
+      delete record[key];
+    });
+    return JSON.stringify(maskSecrets(record), null, 2);
+  }, [fileInfo, fileInfoText]);
+
+  const fileName = editor?.fileName ?? '';
+  const identity =
+    readText(fileInfo, 'email') ||
+    readText(editor?.json ?? null, 'email') ||
+    readText(fileInfo, 'project_id') ||
+    stripJsonExtension(fileName);
 
   return (
     <Sheet
@@ -119,8 +136,13 @@ export function AuthFileDetailsSheet(props: AuthFileDetailsSheetProps) {
       confirmClose={confirmClose}
       size="md"
       closeDisabled={editor?.saving === true}
-      eyebrow={t('auth_files.prefix_proxy_button')}
-      title={editor?.fileName ?? ''}
+      eyebrow={t('auth_files.details_subtitle')}
+      title={identity}
+      description={
+        identity === stripJsonExtension(fileName) ? undefined : (
+          <span className={styles.fileName}>{fileName}</span>
+        )
+      }
       footer={
         <>
           <Button

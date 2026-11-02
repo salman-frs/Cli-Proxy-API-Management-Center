@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { IconEyeOff, IconNetwork } from '@/components/ui/icons';
+import { IconNetwork } from '@/components/ui/icons';
 import { OAuthEditorProviderCard } from '@/features/authFiles/components/OAuthEditorProviderCard';
 import {
   ExcludedModelsPicker,
@@ -335,13 +335,11 @@ export function AuthFilesOAuthExcludedEditPage() {
     <SecondaryScreenShell
       ref={swipeRef}
       title={title}
+      description={t('oauth_excluded.editor_description')}
       onBack={handleBack}
-      backLabel={t('common.back')}
-      backAriaLabel={t('common.back')}
-      contentClassName={styles.pageContent}
-      topBarClassName={styles.topBar}
+      backLabel={t('nav.auth_files')}
       rightAction={
-        <Button size="sm" onClick={handleSave} loading={saving} disabled={!canSave}>
+        <Button onClick={handleSave} loading={saving} disabled={!canSave}>
           {t('oauth_excluded.save')}
         </Button>
       }
@@ -369,16 +367,6 @@ export function AuthFilesOAuthExcludedEditPage() {
         </Card>
       ) : (
         <>
-          <div className={styles.intro}>
-            <span className={styles.introIcon}>
-              <IconEyeOff size={22} aria-hidden="true" />
-            </span>
-            <div>
-              <h1 className={styles.introTitle}>{t('oauth_excluded.title')}</h1>
-              <p className={styles.description}>{t('oauth_excluded.editor_description')}</p>
-            </div>
-          </div>
-
           <OAuthEditorProviderCard
             provider={provider}
             options={providerOptions}
@@ -391,7 +379,7 @@ export function AuthFilesOAuthExcludedEditPage() {
             <div className={styles.editorHeader}>
               <div className={styles.sectionHeading}>
                 <span className={styles.stepNumber} aria-hidden="true">
-                  02
+                  2
                 </span>
                 <div className={styles.headingCopy}>
                   <h2 className={styles.sectionTitle} id="oauth-excluded-models-label">

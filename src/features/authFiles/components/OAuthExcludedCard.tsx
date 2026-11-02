@@ -23,7 +23,12 @@ export function OAuthExcludedCard(props: OAuthExcludedCardProps) {
       <header className={styles.panelHead}>
         <h3 className={styles.panelTitle}>{t('oauth_excluded.title')}</h3>
         <div className={styles.panelExtra}>
-          <Button size="sm" onClick={onAdd} disabled={disableControls || excludedError !== null}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onAdd}
+            disabled={disableControls || excludedError !== null}
+          >
             {t('oauth_excluded.add')}
           </Button>
         </div>
@@ -46,7 +51,10 @@ export function OAuthExcludedCard(props: OAuthExcludedCardProps) {
         ) : excludedError === 'loading' ? (
           <EmptyState title={t('common.loading')} />
         ) : Object.keys(excluded).length === 0 ? (
-          <EmptyState title={t('oauth_excluded.list_empty_all')} />
+          <EmptyState
+            title={t('oauth_excluded.list_empty_all')}
+            description={t('oauth_excluded.list_empty_desc')}
+          />
         ) : (
           <div className={styles.list}>
             {Object.entries(excluded).map(([provider, models]) => (

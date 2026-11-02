@@ -20,7 +20,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--primary-color);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
 }
@@ -84,7 +84,7 @@
 .model {
   min-width: 0;
   overflow-wrap: anywhere;
-  font-weight: 550;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
