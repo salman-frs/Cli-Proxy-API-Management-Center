@@ -1,0 +1,149 @@
+{
+  "login": {
+    "remember_password_label": "Запомнить на этом устройстве",
+    "title": "Вход в CLIProxyAPI",
+    "subtitle": "Управляйте провайдерами, учётными данными и маршрутизацией прокси.",
+    "key_hint": "Используйте ключ управления из management.secret-key — клиентские ключи из access.api-keys здесь не подойдут."
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "Квоты",
+    "config_management": "Конфигурация",
+    "logs": "Логи",
+    "system_info": "Система"
+  },
+  "dashboard": {
+    "overview_description": "Трафик в реальном времени, состояние учётных данных и настройки этого прокси.",
+    "status_operational": "Работает",
+    "status_degraded": "Есть сбои",
+    "status_failing": "Ошибки запросов",
+    "status_idle": "Нет недавнего трафика",
+    "status_connecting": "Подключение",
+    "status_offline": "Нет связи",
+    "status_hint": "На основе доли успешных запросов и доступности учётных данных в текущем окне.",
+    "kpi_requests": "Запросы",
+    "kpi_requests_caption": "За {{window}}",
+    "kpi_success_caption": "{{success}} успешно · {{failed}} с ошибкой",
+    "kpi_credentials_caption": "{{unavailable}} недоступно · {{disabled}} отключено",
+    "kpi_credentials_all_active": "Все активны",
+    "kpi_provider_keys_caption": "Настроенные API-ключи",
+    "kpi_models_caption": "Доступны через прокси",
+    "traffic_card_title": "Пропускная способность",
+    "traffic_card_description": "Запросы за каждые 10 минут · последние {{window}}",
+    "fleet_card_title": "Провайдеры",
+    "fleet_col_provider": "Провайдер",
+    "fleet_col_activity": "Активность",
+    "fleet_col_requests": "Запросы",
+    "runtime_card_title": "Конфигурация",
+    "runtime_features": "Функции",
+    "shortcuts_title": "Быстрые ссылки"
+  },
+  "auth_files": {
+    "prefix_proxy_info_label": "Информация о файле авторизации",
+    "prefix_proxy_source_label": "JSON файла авторизации",
+    "prefix_label": "Префикс",
+    "proxy_url_label": "URL прокси",
+    "priority_label": "Приоритет",
+    "weight_label": "Вес планирования",
+    "disable_cooling_label": "Отключить экспоненциальный cooldown",
+    "use_siwc_label": "Использовать SIWC",
+    "websockets_label": "WebSockets",
+    "using_api_label": "Использовать официальный API",
+    "headers_label": "Пользовательские заголовки",
+    "excluded_models_label": "Исключённые модели",
+    "page_description": "OAuth и файловые учётные данные, через которые прокси может направлять запросы.",
+    "details_subtitle": "Настройки учётных данных"
+  },
+  "oauth_excluded": {
+    "save": "Сохранить",
+    "list_empty_all": "Отключений моделей пока нет",
+    "list_empty_desc": "Скрывайте отдельные модели OAuth-провайдера."
+  },
+  "oauth_model_alias": {
+    "save": "Сохранить",
+    "list_empty_all": "Псевдонимов моделей пока нет",
+    "list_empty_desc": "Открывайте модели OAuth под другим именем."
+  },
+  "auth_login": {
+    "page_description": "Подключайте аккаунты провайдеров через браузер или код устройства. Новые учётные данные появятся в файлах авторизации."
+  },
+  "logs": {
+    "page_description": "Вывод сервера в реальном времени и архив журналов ошибочных запросов.",
+    "more_actions": "Другие действия",
+    "error_logs_empty_desc": "Загляните сюда после неудачного запроса."
+  },
+  "config_management": {
+    "diff": {
+      "title": "Проверка изменений",
+      "confirm": "Подтвердить и сохранить"
+    },
+    "visual": {
+      "api_keys": {
+        "hint": "Ключи, с которыми клиенты обращаются к этому прокси."
+      }
+    },
+    "page_description": "Редактируйте конфигурацию сервера визуально или в YAML. Перед сохранением изменения можно просмотреть."
+  },
+  "quota_management": {
+    "page_description": "Лимиты тарифа и оставшийся объём для каждой учётной записи OAuth."
+  },
+  "routing": {
+    "page_description": "Распределите учётные данные по уровням приоритета. Запросы идут на самый высокий доступный уровень и переключаются вниз при сбоях."
+  },
+  "system_info": {
+    "page_description": "Версии, подключение, доступные модели и локальные данные."
+  },
+  "language": {
+    "chinese_tw": "繁體中文",
+    "turkish": "Türkçe"
+  },
+  "theme": {
+    "light": "Светлая",
+    "white": "Светлая",
+    "auto": "Системная"
+  },
+  "providersPage": {
+    "header": {
+      "description": "API-ключи и эндпоинты, через которые шлюз направляет запросы, сгруппированные по провайдерам."
+    },
+    "actions": {
+      "clearFilters": "Сбросить фильтры"
+    },
+    "form": {
+      "sections": {
+        "connection": "Подключение",
+        "routing": "Маршрутизация",
+        "advanced": "Дополнительно"
+      }
+    },
+    "empty": {
+      "title": "Ресурсов {{provider}} пока нет",
+      "description": "Добавьте API-ключ, чтобы направлять запросы через {{provider}}.",
+      "add": "Добавить {{provider}}",
+      "noMatchTitle": "Ничего не найдено",
+      "noMatchDescription": "Измените запрос или сбросьте фильтр моделей."
+    },
+    "quickStart": {
+      "description": "Подключите {{provider}} одним ключом для протоколов Anthropic, OpenAI, Gemini и Codex.",
+      "addKey": "Добавить API-ключ",
+      "steps": {
+        "register": "Зарегистрируйтесь в {{provider}}",
+        "createKey": "Создайте API-ключ в панели управления",
+        "addKey": "Добавьте ключ здесь и сохраните"
+      }
+    }
+  },
+  "shell": {
+    "search": "Поиск…",
+    "search_placeholder": "Поиск страниц, действий и настроек…",
+    "command_palette": "Палитра команд",
+    "no_results": "Ничего не найдено",
+    "group_pages": "Страницы",
+    "group_actions": "Действия",
+    "group_preferences": "Настройки",
+    "hint_navigate": "Выбор",
+    "hint_select": "Открыть",
+    "navigation": "Основная навигация",
+    "breadcrumb": "Навигационная цепочка"
+  }
+}

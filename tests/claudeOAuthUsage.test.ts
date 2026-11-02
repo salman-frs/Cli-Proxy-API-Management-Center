@@ -423,7 +423,7 @@ describe('Claude usage snapshot rendering and retention', () => {
 
   test('renders enabled extra usage in minor units and each balance in dollars', () => {
     const markup = render(quota);
-    expect(markup).toContain('Extra Usage');
+    expect(markup).toContain('Extra usage');
     expect(markup).toContain('Enabled');
     expect(markup).toContain('Spent $12.50 / Limit $50.00');
     expect(markup).toContain('25% used');
@@ -442,7 +442,7 @@ describe('Claude usage snapshot rendering and retention', () => {
     const markup = render({ ...quota, planType: 'plan_max' });
     // Same anatomy as plan windows: label + mono telemetry header, never bare reset text.
     expect(markup).toContain(
-      '<div class="quotaRowHeader"><span class="quotaModel">Extra Usage</span><div class="quotaMeta"><span class="quotaPercent">Enabled</span><span class="quotaResetRelative">25% used</span>'
+      '<div class="quotaRowHeader"><span class="quotaModel">Extra usage</span><div class="quotaMeta"><span class="quotaPercent">Enabled</span><span class="quotaResetRelative">25% used</span>'
     );
     expect(markup).toContain(
       '<span class="quotaModel" title="iguana_necktie">iguana_necktie</span><div class="quotaMeta"><span class="quotaPercent">$94.96 remaining</span>'
@@ -471,7 +471,7 @@ describe('Claude usage snapshot rendering and retention', () => {
     const plan = markup.indexOf('class="codexPlan"');
     const chip = markup.indexOf('data-slot="chip"');
     const after = markup.indexOf('data-slot="after"');
-    const extra = markup.indexOf('Extra Usage');
+    const extra = markup.indexOf('Extra usage');
     expect(plan).toBeGreaterThanOrEqual(0);
     expect(chip).toBeGreaterThan(plan);
     expect(after).toBeGreaterThan(chip);

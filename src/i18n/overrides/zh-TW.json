@@ -1,0 +1,148 @@
+{
+  "login": {
+    "remember_password_label": "在此裝置上記住",
+    "title": "登入 CLIProxyAPI",
+    "subtitle": "管理代理的供應商、憑證與路由。",
+    "key_hint": "請使用 management.secret-key 中的管理金鑰，access.api-keys 中的用戶端金鑰無法在此登入。"
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "額度",
+    "config_management": "設定",
+    "logs": "記錄",
+    "system_info": "系統"
+  },
+  "dashboard": {
+    "overview_description": "此代理的即時流量、憑證健康狀況與執行設定。",
+    "status_operational": "運作正常",
+    "status_degraded": "效能下降",
+    "status_failing": "請求失敗",
+    "status_idle": "暫無近期流量",
+    "status_connecting": "連線中",
+    "status_offline": "離線",
+    "status_hint": "依據目前視窗內的成功率與憑證可用性判斷。",
+    "kpi_requests": "請求數",
+    "kpi_requests_caption": "最近 {{window}}",
+    "kpi_success_caption": "成功 {{success}} · 失敗 {{failed}}",
+    "kpi_credentials_caption": "{{unavailable}} 個無法使用 · {{disabled}} 個已停用",
+    "kpi_credentials_all_active": "全部可用",
+    "kpi_provider_keys_caption": "已設定的 API 金鑰",
+    "kpi_models_caption": "可透過代理呼叫",
+    "traffic_card_title": "吞吐量",
+    "traffic_card_description": "每 10 分鐘的請求數 · 最近 {{window}}",
+    "fleet_card_title": "供應商",
+    "fleet_col_provider": "供應商",
+    "fleet_col_activity": "活動",
+    "fleet_col_requests": "請求數",
+    "runtime_card_title": "設定",
+    "runtime_features": "功能",
+    "shortcuts_title": "捷徑"
+  },
+  "auth_files": {
+    "prefix_proxy_info_label": "驗證檔案資訊",
+    "prefix_proxy_source_label": "驗證檔案 JSON",
+    "prefix_label": "前綴",
+    "proxy_url_label": "代理 URL",
+    "priority_label": "優先順序",
+    "weight_label": "調度權重",
+    "disable_cooling_label": "停用指數冷卻",
+    "use_siwc_label": "使用 SIWC",
+    "websockets_label": "WebSockets",
+    "using_api_label": "使用官方 API",
+    "excluded_models_label": "排除模型",
+    "headers_label": "自訂請求標頭",
+    "page_description": "代理可用於轉發請求的 OAuth 與檔案憑證。",
+    "details_subtitle": "憑證設定"
+  },
+  "oauth_excluded": {
+    "save": "儲存",
+    "list_empty_all": "尚無模型停用",
+    "list_empty_desc": "為 OAuth 提供者隱藏指定模型。"
+  },
+  "oauth_model_alias": {
+    "save": "儲存",
+    "list_empty_all": "尚無模型別名",
+    "list_empty_desc": "以其他名稱公開 OAuth 模型。"
+  },
+  "auth_login": {
+    "page_description": "透過瀏覽器或裝置碼登入連接供應商帳號，新憑證會出現在認證檔案中。"
+  },
+  "logs": {
+    "page_description": "即時伺服器輸出與已封存的錯誤請求日誌。",
+    "more_actions": "更多操作",
+    "error_logs_empty_desc": "請求失敗後再回來查看。"
+  },
+  "config_management": {
+    "diff": {
+      "title": "檢查變更",
+      "confirm": "確認並儲存"
+    },
+    "visual": {
+      "api_keys": {
+        "hint": "用戶端呼叫此代理時使用的金鑰。"
+      }
+    },
+    "page_description": "以視覺化或 YAML 方式編輯伺服器設定，儲存前可檢視差異。"
+  },
+  "quota_management": {
+    "page_description": "每個 OAuth 憑證的方案限額與剩餘用量。"
+  },
+  "routing": {
+    "page_description": "將憑證排入優先級層級。請求使用最高可用層級，並逐級向下容錯移轉。"
+  },
+  "system_info": {
+    "page_description": "版本、連線、可用模型與本機資料。"
+  },
+  "language": {
+    "chinese_tw": "繁體中文",
+    "turkish": "Türkçe"
+  },
+  "theme": {
+    "light": "淺色",
+    "white": "淺色"
+  },
+  "providersPage": {
+    "header": {
+      "description": "閘道轉送請求所用的 API 金鑰與端點，依提供商分組。"
+    },
+    "actions": {
+      "clearFilters": "清除篩選"
+    },
+    "form": {
+      "sections": {
+        "connection": "連線",
+        "routing": "路由",
+        "advanced": "進階"
+      }
+    },
+    "empty": {
+      "title": "尚無 {{provider}} 設定",
+      "description": "新增 API 金鑰後，即可透過 {{provider}} 轉送請求。",
+      "add": "新增 {{provider}}",
+      "noMatchTitle": "沒有符合的設定",
+      "noMatchDescription": "換個關鍵字搜尋，或清除模型篩選。"
+    },
+    "quickStart": {
+      "description": "只需一把 {{provider}} 金鑰，即可同時接入 Anthropic、OpenAI、Gemini 與 Codex 協定。",
+      "addKey": "新增 API 金鑰",
+      "steps": {
+        "register": "註冊 {{provider}} 帳號",
+        "createKey": "在控制台建立 API 金鑰",
+        "addKey": "將金鑰填寫到這裡並儲存"
+      }
+    }
+  },
+  "shell": {
+    "search": "搜尋…",
+    "search_placeholder": "搜尋頁面、操作與設定…",
+    "command_palette": "命令面板",
+    "no_results": "找不到結果",
+    "group_pages": "頁面",
+    "group_actions": "操作",
+    "group_preferences": "偏好設定",
+    "hint_navigate": "選擇",
+    "hint_select": "開啟",
+    "navigation": "主導覽",
+    "breadcrumb": "導覽路徑"
+  }
+}

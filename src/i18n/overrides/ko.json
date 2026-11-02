@@ -1,0 +1,148 @@
+{
+  "login": {
+    "remember_password_label": "이 기기에서 기억하기",
+    "title": "CLIProxyAPI에 로그인",
+    "subtitle": "프록시의 공급자, 자격 증명, 라우팅을 관리하세요.",
+    "key_hint": "management.secret-key의 관리 키를 사용하세요. access.api-keys의 클라이언트 키로는 로그인할 수 없습니다."
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "할당량",
+    "config_management": "구성",
+    "logs": "로그",
+    "system_info": "시스템"
+  },
+  "dashboard": {
+    "overview_description": "이 프록시의 실시간 트래픽, 자격 증명 상태와 실행 설정입니다.",
+    "status_operational": "정상 운영",
+    "status_degraded": "성능 저하",
+    "status_failing": "요청 실패",
+    "status_idle": "최근 트래픽 없음",
+    "status_connecting": "연결 중",
+    "status_offline": "오프라인",
+    "status_hint": "현재 구간의 성공률과 자격 증명 가용성을 기준으로 판단합니다.",
+    "kpi_requests": "요청",
+    "kpi_requests_caption": "최근 {{window}}",
+    "kpi_success_caption": "성공 {{success}} · 실패 {{failed}}",
+    "kpi_credentials_caption": "사용 불가 {{unavailable}} · 비활성 {{disabled}}",
+    "kpi_credentials_all_active": "모두 활성",
+    "kpi_provider_keys_caption": "구성된 API 키",
+    "kpi_models_caption": "프록시로 사용 가능",
+    "traffic_card_title": "처리량",
+    "traffic_card_description": "10분 단위 요청 수 · 최근 {{window}}",
+    "fleet_card_title": "공급자",
+    "fleet_col_provider": "공급자",
+    "fleet_col_activity": "활동",
+    "fleet_col_requests": "요청",
+    "runtime_card_title": "구성",
+    "runtime_features": "기능",
+    "shortcuts_title": "바로가기"
+  },
+  "auth_files": {
+    "prefix_proxy_info_label": "인증 파일 정보",
+    "prefix_proxy_source_label": "인증 파일 JSON",
+    "prefix_label": "접두사",
+    "proxy_url_label": "프록시 URL",
+    "priority_label": "우선순위",
+    "weight_label": "스케줄링 가중치",
+    "disable_cooling_label": "지수 쿨다운 비활성화",
+    "use_siwc_label": "SIWC 사용",
+    "websockets_label": "WebSockets",
+    "using_api_label": "공식 API 사용",
+    "excluded_models_label": "제외 모델",
+    "headers_label": "사용자 정의 헤더",
+    "page_description": "프록시가 요청을 라우팅할 수 있는 OAuth 및 파일 기반 자격 증명입니다.",
+    "details_subtitle": "자격 증명 설정"
+  },
+  "oauth_excluded": {
+    "save": "저장",
+    "list_empty_all": "모델 비활성화 없음",
+    "list_empty_desc": "OAuth 공급자의 특정 모델을 숨깁니다."
+  },
+  "oauth_model_alias": {
+    "save": "저장",
+    "list_empty_all": "모델 별칭 없음",
+    "list_empty_desc": "OAuth 모델을 다른 이름으로 노출합니다."
+  },
+  "auth_login": {
+    "page_description": "브라우저 또는 기기 코드 로그인으로 공급자 계정을 연결하세요. 새 자격 증명은 인증 파일에 표시됩니다."
+  },
+  "logs": {
+    "page_description": "실시간 서버 출력과 보관된 오류 요청 로그입니다.",
+    "more_actions": "추가 작업",
+    "error_logs_empty_desc": "요청이 실패한 후 다시 확인하세요."
+  },
+  "config_management": {
+    "diff": {
+      "confirm": "확인 후 저장"
+    },
+    "visual": {
+      "api_keys": {
+        "hint": "클라이언트가 이 프록시를 호출할 때 사용하는 키입니다."
+      }
+    },
+    "page_description": "서버 구성을 시각적으로 또는 YAML로 편집하세요. 저장 전에 변경 사항을 검토합니다."
+  },
+  "quota_management": {
+    "page_description": "각 OAuth 자격 증명의 요금제 한도와 남은 사용량입니다."
+  },
+  "routing": {
+    "page_description": "자격 증명을 우선순위 계층으로 정렬하세요. 요청은 사용 가능한 가장 높은 계층을 사용하고 실패 시 아래로 넘어갑니다."
+  },
+  "system_info": {
+    "page_description": "버전, 연결, 사용 가능한 모델 및 로컬 데이터."
+  },
+  "language": {
+    "chinese_tw": "繁體中文",
+    "turkish": "Türkçe"
+  },
+  "theme": {
+    "light": "라이트",
+    "white": "라이트",
+    "auto": "시스템"
+  },
+  "providersPage": {
+    "header": {
+      "description": "게이트웨이가 요청을 전달하는 API 키와 엔드포인트를 공급자별로 관리합니다."
+    },
+    "actions": {
+      "clearFilters": "필터 지우기"
+    },
+    "form": {
+      "sections": {
+        "connection": "연결",
+        "routing": "라우팅",
+        "advanced": "고급"
+      }
+    },
+    "empty": {
+      "title": "아직 {{provider}} 리소스가 없습니다",
+      "description": "API 키를 추가하면 {{provider}}를 통해 요청을 전달할 수 있습니다.",
+      "add": "{{provider}} 추가",
+      "noMatchTitle": "일치하는 리소스가 없습니다",
+      "noMatchDescription": "다른 검색어를 사용하거나 모델 필터를 지우세요."
+    },
+    "quickStart": {
+      "description": "{{provider}} 키 하나로 Anthropic, OpenAI, Gemini, Codex 프로토콜에 연결하세요.",
+      "addKey": "API 키 추가",
+      "steps": {
+        "register": "{{provider}} 계정 만들기",
+        "createKey": "대시보드에서 API 키 만들기",
+        "addKey": "여기에 키를 추가하고 저장"
+      }
+    }
+  },
+  "shell": {
+    "search": "검색…",
+    "search_placeholder": "페이지, 작업, 설정 검색…",
+    "command_palette": "명령 팔레트",
+    "no_results": "결과가 없습니다",
+    "group_pages": "페이지",
+    "group_actions": "작업",
+    "group_preferences": "환경설정",
+    "hint_navigate": "이동",
+    "hint_select": "열기",
+    "navigation": "주 탐색",
+    "breadcrumb": "탐색 경로"
+  }
+}

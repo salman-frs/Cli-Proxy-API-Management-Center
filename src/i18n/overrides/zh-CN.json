@@ -1,0 +1,149 @@
+{
+  "login": {
+    "remember_password_label": "在此设备上记住",
+    "title": "登录 CLIProxyAPI",
+    "subtitle": "管理代理的提供商、凭证与路由。",
+    "key_hint": "请使用 management.secret-key 中的管理密钥，access.api-keys 中的客户端密钥无法在此登录。"
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "额度",
+    "config_management": "配置",
+    "logs": "日志",
+    "system_info": "系统"
+  },
+  "dashboard": {
+    "overview_description": "此代理的实时流量、凭证健康状况与运行配置。",
+    "status_operational": "运行正常",
+    "status_degraded": "性能下降",
+    "status_failing": "请求失败",
+    "status_idle": "暂无近期流量",
+    "status_connecting": "连接中",
+    "status_offline": "离线",
+    "status_hint": "根据当前窗口内的成功率与凭证可用性判断。",
+    "kpi_requests": "请求数",
+    "kpi_requests_caption": "最近 {{window}}",
+    "kpi_success_caption": "成功 {{success}} · 失败 {{failed}}",
+    "kpi_credentials_caption": "{{unavailable}} 个不可用 · {{disabled}} 个已禁用",
+    "kpi_credentials_all_active": "全部可用",
+    "kpi_provider_keys_caption": "已配置的 API 密钥",
+    "kpi_models_caption": "可通过代理调用",
+    "traffic_card_title": "吞吐量",
+    "traffic_card_description": "每 10 分钟的请求数 · 最近 {{window}}",
+    "fleet_card_title": "供应商",
+    "fleet_col_provider": "供应商",
+    "fleet_col_activity": "活动",
+    "fleet_col_requests": "请求数",
+    "runtime_card_title": "配置",
+    "runtime_features": "功能",
+    "shortcuts_title": "快捷入口"
+  },
+  "auth_files": {
+    "prefix_proxy_info_label": "认证文件信息",
+    "prefix_proxy_source_label": "认证文件 JSON",
+    "prefix_label": "前缀",
+    "proxy_url_label": "代理 URL",
+    "priority_label": "优先级",
+    "weight_label": "调度权重",
+    "disable_cooling_label": "禁用指数冷却",
+    "use_siwc_label": "使用 SIWC",
+    "websockets_label": "WebSockets",
+    "using_api_label": "使用官方 API",
+    "excluded_models_label": "排除模型",
+    "headers_label": "自定义请求头",
+    "page_description": "代理可用于转发请求的 OAuth 与文件凭证。",
+    "details_subtitle": "凭证设置"
+  },
+  "oauth_excluded": {
+    "save": "保存",
+    "list_empty_all": "暂无模型禁用",
+    "list_empty_desc": "为 OAuth 提供商隐藏指定模型。"
+  },
+  "oauth_model_alias": {
+    "save": "保存",
+    "list_empty_all": "暂无模型别名",
+    "list_empty_desc": "以其他名称暴露 OAuth 模型。"
+  },
+  "auth_login": {
+    "page_description": "通过浏览器或设备码登录连接提供商账号，新凭证会出现在认证文件中。"
+  },
+  "logs": {
+    "page_description": "实时服务器输出与已归档的错误请求日志。",
+    "more_actions": "更多操作",
+    "error_logs_empty_desc": "请求失败后再来查看。"
+  },
+  "config_management": {
+    "diff": {
+      "title": "检查更改",
+      "confirm": "确认并保存"
+    },
+    "visual": {
+      "api_keys": {
+        "hint": "客户端调用本代理时使用的密钥。"
+      }
+    },
+    "page_description": "以可视化或 YAML 方式编辑服务器配置，保存前可查看差异。"
+  },
+  "quota_management": {
+    "page_description": "每个 OAuth 凭证的套餐限额与剩余用量。"
+  },
+  "routing": {
+    "page_description": "将凭证排入优先级层级。请求使用最高可用层级，并逐级向下故障转移。"
+  },
+  "system_info": {
+    "page_description": "版本、连接、可用模型与本地数据。"
+  },
+  "language": {
+    "chinese_tw": "繁體中文",
+    "turkish": "Türkçe"
+  },
+  "theme": {
+    "light": "浅色",
+    "white": "浅色",
+    "dark": "深色"
+  },
+  "providersPage": {
+    "header": {
+      "description": "网关转发请求所用的 API 密钥与端点，按提供商分组。"
+    },
+    "actions": {
+      "clearFilters": "清除筛选"
+    },
+    "form": {
+      "sections": {
+        "connection": "连接",
+        "routing": "路由",
+        "advanced": "高级"
+      }
+    },
+    "empty": {
+      "title": "暂无 {{provider}} 配置",
+      "description": "添加 API 密钥后，即可通过 {{provider}} 转发请求。",
+      "add": "添加 {{provider}}",
+      "noMatchTitle": "没有匹配的配置",
+      "noMatchDescription": "换个关键词搜索，或清除模型筛选。"
+    },
+    "quickStart": {
+      "description": "只需一个 {{provider}} 密钥，即可同时接入 Anthropic、OpenAI、Gemini 与 Codex 协议。",
+      "addKey": "添加 API 密钥",
+      "steps": {
+        "register": "注册 {{provider}} 账号",
+        "createKey": "在控制台创建 API 密钥",
+        "addKey": "将密钥填写到这里并保存"
+      }
+    }
+  },
+  "shell": {
+    "search": "搜索…",
+    "search_placeholder": "搜索页面、操作和设置…",
+    "command_palette": "命令面板",
+    "no_results": "没有找到结果",
+    "group_pages": "页面",
+    "group_actions": "操作",
+    "group_preferences": "偏好设置",
+    "hint_navigate": "选择",
+    "hint_select": "打开",
+    "navigation": "主导航",
+    "breadcrumb": "面包屑"
+  }
+}

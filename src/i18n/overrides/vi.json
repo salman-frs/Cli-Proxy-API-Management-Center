@@ -1,0 +1,147 @@
+{
+  "login": {
+    "remember_password_label": "Ghi nhớ trên thiết bị này",
+    "title": "Đăng nhập CLIProxyAPI",
+    "subtitle": "Quản lý nhà cung cấp, thông tin xác thực và định tuyến cho proxy.",
+    "key_hint": "Dùng khóa quản lý trong management.secret-key — khóa client trong access.api-keys không dùng được ở đây."
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "Hạn mức",
+    "config_management": "Cấu hình",
+    "logs": "Nhật ký",
+    "system_info": "Hệ thống"
+  },
+  "dashboard": {
+    "overview_description": "Lưu lượng trực tiếp, tình trạng thông tin xác thực và cấu hình của proxy này.",
+    "status_operational": "Hoạt động bình thường",
+    "status_degraded": "Suy giảm",
+    "status_failing": "Đang lỗi",
+    "status_idle": "Chưa có lưu lượng gần đây",
+    "status_connecting": "Đang kết nối",
+    "status_offline": "Ngoại tuyến",
+    "status_hint": "Dựa trên tỷ lệ thành công và mức khả dụng của thông tin xác thực trong khung thời gian hiện tại.",
+    "kpi_requests": "Yêu cầu",
+    "kpi_requests_caption": "{{window}} gần nhất",
+    "kpi_success_caption": "{{success}} thành công · {{failed}} lỗi",
+    "kpi_credentials_caption": "{{unavailable}} không khả dụng · {{disabled}} đã tắt",
+    "kpi_credentials_all_active": "Tất cả đang hoạt động",
+    "kpi_provider_keys_caption": "API key đã cấu hình",
+    "kpi_models_caption": "Dùng được qua proxy",
+    "traffic_card_title": "Thông lượng",
+    "traffic_card_description": "Số yêu cầu mỗi 10 phút · {{window}} gần nhất",
+    "fleet_card_title": "Nhà cung cấp",
+    "fleet_col_provider": "Nhà cung cấp",
+    "fleet_col_activity": "Hoạt động",
+    "fleet_col_requests": "Yêu cầu",
+    "runtime_card_title": "Cấu hình",
+    "runtime_features": "Tính năng",
+    "shortcuts_title": "Lối tắt"
+  },
+  "auth_files": {
+    "prefix_proxy_info_label": "Thông tin file xác thực",
+    "prefix_proxy_source_label": "JSON file xác thực",
+    "prefix_label": "Tiền tố",
+    "proxy_url_label": "URL Proxy",
+    "priority_label": "Ưu tiên",
+    "weight_label": "Trọng số điều phối",
+    "disable_cooling_label": "Tắt cooldown lũy thừa",
+    "use_siwc_label": "Sử dụng SIWC",
+    "websockets_label": "WebSocket",
+    "using_api_label": "Dùng API chính thức",
+    "excluded_models_label": "Model bị loại trừ",
+    "headers_label": "Header tùy chỉnh",
+    "page_description": "Thông tin xác thực OAuth và dạng tệp mà proxy có thể dùng để định tuyến yêu cầu.",
+    "details_subtitle": "Cài đặt thông tin xác thực"
+  },
+  "oauth_excluded": {
+    "save": "Lưu",
+    "list_empty_all": "Chưa có vô hiệu hóa model",
+    "list_empty_desc": "Ẩn các model cụ thể của nhà cung cấp OAuth."
+  },
+  "oauth_model_alias": {
+    "save": "Lưu",
+    "list_empty_all": "Chưa có bí danh model",
+    "list_empty_desc": "Hiển thị model OAuth dưới tên khác."
+  },
+  "auth_login": {
+    "page_description": "Kết nối tài khoản nhà cung cấp qua trình duyệt hoặc mã thiết bị. Thông tin xác thực mới sẽ xuất hiện trong File xác thực."
+  },
+  "logs": {
+    "page_description": "Đầu ra máy chủ trực tiếp và nhật ký yêu cầu lỗi đã lưu trữ.",
+    "more_actions": "Thao tác khác",
+    "error_logs_empty_desc": "Hãy quay lại sau khi có yêu cầu thất bại."
+  },
+  "config_management": {
+    "diff": {
+      "confirm": "Xác nhận và lưu"
+    },
+    "visual": {
+      "api_keys": {
+        "hint": "Khóa mà client dùng để gọi proxy này."
+      }
+    },
+    "page_description": "Chỉnh sửa cấu hình máy chủ trực quan hoặc bằng YAML. Thay đổi được xem lại trước khi lưu."
+  },
+  "quota_management": {
+    "page_description": "Giới hạn gói và mức sử dụng còn lại của từng thông tin xác thực OAuth."
+  },
+  "routing": {
+    "page_description": "Sắp xếp thông tin xác thực theo tầng ưu tiên. Yêu cầu dùng tầng cao nhất còn khả dụng và chuyển xuống khi lỗi."
+  },
+  "system_info": {
+    "page_description": "Phiên bản, kết nối, mô hình khả dụng và dữ liệu cục bộ."
+  },
+  "language": {
+    "chinese_tw": "繁體中文",
+    "turkish": "Türkçe"
+  },
+  "theme": {
+    "light": "Sáng",
+    "white": "Sáng"
+  },
+  "providersPage": {
+    "header": {
+      "description": "Các API key và endpoint mà gateway dùng để chuyển tiếp yêu cầu, nhóm theo nhà cung cấp."
+    },
+    "actions": {
+      "clearFilters": "Xóa bộ lọc"
+    },
+    "form": {
+      "sections": {
+        "connection": "Kết nối",
+        "routing": "Định tuyến",
+        "advanced": "Nâng cao"
+      }
+    },
+    "empty": {
+      "title": "Chưa có tài nguyên {{provider}}",
+      "description": "Thêm API key để bắt đầu chuyển tiếp yêu cầu qua {{provider}}.",
+      "add": "Thêm {{provider}}",
+      "noMatchTitle": "Không có tài nguyên phù hợp",
+      "noMatchDescription": "Thử từ khóa khác hoặc xóa bộ lọc model."
+    },
+    "quickStart": {
+      "description": "Kết nối {{provider}} bằng một key duy nhất cho các giao thức Anthropic, OpenAI, Gemini và Codex.",
+      "addKey": "Thêm API key",
+      "steps": {
+        "register": "Tạo tài khoản {{provider}}",
+        "createKey": "Tạo API key trong bảng điều khiển",
+        "addKey": "Thêm key tại đây và lưu"
+      }
+    }
+  },
+  "shell": {
+    "search": "Tìm kiếm…",
+    "search_placeholder": "Tìm trang, thao tác và cài đặt…",
+    "command_palette": "Bảng lệnh",
+    "no_results": "Không tìm thấy kết quả",
+    "group_pages": "Trang",
+    "group_actions": "Thao tác",
+    "group_preferences": "Tùy chọn",
+    "hint_navigate": "Di chuyển",
+    "hint_select": "Mở",
+    "navigation": "Điều hướng chính",
+    "breadcrumb": "Đường dẫn"
+  }
+}

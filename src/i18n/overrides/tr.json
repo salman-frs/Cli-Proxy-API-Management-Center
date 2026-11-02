@@ -1,0 +1,152 @@
+{
+  "login": {
+    "remember_password_label": "Bu cihazda hatırla",
+    "submit_button": "Giriş yap",
+    "title": "CLIProxyAPI'ye giriş yap",
+    "subtitle": "Proxy'nizin sağlayıcılarını, kimlik bilgilerini ve yönlendirmesini yönetin.",
+    "key_hint": "management.secret-key içindeki yönetim anahtarını kullanın; access.api-keys içindeki istemci anahtarları burada çalışmaz."
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "Kotalar",
+    "config_management": "Yapılandırma",
+    "logs": "Günlükler",
+    "system_info": "Sistem"
+  },
+  "dashboard": {
+    "overview_description": "Bu proxy için canlı trafik, kimlik bilgisi durumu ve çalışma ayarları.",
+    "status_operational": "Çalışıyor",
+    "status_degraded": "Performans düşük",
+    "status_failing": "İstekler başarısız",
+    "status_idle": "Son zamanlarda trafik yok",
+    "status_connecting": "Bağlanıyor",
+    "status_offline": "Çevrimdışı",
+    "status_hint": "Geçerli penceredeki başarı oranına ve kimlik bilgisi kullanılabilirliğine göre belirlenir.",
+    "kpi_requests": "İstekler",
+    "kpi_requests_caption": "Son {{window}}",
+    "kpi_success_caption": "{{success}} başarılı · {{failed}} başarısız",
+    "kpi_credentials_caption": "{{unavailable}} kullanılamaz · {{disabled}} devre dışı",
+    "kpi_credentials_all_active": "Tümü etkin",
+    "kpi_provider_keys_caption": "Yapılandırılmış API anahtarları",
+    "kpi_models_caption": "Proxy üzerinden kullanılabilir",
+    "traffic_card_title": "Verim",
+    "traffic_card_description": "10 dakikalık dilim başına istek · son {{window}}",
+    "fleet_card_title": "Sağlayıcılar",
+    "fleet_col_provider": "Sağlayıcı",
+    "fleet_col_activity": "Etkinlik",
+    "fleet_col_requests": "İstekler",
+    "runtime_card_title": "Yapılandırma",
+    "runtime_features": "Özellikler",
+    "shortcuts_title": "Kısayollar"
+  },
+  "auth_files": {
+    "prefix_proxy_info_label": "Kimlik dosyası bilgisi",
+    "prefix_proxy_source_label": "Kimlik dosyası JSON",
+    "prefix_label": "Önek",
+    "proxy_url_label": "Proxy URL",
+    "priority_label": "Öncelik",
+    "weight_label": "Zamanlama Ağırlığı",
+    "disable_cooling_label": "Üstel Soğumayı Devre Dışı Bırak",
+    "use_siwc_label": "SIWC Kullan",
+    "websockets_label": "WebSockets",
+    "using_api_label": "Resmi API Kullan",
+    "excluded_models_label": "Hariç Tutulan Modeller",
+    "headers_label": "Özel Üst Bilgiler",
+    "page_description": "Proxy'nin istekleri yönlendirebileceği OAuth ve dosya tabanlı kimlik bilgileri.",
+    "details_subtitle": "Kimlik bilgisi ayarları"
+  },
+  "oauth_excluded": {
+    "save": "Kaydet",
+    "list_empty_all": "Henüz model devre dışı bırakma yok",
+    "list_empty_desc": "Bir OAuth sağlayıcısındaki belirli modelleri gizleyin."
+  },
+  "oauth_model_alias": {
+    "save": "Kaydet",
+    "list_empty_all": "Henüz model takma adı yok",
+    "list_empty_desc": "OAuth modellerini başka bir adla sunun."
+  },
+  "auth_login": {
+    "page_description": "Sağlayıcı hesaplarını tarayıcı veya cihaz koduyla bağlayın. Yeni kimlik bilgileri Kimlik Dosyaları'nda görünür."
+  },
+  "logs": {
+    "page_description": "Canlı sunucu çıktısı ve arşivlenmiş hatalı istek günlükleri.",
+    "more_actions": "Diğer işlemler",
+    "error_logs_empty_desc": "Bir istek başarısız olduktan sonra tekrar bakın."
+  },
+  "config_management": {
+    "diff": {
+      "title": "Değişiklikleri incele",
+      "confirm": "Onayla ve kaydet"
+    },
+    "visual": {
+      "api_keys": {
+        "hint": "İstemcilerin bu proxy'yi çağırmak için kullandığı anahtarlar."
+      }
+    },
+    "page_description": "Sunucu yapılandırmasını görsel olarak veya YAML ile düzenleyin. Değişiklikler kaydetmeden önce incelenir."
+  },
+  "quota_management": {
+    "page_description": "Her OAuth kimlik bilgisi için plan limitleri ve kalan kullanım."
+  },
+  "routing": {
+    "page_description": "Kimlik bilgilerini öncelik katmanlarına sıralayın. İstekler en yüksek uygun katmanı kullanır ve hata durumunda alt katmana geçer."
+  },
+  "system_info": {
+    "page_description": "Sürümler, bağlantı, kullanılabilir modeller ve yerel veriler."
+  },
+  "language": {
+    "chinese_tw": "繁體中文"
+  },
+  "theme": {
+    "light": "Açık",
+    "white": "Açık",
+    "auto": "Sistem"
+  },
+  "providersPage": {
+    "header": {
+      "description": "Ağ geçidinin istekleri yönlendirdiği API anahtarları ve uç noktalar, sağlayıcıya göre gruplanmış."
+    },
+    "actions": {
+      "clearFilters": "Filtreleri temizle"
+    },
+    "categories": {
+      "quickFill": "Hızlı doldur"
+    },
+    "form": {
+      "sections": {
+        "connection": "Bağlantı",
+        "routing": "Yönlendirme",
+        "advanced": "Gelişmiş"
+      }
+    },
+    "empty": {
+      "title": "Henüz {{provider}} kaynağı yok",
+      "description": "İstekleri {{provider}} üzerinden yönlendirmek için bir API anahtarı ekleyin.",
+      "add": "{{provider}} ekle",
+      "noMatchTitle": "Eşleşen kaynak yok",
+      "noMatchDescription": "Farklı bir arama deneyin veya model filtresini temizleyin."
+    },
+    "quickStart": {
+      "description": "{{provider}} hesabını Anthropic, OpenAI, Gemini ve Codex protokolleri için tek bir anahtarla bağlayın.",
+      "addKey": "API anahtarı ekle",
+      "steps": {
+        "register": "Bir {{provider}} hesabı oluşturun",
+        "createKey": "Panelde bir API anahtarı oluşturun",
+        "addKey": "Anahtarı buraya ekleyip kaydedin"
+      }
+    }
+  },
+  "shell": {
+    "search": "Ara…",
+    "search_placeholder": "Sayfa, işlem ve ayar ara…",
+    "command_palette": "Komut paleti",
+    "no_results": "Sonuç bulunamadı",
+    "group_pages": "Sayfalar",
+    "group_actions": "İşlemler",
+    "group_preferences": "Tercihler",
+    "hint_navigate": "Gezin",
+    "hint_select": "Aç",
+    "navigation": "Ana gezinme",
+    "breadcrumb": "İçerik yolu"
+  }
+}

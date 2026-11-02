@@ -1,0 +1,420 @@
+{
+  "common": {
+    "custom_headers_label": "Custom headers",
+    "custom_headers_add": "Add header"
+  },
+  "login": {
+    "custom_connection_label": "Custom connection URL",
+    "remember_password_label": "Remember me on this device",
+    "management_key_label": "Management key",
+    "submit_button": "Sign in",
+    "title": "Sign in to CLIProxyAPI",
+    "subtitle": "Manage providers, credentials and routing for your proxy.",
+    "key_hint": "Use the management key from management.secret-key — client API keys from access.api-keys will not work here."
+  },
+  "header": {
+    "refresh_all": "Refresh all"
+  },
+  "connection": {
+    "status": "Connection status:"
+  },
+  "nav": {
+    "oauth": "OAuth",
+    "quota_management": "Quotas",
+    "config_management": "Configuration",
+    "logs": "Logs",
+    "system_info": "System"
+  },
+  "dashboard": {
+    "overview_description": "Live traffic, credential health and runtime settings for this proxy.",
+    "status_operational": "Operational",
+    "status_degraded": "Degraded",
+    "status_failing": "Failing",
+    "status_idle": "No recent traffic",
+    "status_connecting": "Connecting",
+    "status_offline": "Offline",
+    "status_hint": "Based on the success rate and credential availability in the current window.",
+    "kpi_requests": "Requests",
+    "kpi_requests_caption": "Last {{window}}",
+    "kpi_success_caption": "{{success}} ok · {{failed}} failed",
+    "kpi_credentials_caption": "{{unavailable}} unavailable · {{disabled}} disabled",
+    "kpi_credentials_all_active": "All active",
+    "kpi_provider_keys_caption": "Configured API keys",
+    "kpi_models_caption": "Available via the proxy",
+    "traffic_card_title": "Throughput",
+    "traffic_card_description": "Requests per 10-minute bucket · last {{window}}",
+    "fleet_card_title": "Providers",
+    "fleet_col_provider": "Provider",
+    "fleet_col_activity": "Activity",
+    "fleet_col_requests": "Requests",
+    "runtime_card_title": "Configuration",
+    "runtime_features": "Features",
+    "shortcuts_title": "Shortcuts"
+  },
+  "basic_settings": {
+    "debug_enable": "Enable debug mode",
+    "request_log_title": "Request logging"
+  },
+  "auth_files": {
+    "title": "Auth files management",
+    "upload_button": "Upload file",
+    "delete_all_button": "Delete all",
+    "delete_problem_button": "Delete problem files",
+    "problem_filter_label": "Status filter",
+    "batch_delete_title": "Delete selected files",
+    "batch_select_all": "Select all",
+    "prefix_proxy_button": "Auth file details / edit",
+    "prefix_proxy_info_label": "Auth file info",
+    "prefix_proxy_source_label": "Auth file JSON",
+    "prefix_label": "Prefix",
+    "proxy_url_label": "Proxy URL",
+    "priority_label": "Priority",
+    "weight_label": "Scheduling weight",
+    "disable_cooling_label": "Disable exponential cooldown",
+    "use_siwc_label": "Use SIWC",
+    "websockets_label": "WebSockets",
+    "using_api_label": "Use official API",
+    "excluded_models_label": "Excluded models",
+    "headers_label": "Custom headers",
+    "page_description": "OAuth and file-based credentials the proxy can route requests through.",
+    "details_subtitle": "Credential settings"
+  },
+  "antigravity_quota": {
+    "title": "Antigravity quota",
+    "empty_title": "No Antigravity auth files",
+    "refresh_button": "Refresh quota",
+    "fetch_all": "Fetch all"
+  },
+  "plugin_quota": {
+    "empty_title": "No plugin auth files"
+  },
+  "claude_quota": {
+    "title": "Claude quota",
+    "empty_title": "No Claude OAuth files",
+    "refresh_button": "Refresh quota",
+    "fetch_all": "Fetch all",
+    "extra_usage_label": "Extra usage"
+  },
+  "codex_quota": {
+    "title": "Codex quota",
+    "empty_title": "No Codex auth files",
+    "refresh_button": "Refresh quota",
+    "fetch_all": "Fetch all"
+  },
+  "meta_quota": {
+    "title": "Muse (Meta) quota"
+  },
+  "kimi_quota": {
+    "title": "Kimi quota",
+    "empty_title": "No Kimi auth files",
+    "refresh_button": "Refresh quota",
+    "fetch_all": "Fetch all"
+  },
+  "xai_quota": {
+    "title": "Grok quota",
+    "empty_title": "No xAI/Grok auth files",
+    "refresh_button": "Refresh quota",
+    "fetch_all": "Fetch all"
+  },
+  "vertex_import": {
+    "title": "Vertex JSON login",
+    "choose_file": "Choose file",
+    "import_button": "Import Vertex credential"
+  },
+  "oauth_excluded": {
+    "title": "OAuth model disablement",
+    "add": "Add disablement",
+    "save": "Save",
+    "delete": "Delete provider",
+    "list_empty_all": "No model disablements yet",
+    "list_empty_desc": "Hide specific models from an OAuth provider."
+  },
+  "oauth_model_alias": {
+    "title": "OAuth model aliases",
+    "add": "Add alias",
+    "save": "Save",
+    "delete": "Delete provider",
+    "delete_alias_title": "Delete alias",
+    "list_empty_all": "No model aliases yet",
+    "diagram_source_models": "Source models",
+    "diagram_add_alias": "Add alias",
+    "list_empty_desc": "Expose OAuth models under another name."
+  },
+  "auth_login": {
+    "devin_oauth_cancel": "Cancel Devin login",
+    "devin_oauth_button": "Start Devin login",
+    "devin_copy_link": "Copy link",
+    "devin_open_link": "Open link",
+    "codex_oauth_button": "Start Codex login",
+    "codex_open_link": "Open link",
+    "codex_copy_link": "Copy link",
+    "anthropic_oauth_button": "Start Anthropic login",
+    "anthropic_open_link": "Open link",
+    "anthropic_copy_link": "Copy link",
+    "antigravity_oauth_button": "Start Antigravity login",
+    "antigravity_open_link": "Open link",
+    "antigravity_copy_link": "Copy link",
+    "meta_open_link": "Open link",
+    "meta_copy_link": "Copy link",
+    "kimi_sign_up_button": "Sign up now",
+    "kimi_open_link": "Open link",
+    "kimi_copy_link": "Copy link",
+    "xai_oauth_button": "Start xAI login",
+    "xai_open_link": "Open link",
+    "xai_copy_link": "Copy link",
+    "plugin_open_link": "Open link",
+    "plugin_copy_link": "Copy link",
+    "oauth_callback_button": "Submit callback URL",
+    "iflow_oauth_button": "Start iFlow login",
+    "iflow_open_link": "Open link",
+    "iflow_copy_link": "Copy link",
+    "sponsor_sign_up": "Join open platform",
+    "page_description": "Connect provider accounts with browser or device sign-in. New credentials appear in Auth Files."
+  },
+  "logs": {
+    "title": "Logs viewer",
+    "refresh_button": "Refresh logs",
+    "clear_button": "Clear logs",
+    "fullscreen_button": "Full screen",
+    "exit_fullscreen_button": "Exit full screen",
+    "download_button": "Download logs",
+    "error_logs_modal_title": "Error request logs",
+    "error_log_view_title": "Error request log details",
+    "request_log_download_title": "Download request log",
+    "empty_title": "No logs available",
+    "log_content": "Log content",
+    "auto_refresh": "Auto refresh",
+    "show_raw_logs": "Show raw logs",
+    "clear_filters": "Clear filters",
+    "page_description": "Live server output and archived error request logs.",
+    "more_actions": "More actions",
+    "error_logs_empty_desc": "Check back after a request fails."
+  },
+  "config_management": {
+    "title": "Config panel",
+    "diff": {
+      "title": "Review changes",
+      "confirm": "Confirm and save"
+    },
+    "visual": {
+      "sections": {
+        "connectivity": {
+          "title": "Access & authentication"
+        },
+        "logging": {
+          "title": "Logging & diagnostics"
+        },
+        "advanced": {
+          "antigravity_credits": "Use Antigravity credits",
+          "title": "Advanced & experimental",
+          "signature_title": "Signature validation"
+        },
+        "server": {
+          "github_token": "Global GitHub token",
+          "host": "Host address"
+        },
+        "tls": {
+          "title": "TLS/SSL configuration",
+          "cert": "Certificate file path",
+          "key": "Private key file path"
+        },
+        "remote": {
+          "title": "Remote management",
+          "allow_remote": "Allow remote access",
+          "disable_panel": "Disable control panel",
+          "disable_auto_update_panel": "Disable panel auto updates",
+          "secret_key": "Management key",
+          "panel_repo": "Panel repository"
+        },
+        "auth": {
+          "auth_dir": "OAuth credential directory (oauth.auth-dir)"
+        },
+        "system": {
+          "debug": "Debug mode",
+          "commercial_mode": "Commercial mode",
+          "logging_to_file": "Log to file",
+          "plugins_enabled": "Enable plugin system",
+          "plugin_store_sources": "Third-party plugin sources",
+          "plugin_store_auth": "Plugin store auth rules",
+          "logs_max_size": "Log file size limit (MB)",
+          "error_logs_max_files": "Retained error log files",
+          "usage_statistics_enabled": "Enable in-memory usage statistics",
+          "redis_usage_retention": "Redis usage queue retention (seconds)",
+          "antigravity_sensitive_words": "Sensitive word obfuscation",
+          "devin_sensitive_words": "Devin system prompt sensitive words",
+          "antigravity_signature_cache": "Enable Antigravity signature cache",
+          "antigravity_signature_strict": "Strict bypass signature validation"
+        },
+        "headers": {
+          "title": "Header defaults",
+          "claude_title": "Claude OAuth header defaults",
+          "codex_title": "Codex OAuth header defaults",
+          "package_version": "Package version",
+          "runtime_version": "Runtime version",
+          "stabilize_device": "Stabilize device profile",
+          "beta_features": "Beta features"
+        },
+        "network": {
+          "title": "Network configuration",
+          "request_retry": "Request retry count",
+          "max_retry_credentials": "Max retry credentials",
+          "max_retry_interval": "Max retry interval (seconds)",
+          "auth_auto_refresh_workers": "Auth auto-refresh workers",
+          "disable_image_generation": "Disable image generation",
+          "gpt_image_2_base_model": "GPT Image 2 base model",
+          "routing_strategy": "Routing strategy",
+          "strategy_round_robin": "Round robin",
+          "strategy_weighted_round_robin": "Weighted round robin",
+          "strategy_fill_first": "Fill first",
+          "session_affinity_ttl": "Session affinity TTL",
+          "force_model_prefix": "Force model prefix",
+          "passthrough_headers": "Pass through upstream headers",
+          "disable_cooling": "Disable cooling",
+          "session_affinity": "Session affinity routing",
+          "ws_auth": "WebSocket authentication"
+        },
+        "streaming": {
+          "title": "Streaming configuration",
+          "keepalive_seconds": "Keepalive seconds",
+          "bootstrap_retries": "Bootstrap retries",
+          "nonstream_keepalive": "Non-stream keepalive interval (seconds)"
+        },
+        "payload": {
+          "title": "Payload configuration",
+          "default_rules": "Default rules",
+          "default_raw_rules": "Default raw rules",
+          "override_rules": "Override rules",
+          "override_raw_rules": "Override raw rules",
+          "filter_rules": "Filter rules"
+        }
+      },
+      "api_keys": {
+        "label": "Client API keys (access.api-keys)",
+        "add": "Add API key",
+        "hint": "Keys clients use to call this proxy.",
+        "edit_title": "Edit API key",
+        "add_title": "Add API key",
+        "input_label": "API key"
+      },
+      "payload_rules": {
+        "models": "Applicable models",
+        "model_name": "Model name",
+        "provider_type": "Provider type",
+        "add_model": "Add model",
+        "params": "Parameter settings",
+        "remove_params": "Remove parameters",
+        "json_path": "JSON path (e.g., temperature)",
+        "json_path_filter": "JSON path (gjson/sjson), e.g., generationConfig.thinkingConfig.thinkingBudget",
+        "param_type": "Parameter type",
+        "param_value": "Parameter value",
+        "add_param": "Add parameter",
+        "add_rule": "Add rule",
+        "hide_advanced": "Hide advanced",
+        "from_protocol": "Source protocol (from-protocol)",
+        "headers": "Request header matches",
+        "header_name": "Header name",
+        "header_value": "Header value",
+        "add_header": "Add header",
+        "match": "Required matches (match)",
+        "notMatch": "Forbidden matches (not-match)",
+        "exist": "Required paths (exist)",
+        "notExist": "Forbidden paths (not-exist)",
+        "condition_path": "Match path",
+        "condition_value": "Match value",
+        "add_condition": "Add condition"
+      }
+    },
+    "page_description": "Edit the server configuration visually or as YAML. Changes are reviewed before saving."
+  },
+  "quota_management": {
+    "page_description": "Plan limits and remaining usage for each OAuth credential."
+  },
+  "routing": {
+    "kind_api_key": "API key",
+    "page_description": "Order credentials into priority tiers. Requests use the highest available tier and fail over downward."
+  },
+  "plugin_store": {
+    "install_version_releases_link": "View GitHub releases"
+  },
+  "system_info": {
+    "title": "Management Center info",
+    "models_title": "Available models",
+    "quick_links_title": "Quick links",
+    "link_main_repo": "Main repository",
+    "link_webui_repo": "WebUI repository",
+    "clear_login_title": "Local login data",
+    "page_description": "Versions, connection, available models and local data."
+  },
+  "language": {
+    "chinese_tw": "繁體中文",
+    "turkish": "Türkçe"
+  },
+  "theme": {
+    "light": "Light",
+    "white": "Light",
+    "auto": "System"
+  },
+  "footer": {
+    "api_version": "CLI Proxy API version",
+    "build_date": "Build time",
+    "version": "Management UI version"
+  },
+  "providersPage": {
+    "behavior": {
+      "alphaSearch": "Enable alpha search"
+    },
+    "header": {
+      "description": "API keys and endpoints the gateway routes requests to, grouped by provider."
+    },
+    "actions": {
+      "clearFilters": "Clear filters"
+    },
+    "categories": {
+      "quickFill": "Quick fill"
+    },
+    "table": {
+      "cliProfileTag": "CLI profile"
+    },
+    "detail": {
+      "fields": {
+        "authIndex": "Auth index"
+      }
+    },
+    "form": {
+      "sections": {
+        "connection": "Connection",
+        "routing": "Routing",
+        "advanced": "Advanced"
+      }
+    },
+    "empty": {
+      "title": "No {{provider}} resources yet",
+      "description": "Add an API key to start routing requests through {{provider}}.",
+      "add": "Add {{provider}}",
+      "noMatchTitle": "No matching resources",
+      "noMatchDescription": "Try a different search or clear the model filter."
+    },
+    "quickStart": {
+      "description": "Connect {{provider}} with one key across the Anthropic, OpenAI, Gemini and Codex protocols.",
+      "addKey": "Add API key",
+      "steps": {
+        "register": "Create a {{provider}} account",
+        "createKey": "Create an API key in its dashboard",
+        "addKey": "Add the key here and save"
+      }
+    }
+  },
+  "shell": {
+    "search": "Search…",
+    "search_placeholder": "Search pages, actions and settings…",
+    "command_palette": "Command palette",
+    "no_results": "No results found",
+    "group_pages": "Pages",
+    "group_actions": "Actions",
+    "group_preferences": "Preferences",
+    "hint_navigate": "Navigate",
+    "hint_select": "Open",
+    "navigation": "Main navigation",
+    "breadcrumb": "Breadcrumb"
+  }
+}
