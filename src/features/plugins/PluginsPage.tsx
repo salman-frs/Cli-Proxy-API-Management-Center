@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Input } from '@/components/ui/Input';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { Select } from '@/components/ui/Select';
 import { Sheet } from '@/components/ui/Sheet';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
@@ -486,11 +487,16 @@ export function PluginsPage() {
 
   return (
     <div className={styles.page}>
-      {/* ── Page Header ── */}
-      <div className={styles.pageHeader}>
-        <h1 className={styles.title}>{t('plugin_management.title')}</h1>
-        <p className={styles.description}>{t('plugin_management.description')}</p>
-      </div>
+      <PageHeader
+        title={t('nav.plugins')}
+        description={t('plugin_management.description')}
+        actions={
+          <Button variant="secondary" onClick={() => navigate('/plugin-store')}>
+            <IconSidebarStore size={14} />
+            {t('plugin_store.title')}
+          </Button>
+        }
+      />
 
       {/* ── Alerts ── */}
       {error ? <div className={styles.errorBox}>{error}</div> : null}
@@ -556,20 +562,6 @@ export function PluginsPage() {
           aria-label={t('plugin_management.search_label')}
           rightElement={<IconSearch size={16} />}
         />
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={loadPlugins}
-          disabled={!connected || loading || Boolean(mutatingID || deletingID)}
-          loading={loading}
-        >
-          <IconRefreshCw size={16} />
-          {t('plugin_management.refresh')}
-        </Button>
-        <Button variant="secondary" size="sm" onClick={() => navigate('/plugin-store')}>
-          <IconSidebarStore size={16} />
-          {t('plugin_store.title')}
-        </Button>
       </div>
 
       {/* ── Plugin List ── */}

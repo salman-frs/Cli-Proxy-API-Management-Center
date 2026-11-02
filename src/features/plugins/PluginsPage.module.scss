@@ -37,21 +37,21 @@
 
 .errorBox,
 .warningBox {
-  padding: $spacing-md;
-  border-radius: $radius-md;
-  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
   line-height: 1.5;
 }
 
 .errorBox {
-  border: 1px solid var(--danger-color);
-  background: rgba($error-color, 0.1);
-  color: var(--danger-color);
+  border: 1px solid var(--danger-border);
+  background: var(--danger-subtle);
+  color: var(--danger-text);
 }
 
 .warningBox {
-  border: 1px solid color-mix(in srgb, var(--warning-color, #c65746) 42%, var(--border-color));
-  background: color-mix(in srgb, var(--warning-color, #c65746) 9%, var(--bg-secondary));
+  border: 1px solid var(--warning-line);
+  background: var(--warning-subtle);
   color: var(--text-primary);
 }
 
@@ -60,12 +60,9 @@
 .statusBar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
-  background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
+  gap: 4px 16px;
   flex-wrap: wrap;
+  margin-top: -8px;
 }
 
 .statusPill {
@@ -74,12 +71,7 @@
   max-width: 100%;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
-  border-radius: $radius-full;
-  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 56%, transparent);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -91,8 +83,8 @@
 }
 
 .statusDotOn {
-  background: $success-color;
-  box-shadow: 0 0 6px rgba($success-color, 0.5);
+  background: var(--success);
+  box-shadow: 0 0 0 3px var(--success-subtle);
 }
 
 .statusDotOff {
@@ -100,12 +92,12 @@
 }
 
 .statusLabel {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
 }
 
 .statusValue {
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .statusPathValue {
@@ -119,8 +111,8 @@
 
 .statusDivider {
   width: 1px;
-  height: 20px;
-  background: color-mix(in srgb, var(--border-color) 60%, transparent);
+  height: 14px;
+  background: var(--border-color);
   flex-shrink: 0;
 
   @include mobile {
@@ -166,59 +158,57 @@
 .pluginList {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-  border-radius: $radius-lg;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: color-mix(in srgb, var(--border-color) 30%, transparent);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-xs);
 }
 
 // ─── Plugin Row ─────────────────────────────────────────
 
 .pluginRow {
   display: grid;
-  grid-template-columns: 40px 1fr auto;
+  grid-template-columns: 36px 1fr auto;
   align-items: center;
-  gap: $spacing-md;
-  padding: $spacing-md $spacing-lg;
-  background: var(--bg-primary);
-  transition: background-color $transition-fast;
+  gap: 14px;
+  padding: 14px 16px;
+  background: transparent;
+  transition: background-color var(--dur-hover) ease;
+
+  & + & {
+    border-top: 1px solid var(--border-subtle);
+  }
 
   &:hover {
-    background: var(--bg-hover);
+    background: var(--fill-hover);
   }
 
   @include mobile {
     grid-template-columns: 36px 1fr;
     grid-template-rows: auto auto;
     gap: $spacing-sm;
-    padding: $spacing-md;
+    padding: 14px;
   }
 }
 
 .logoBox {
   display: inline-flex;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
-  background: color-mix(in srgb, var(--bg-tertiary) 60%, transparent);
-  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+  color: var(--text-tertiary);
   flex-shrink: 0;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  @include mobile {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
   }
 }
 
@@ -239,8 +229,8 @@
     min-width: 0;
     margin: 0;
     color: var(--text-primary);
-    font-size: 15px;
-    font-weight: 650;
+    font-size: 14px;
+    font-weight: 600;
     line-height: 1.3;
     @include text-ellipsis;
   }
@@ -303,32 +293,27 @@
 .badgeSuccess,
 .badgeWarning,
 .badgeMuted {
-  display: inline-flex;
-  min-height: 22px;
-  align-items: center;
-  border-radius: 6px;
-  padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.25;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
 }
 
 .badge {
-  background: color-mix(in srgb, var(--bg-secondary) 82%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
 }
 
 .badgeSuccess {
-  background: rgba($success-color, 0.1);
-  border: 1px solid rgba($success-color, 0.2);
-  color: var(--success-color);
+  background: var(--success-subtle);
+  border: 1px solid var(--success-border);
+  color: var(--success-text);
 }
 
 .badgeWarning {
-  background: rgba($warning-color, 0.1);
-  border: 1px solid rgba($warning-color, 0.2);
-  color: var(--warning-color);
+  background: var(--warning-subtle);
+  border: 1px solid var(--warning-line);
+  color: var(--warning-fg);
 }
 
 .badgeMuted {
@@ -364,31 +349,29 @@
 
 .iconLink {
   display: inline-flex;
-  min-height: 30px;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-color);
-  border-radius: $radius-md;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 12px;
-  font-weight: 600;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
   text-decoration: none;
   transition:
-    border-color $transition-fast,
-    background-color $transition-fast,
-    color $transition-fast;
+    background-color var(--dur-hover) ease,
+    color var(--dur-hover) ease;
 
   &:hover {
-    border-color: var(--primary-color);
-    background: var(--bg-hover);
-    color: var(--primary-color);
+    background: var(--fill-hover);
+    color: var(--text-primary);
   }
-}
 
-.iconLink {
-  width: 30px;
-  flex: 0 0 auto;
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
 }
 
 // ─── Skeleton ───────────────────────────────────────────

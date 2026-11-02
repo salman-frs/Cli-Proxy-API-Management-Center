@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { Select } from '@/components/ui/Select';
 import {
   IconAlertTriangle,
@@ -806,6 +807,7 @@ export function PluginStorePage() {
       : entry.sourceName;
     const sourceText = sourceName ? t('plugin_store.source_name', { source: sourceName }) : '';
     const metaItems = [versionText, sourceText, entry.author, entry.license].filter(Boolean);
+    const detailItems = versionText ? metaItems.slice(1) : metaItems;
     const isInstalling = installingKey === entryKey;
     const hasPendingInstall = Boolean(installingKey);
     const missingAuth = entry.authRequired && !entry.authConfigured;
@@ -899,12 +901,14 @@ export function PluginStorePage() {
               </span>
             ) : null}
             {platformText ? <span className={styles.metaItem}>{platformText}</span> : null}
-            {metaItems.map((item, index) => (
-              <span key={`${entryKey}-meta-${index}`} className={styles.metaItem}>
-                {index > 0 ? <span className={styles.metaDot} aria-hidden="true" /> : null}
-                {index === 0 && versionText ? <strong>{item}</strong> : item}
+            {versionText && metaItems.length > 0 ? (
+              <span className={styles.metaItem}>
+                <strong>{metaItems[0]}</strong>
               </span>
-            ))}
+            ) : null}
+            {detailItems.length > 0 ? (
+              <span className={styles.metaDetails}>{detailItems.join(' · ')}</span>
+            ) : null}
           </div>
         ) : null}
 
@@ -922,6 +926,7 @@ export function PluginStorePage() {
           <div className={styles.cardActions}>
             {!entry.installed ? (
               <Button
+                variant="secondary"
                 size="sm"
                 onClick={() => handleInstall(entry)}
                 disabled={actionDisabled}
@@ -985,11 +990,7 @@ export function PluginStorePage() {
 
   return (
     <div className={styles.page}>
-      {/* ── Page Header ── */}
-      <div className={styles.pageHeader}>
-        <h1 className={styles.title}>{t('plugin_store.title')}</h1>
-        <p className={styles.description}>{t('plugin_store.description')}</p>
-      </div>
+      <PageHeader title={t('plugin_store.title')} description={t('plugin_store.description')} />
 
       {/* ── Security Banner ── */}
       <div className={styles.securityBanner} role="note">
@@ -997,6 +998,9 @@ export function PluginStorePage() {
         <div className={styles.securityBannerText}>
           <strong>{t('plugin_store.security_banner_title')}</strong>
           <p>{t('plugin_store.security_banner_text')}</p>
+          {data && !data.pluginsEnabled ? (
+            <p className={styles.securityBannerWarning}>{t('plugin_store.global_disabled_hint')}</p>
+          ) : null}
         </div>
       </div>
 
@@ -1028,10 +1032,6 @@ export function PluginStorePage() {
             })}
           </ul>
         </div>
-      ) : null}
-
-      {data && !data.pluginsEnabled ? (
-        <div className={styles.warningBox}>{t('plugin_store.global_disabled_hint')}</div>
       ) : null}
 
       {restartNames.length > 0 ? (
@@ -1088,34 +1088,26 @@ export function PluginStorePage() {
           aria-label={t('plugin_store.search_label')}
           rightElement={<IconSearch size={16} />}
         />
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={loadStore}
-          disabled={!connected || loading}
-          loading={loading}
+        <div
+          className={styles.filterChips}
+          role="group"
+          aria-label={t('plugin_store.filter_label')}
         >
-          <IconRefreshCw size={16} />
-          {t('plugin_store.refresh')}
-        </Button>
-      </div>
-
-      {/* ── Status Filter Chips ── */}
-      <div className={styles.filterChips} role="group" aria-label={t('plugin_store.filter_label')}>
-        {statusFilters.map((item) => (
-          <button
-            key={item.key}
-            type="button"
-            className={`${styles.filterChip} ${
-              statusFilter === item.key ? styles.filterChipActive : ''
-            }`}
-            onClick={() => setStatusFilter(item.key)}
-            aria-pressed={statusFilter === item.key}
-          >
-            {item.label}
-            <span className={styles.filterChipCount}>{item.count}</span>
-          </button>
-        ))}
+          {statusFilters.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={`${styles.filterChip} ${
+                statusFilter === item.key ? styles.filterChipActive : ''
+              }`}
+              onClick={() => setStatusFilter(item.key)}
+              aria-pressed={statusFilter === item.key}
+            >
+              {item.label}
+              <span className={styles.filterChipCount}>{item.count}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* ── Plugin Cards ── */}

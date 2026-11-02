@@ -37,9 +37,9 @@
 
 .errorBox,
 .warningBox {
-  padding: $spacing-md;
-  border-radius: $radius-md;
-  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -48,9 +48,9 @@
   align-items: center;
   justify-content: space-between;
   gap: $spacing-md;
-  border: 1px solid var(--danger-color);
-  background: rgba($error-color, 0.1);
-  color: var(--danger-color);
+  border: 1px solid var(--danger-border);
+  background: var(--danger-subtle);
+  color: var(--danger-text);
 
   span {
     min-width: 0;
@@ -68,8 +68,8 @@
 }
 
 .warningBox {
-  border: 1px solid color-mix(in srgb, var(--warning-color, #c65746) 42%, var(--border-color));
-  background: color-mix(in srgb, var(--warning-color, #c65746) 9%, var(--bg-secondary));
+  border: 1px solid var(--warning-line);
+  background: var(--warning-subtle);
   color: var(--text-primary);
 }
 
@@ -105,17 +105,19 @@
 .securityBanner {
   display: flex;
   align-items: flex-start;
-  gap: $spacing-sm;
+  gap: 10px;
   padding: 12px 14px;
-  border-radius: $radius-md;
-  border: 1px solid color-mix(in srgb, var(--quota-medium-color, #e0aa14) 45%, var(--border-color));
-  background: color-mix(in srgb, var(--quota-medium-color, #e0aa14) 14%, var(--bg-secondary));
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--surface-2);
   color: var(--text-primary);
 
   > svg {
     flex-shrink: 0;
-    margin-top: 1px;
-    color: var(--quota-medium-color, #e0aa14);
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    color: var(--warning);
   }
 }
 
@@ -124,9 +126,9 @@
 
   strong {
     display: block;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.4;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
   }
 
   p {
@@ -135,6 +137,11 @@
     line-height: 1.5;
     color: var(--text-secondary);
   }
+
+  p.securityBannerWarning {
+    margin-top: 6px;
+    color: var(--warning-fg);
+  }
 }
 
 // ─── Status Bar ─────────────────────────────────────────
@@ -142,12 +149,9 @@
 .statusBar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
-  background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
+  gap: 4px 16px;
   flex-wrap: wrap;
+  margin-top: -8px;
 }
 
 .statusPill {
@@ -156,12 +160,7 @@
   max-width: 100%;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
-  border-radius: $radius-full;
-  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 56%, transparent);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -173,8 +172,8 @@
 }
 
 .statusDotOn {
-  background: $success-color;
-  box-shadow: 0 0 6px rgba($success-color, 0.5);
+  background: var(--success);
+  box-shadow: 0 0 0 3px var(--success-subtle);
 }
 
 .statusDotOff {
@@ -182,12 +181,12 @@
 }
 
 .statusLabel {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
 }
 
 .statusValue {
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .statusPathValue {
@@ -201,8 +200,8 @@
 
 .statusDivider {
   width: 1px;
-  height: 20px;
-  background: color-mix(in srgb, var(--border-color) 60%, transparent);
+  height: 14px;
+  background: var(--border-color);
   flex-shrink: 0;
 
   @include mobile {
@@ -215,6 +214,8 @@
 .toolbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: $spacing-sm;
 
   :global(.form-group) {
@@ -246,9 +247,16 @@
 // ─── Status Filter Chips ────────────────────────────────
 
 .filterChips {
-  display: flex;
+  display: inline-flex;
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow-x: auto;
   align-items: center;
-  gap: $spacing-sm;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
   flex-wrap: wrap;
 }
 
@@ -256,43 +264,50 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-  border-radius: $radius-full;
-  background: var(--bg-primary);
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
   color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition:
-    border-color $transition-fast,
-    background-color $transition-fast,
-    color $transition-fast;
+    background-color var(--dur-hover) ease,
+    color var(--dur-hover) ease;
 
   &:hover {
-    border-color: var(--primary-color);
     color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 }
 
 .filterChipActive {
-  border-color: var(--primary-color);
-  background: color-mix(in srgb, var(--primary-color) 12%, var(--bg-primary));
+  background: var(--surface-1);
   color: var(--text-primary);
+  box-shadow:
+    0 0 0 1px var(--border-color),
+    var(--shadow-xs);
 }
 
 .filterChipCount {
   display: inline-flex;
   min-width: 18px;
+  height: 18px;
   align-items: center;
   justify-content: center;
   padding: 0 5px;
-  border-radius: $radius-full;
-  background: color-mix(in srgb, var(--border-color) 45%, transparent);
+  border-radius: var(--radius-full);
+  background: var(--fill-active);
   color: var(--text-secondary);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 // ─── Card Grid ──────────────────────────────────────────
@@ -312,18 +327,16 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-  padding: $spacing-md;
-  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-  border-radius: $radius-lg;
-  background: var(--bg-primary);
-  transition:
-    border-color $transition-fast,
-    background-color $transition-fast;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur-hover) ease;
 
   &:hover {
-    border-color: color-mix(in srgb, var(--primary-color) 45%, var(--border-color));
-    background: var(--bg-hover);
+    border-color: var(--border-strong);
   }
 }
 
@@ -344,10 +357,10 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
-  background: color-mix(in srgb, var(--bg-tertiary) 60%, transparent);
-  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+  color: var(--text-tertiary);
   flex-shrink: 0;
 
   img {
@@ -369,9 +382,9 @@
 .cardTitle {
   margin: 0;
   color: var(--text-primary);
-  font-size: 15px;
-  font-weight: 650;
-  line-height: 1.3;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
   overflow-wrap: anywhere;
   @include text-ellipsis-multiline(2);
 }
@@ -404,39 +417,40 @@
   display: inline-flex;
   min-height: 22px;
   align-items: center;
-  border-radius: 6px;
+  border-radius: var(--radius-full);
   padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 11.5px;
+  font-weight: 500;
   line-height: 1.25;
 }
 
 .badge {
-  background: color-mix(in srgb, var(--bg-secondary) 82%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
 }
 
 .badgeSuccess {
-  background: rgba($success-color, 0.1);
-  border: 1px solid rgba($success-color, 0.2);
-  color: var(--success-color);
+  background: var(--success-subtle);
+  border: 1px solid var(--success-border);
+  color: var(--success-text);
 }
 
 .badgeWarning {
-  background: rgba($warning-color, 0.1);
-  border: 1px solid rgba($warning-color, 0.2);
-  color: var(--warning-color);
+  background: var(--warning-subtle);
+  border: 1px solid var(--warning-line);
+  color: var(--warning-fg);
 }
 
 .badgeUntrusted {
   gap: 4px;
-  background: rgba($warning-color, 0.12);
-  border: 1px solid rgba($warning-color, 0.4);
-  color: var(--danger-color);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
 
   svg {
     flex-shrink: 0;
+    color: var(--warning);
   }
 }
 
@@ -511,12 +525,12 @@
   }
 }
 
-.metaDot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--text-tertiary) 50%, transparent);
-  flex-shrink: 0;
+.metaDetails {
+  flex-basis: 100%;
+  min-width: 0;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .tagRow {
@@ -544,7 +558,8 @@
   justify-content: space-between;
   gap: $spacing-sm;
   margin-top: auto;
-  padding-top: $spacing-sm;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .cardActions {
@@ -569,25 +584,28 @@
 
 .iconLink {
   display: inline-flex;
-  width: 30px;
-  min-height: 30px;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-color);
-  border-radius: $radius-md;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
   text-decoration: none;
   transition:
-    border-color $transition-fast,
-    background-color $transition-fast,
-    color $transition-fast;
+    background-color var(--dur-hover) ease,
+    color var(--dur-hover) ease;
 
   &:hover {
-    border-color: var(--primary-color);
-    background: var(--bg-hover);
-    color: var(--primary-color);
+    background: var(--fill-hover);
+    color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 }
 
