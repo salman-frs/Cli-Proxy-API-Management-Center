@@ -13,8 +13,8 @@
   }
 
   :global(.input) {
-    height: 38px;
-    border-radius: 10px;
+    height: var(--control-h);
+    border-radius: var(--radius-sm);
     font-size: 13px;
   }
 }
@@ -42,13 +42,10 @@
   max-height: 320px;
   overflow-y: auto;
   padding: 6px;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--floating-surface, var(--bg-primary));
-  box-shadow: var(
-    --floating-shadow,
-    0 14px 32px color-mix(in srgb, var(--text-primary) 16%, transparent)
-  );
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-popover);
   transform-origin: top center;
   animation: config-search-in var(--dur-press, 160ms) var(--ease-out-strong, ease-out) both;
 }
@@ -68,7 +65,7 @@
   gap: 12px;
   width: 100%;
   padding: 9px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-align: left;
   transition: background-color $transition-fast;
 
@@ -89,7 +86,7 @@
   min-width: 0;
   color: var(--text-primary);
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.3;
 }
 
@@ -104,7 +101,7 @@
   flex: 0 0 auto;
   color: var(--text-secondary);
   font-size: 11px;
-  font-weight: 650;
+  font-weight: 600;
   white-space: nowrap;
 }
 

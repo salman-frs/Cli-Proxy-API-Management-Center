@@ -7,10 +7,9 @@ $diff-line-height: 20px;
 $diff-gutter-width: 50px;
 $diff-prefix-width: 20px;
 
-// GitHub-inspired diff colors (theme-adaptive via color-mix)
-$diff-add-color: #3fb950;
-$diff-del-color: #f85149;
-$diff-hunk-color: #388bfd;
+$diff-add-color: var(--success);
+$diff-del-color: var(--danger);
+$diff-hunk-color: var(--accent);
 
 .diffModal {
   :global(.modal-body) {
@@ -23,8 +22,8 @@ $diff-hunk-color: #388bfd;
 .content {
   display: flex;
   flex-direction: column;
-  height: 70vh;
-  min-height: 420px;
+  max-height: 70vh;
+  min-height: 200px;
 }
 
 .emptyState {
@@ -79,7 +78,7 @@ $diff-hunk-color: #388bfd;
   align-items: center;
   gap: $spacing-sm;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   font-family: $diff-mono;
 }
 
@@ -190,7 +189,7 @@ $diff-hunk-color: #388bfd;
   flex-shrink: 0;
   text-align: center;
   user-select: none;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 // ── Code text ───────────────────────────────────────────
@@ -261,8 +260,8 @@ $diff-hunk-color: #388bfd;
 
 @include mobile {
   .content {
-    height: 65vh;
-    min-height: 360px;
+    max-height: 65vh;
+    min-height: 200px;
   }
 
   .lineNum {

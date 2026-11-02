@@ -330,7 +330,7 @@ export function ConfigPage() {
       </div>
 
       {mode === 'visual' ? (
-        <>
+        <div className={styles.workspace}>
           <div className={styles.tabsRow} data-reveal>
             <ConfigTabs
               active={activeSection}
@@ -348,7 +348,7 @@ export function ConfigPage() {
           >
             {renderActiveSection()}
           </div>
-        </>
+        </div>
       ) : (
         <SourcePanel
           search={sourceSearch}

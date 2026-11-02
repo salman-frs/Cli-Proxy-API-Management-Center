@@ -21,8 +21,8 @@ export type ConfigTabsProps = {
 };
 
 /**
- * 分区 tabs：安静的下划线式（与提供商 tabs 同语汇），图标 + 标签 + 错误徽章 + 脏点。
- * 「常用」是首 tab；tab 切换是高频操作，零动画。
+ * Section navigation: a vertical list beside the panel on wide screens and a horizontal
+ * scroller on narrow ones, so arrow keys work along both axes.
  */
 export function ConfigTabs({
   active,
@@ -52,9 +52,11 @@ export function ConfigTabs({
     const count = CONFIG_TAB_IDS.length;
     const currentIndex = CONFIG_TAB_IDS.indexOf(active);
     let nextIndex = -1;
-    if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % count;
-    else if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + count) % count;
-    else if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % count;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = (currentIndex - 1 + count) % count;
+    } else if (event.key === 'Home') nextIndex = 0;
     else if (event.key === 'End') nextIndex = count - 1;
     if (nextIndex < 0) return;
     event.preventDefault();
@@ -68,6 +70,7 @@ export function ConfigTabs({
       className={styles.tabs}
       role="tablist"
       aria-label={t('config_management.title')}
+      aria-orientation="vertical"
       ref={listRef}
     >
       {CONFIG_TAB_IDS.map((id) => {

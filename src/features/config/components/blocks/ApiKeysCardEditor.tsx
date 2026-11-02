@@ -155,7 +155,7 @@ function ScopedApiKeysCardEditor({
           </span>
           <span className={styles.apiKeysHint}>{t('config_management.visual.api_keys.hint')}</span>
         </div>
-        <Button size="sm" onClick={openAddModal} disabled={disabled}>
+        <Button variant="secondary" size="sm" onClick={openAddModal} disabled={disabled}>
           {t('config_management.visual.api_keys.add')}
         </Button>
       </div>
