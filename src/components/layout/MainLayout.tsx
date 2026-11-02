@@ -1,23 +1,31 @@
 import {
   ReactNode,
   RefObject,
-  SVGProps,
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
   type MouseEvent as ReactMouseEvent,
   type SyntheticEvent,
 } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/Button';
 import { PageTransition } from '@/components/common/PageTransition';
 import { MainRoutes } from '@/router/MainRoutes';
 import { authFilesApi, pluginsApi } from '@/services/api';
 import {
+  IconCheck,
+  IconChevronDown,
+  IconChevronRight,
+  IconGlobe,
+  IconLogOut,
+  IconMenu,
+  IconMonitor,
+  IconMoon,
+  IconPanelLeft,
+  IconRefreshCw,
+  IconSearch,
   IconSidebarAuthFiles,
   IconSidebarConfig,
   IconSidebarDashboard,
@@ -30,7 +38,8 @@ import {
   IconSidebarRouting,
   IconSidebarStore,
   IconSidebarSystem,
-  IconChevronDown,
+  IconSun,
+  IconX,
 } from '@/components/ui/icons';
 import { INLINE_LOGO_JPEG } from '@/assets/logoInline';
 import {
@@ -53,22 +62,31 @@ import { triggerHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { LANGUAGE_LABEL_KEYS, LANGUAGE_ORDER } from '@/utils/constants';
 import { isSupportedLanguage } from '@/utils/language';
 import { getSidebarShortcutLabel, isSidebarToggleShortcut } from '@/utils/sidebarShortcut';
+import { CommandPalette, type CommandItem } from './CommandPalette';
 import type { Theme } from '@/types';
 
+const NAV_ICON_SIZE = 16;
+
 const sidebarIcons: Record<string, ReactNode> = {
-  dashboard: <IconSidebarDashboard size={18} />,
-  quickStart: <IconSidebarQuickStart size={18} />,
-  aiProviders: <IconSidebarProviders size={18} />,
-  authFiles: <IconSidebarAuthFiles size={18} />,
-  oauth: <IconSidebarOauth size={18} />,
-  quota: <IconSidebarQuota size={18} />,
-  routing: <IconSidebarRouting size={18} />,
-  plugins: <IconSidebarPlugins size={18} />,
-  pluginStore: <IconSidebarStore size={18} />,
-  config: <IconSidebarConfig size={18} />,
-  logs: <IconSidebarLogs size={18} />,
-  system: <IconSidebarSystem size={18} />,
+  dashboard: <IconSidebarDashboard size={NAV_ICON_SIZE} />,
+  quickStart: <IconSidebarQuickStart size={NAV_ICON_SIZE} />,
+  aiProviders: <IconSidebarProviders size={NAV_ICON_SIZE} />,
+  authFiles: <IconSidebarAuthFiles size={NAV_ICON_SIZE} />,
+  oauth: <IconSidebarOauth size={NAV_ICON_SIZE} />,
+  quota: <IconSidebarQuota size={NAV_ICON_SIZE} />,
+  routing: <IconSidebarRouting size={NAV_ICON_SIZE} />,
+  plugins: <IconSidebarPlugins size={NAV_ICON_SIZE} />,
+  pluginStore: <IconSidebarStore size={NAV_ICON_SIZE} />,
+  config: <IconSidebarConfig size={NAV_ICON_SIZE} />,
+  logs: <IconSidebarLogs size={NAV_ICON_SIZE} />,
+  system: <IconSidebarSystem size={NAV_ICON_SIZE} />,
 };
+
+const THEME_OPTIONS: Array<{ key: Theme; labelKey: string; icon: ReactNode }> = [
+  { key: 'auto', labelKey: 'theme.auto', icon: <IconMonitor size={14} /> },
+  { key: 'light', labelKey: 'theme.light', icon: <IconSun size={14} /> },
+  { key: 'dark', labelKey: 'theme.dark', icon: <IconMoon size={14} /> },
+];
 
 interface SidebarNavLinkItem {
   kind?: 'link';
@@ -105,7 +123,35 @@ interface SidebarNavGroup {
 const flattenNavItems = (items: SidebarNavItem[]): SidebarNavLinkItem[] =>
   items.flatMap((item) => (item.kind === 'drawer' ? item.children : [item]));
 
-/** 点击菜单外或按下 Escape 时关闭弹出菜单 */
+const normalizePathname = (pathname: string) => {
+  const trimmed = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  return trimmed === '/dashboard' ? '/' : trimmed;
+};
+
+const isMacPlatform = () => {
+  if (typeof navigator === 'undefined') return false;
+  const platform =
+    (navigator as unknown as { userAgentData?: { platform?: string } }).userAgentData?.platform ||
+    navigator.platform ||
+    navigator.userAgent ||
+    '';
+  return /(Mac|iPhone|iPod|iPad)/i.test(platform);
+};
+
+const IS_MAC = isMacPlatform();
+
+const isCommandPaletteShortcut = (event: KeyboardEvent) =>
+  (event.metaKey || event.ctrlKey) && (event.key === 'k' || event.key === 'K');
+
+const formatHost = (apiBase: string) => {
+  try {
+    return new URL(apiBase).host;
+  } catch {
+    return apiBase;
+  }
+};
+
+/** Close a popover menu on outside pointer-down or Escape. */
 function useMenuDismiss(
   open: boolean,
   menuRef: RefObject<HTMLDivElement | null>,
@@ -145,178 +191,20 @@ function PluginSidebarIcon({ src }: { src: string }) {
   return showImage ? (
     <img src={src} alt="" onError={() => setFailed(true)} />
   ) : (
-    <IconSidebarPlugins size={18} />
+    <IconSidebarPlugins size={NAV_ICON_SIZE} />
   );
 }
-
-// Header action icons - smaller size for header buttons
-const headerIconProps: SVGProps<SVGSVGElement> = {
-  width: 16,
-  height: 16,
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 2,
-  strokeLinecap: 'round',
-  strokeLinejoin: 'round',
-  'aria-hidden': 'true',
-  focusable: 'false',
-};
-
-const headerIcons = {
-  refresh: (
-    <svg {...headerIconProps}>
-      <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-      <path d="M21 3v5h-5" />
-    </svg>
-  ),
-  menu: (
-    <svg {...headerIconProps}>
-      <path d="M4 7h16" />
-      <path d="M4 12h16" />
-      <path d="M4 17h16" />
-    </svg>
-  ),
-  close: (
-    <svg {...headerIconProps}>
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  ),
-  chevronLeft: (
-    <svg {...headerIconProps}>
-      <path d="m14 18-6-6 6-6" />
-    </svg>
-  ),
-  chevronRight: (
-    <svg {...headerIconProps}>
-      <path d="m10 6 6 6-6 6" />
-    </svg>
-  ),
-  language: (
-    <svg {...headerIconProps}>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M2 12h20" />
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  ),
-  sun: (
-    <svg {...headerIconProps}>
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </svg>
-  ),
-  moon: (
-    <svg {...headerIconProps}>
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
-    </svg>
-  ),
-  whiteTheme: (
-    <svg {...headerIconProps}>
-      <circle cx="12" cy="12" r="7" />
-      <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
-    </svg>
-  ),
-  autoTheme: (
-    <svg {...headerIconProps}>
-      <defs>
-        <clipPath id="mainLayoutAutoThemeSunLeftHalf">
-          <rect x="0" y="0" width="12" height="24" />
-        </clipPath>
-      </defs>
-      <circle cx="12" cy="12" r="4" />
-      <circle
-        cx="12"
-        cy="12"
-        r="4"
-        clipPath="url(#mainLayoutAutoThemeSunLeftHalf)"
-        fill="currentColor"
-      />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="M4.93 4.93l1.41 1.41" />
-      <path d="M17.66 17.66l1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="M6.34 17.66l-1.41 1.41" />
-      <path d="M19.07 4.93l-1.41 1.41" />
-    </svg>
-  ),
-  logout: (
-    <svg {...headerIconProps}>
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <path d="m16 17 5-5-5-5" />
-      <path d="M21 12H9" />
-    </svg>
-  ),
-};
-
-const THEME_CARDS: Array<{
-  key: Theme;
-  labelKey: string;
-  colors: { bg: string; card: string; border: string; text: string; textMuted: string };
-}> = [
-  {
-    key: 'auto',
-    labelKey: 'theme.auto',
-    colors: {
-      bg: 'linear-gradient(135deg, #ffffff 0 50%, #111111 50% 100%)',
-      card: 'linear-gradient(135deg, #ffffff 0 50%, #1a1a1a 50% 100%)',
-      border: '#bdbdbd',
-      text: '#2d2a26',
-      textMuted: 'linear-gradient(135deg, #c9c9c9 0 50%, #5a5a5a 50% 100%)',
-    },
-  },
-  {
-    key: 'white',
-    labelKey: 'theme.white',
-    colors: {
-      bg: '#ffffff',
-      card: '#ffffff',
-      border: '#e5e5e5',
-      text: '#2d2a26',
-      textMuted: '#a29c95',
-    },
-  },
-  {
-    key: 'light',
-    labelKey: 'theme.light',
-    colors: {
-      bg: '#faf9f5',
-      card: '#f0eee8',
-      border: '#e3e1db',
-      text: '#2d2a26',
-      textMuted: '#a29c95',
-    },
-  },
-  {
-    key: 'dark',
-    labelKey: 'theme.dark',
-    colors: {
-      bg: '#151412',
-      card: '#1d1b18',
-      border: '#3a3530',
-      text: '#f6f4f1',
-      textMuted: '#9c958d',
-    },
-  },
-];
 
 export function MainLayout() {
   const { t } = useTranslation();
   const { showNotification } = useNotificationStore();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const logout = useAuthStore((state) => state.logout);
   const connectionStatus = useAuthStore((state) => state.connectionStatus);
   const apiBase = useAuthStore((state) => state.apiBase);
+  const serverVersion = useAuthStore((state) => state.serverVersion);
   const supportsPlugin = useAuthStore((state) => state.supportsPlugin);
 
   const fetchConfig = useConfigStore((state) => state.fetchConfig);
@@ -330,6 +218,8 @@ export function MainLayout() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [authFilesCount, setAuthFilesCount] = useState<number | null>(null);
   const [railTooltip, setRailTooltip] = useState<{
     targetID: string;
@@ -352,12 +242,12 @@ export function MainLayout() {
   const themeMenuRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
 
-  const fullBrandName = 'CLI Proxy API Management Center';
-  const abbrBrandName = t('title.abbr');
   const arrivingFromLogin = useLoginTransitionStore((state) => state.phase === 'revealing');
   const isLogsPage = location.pathname.startsWith('/logs');
   const isPluginResourcePage = location.pathname.startsWith('/plugin-pages');
   const showSidebarLabels = !sidebarCollapsed || sidebarOpen;
+  const sidebarShortcutText = getSidebarShortcutLabel(IS_MAC);
+  const commandShortcutText = IS_MAC ? '⌘K' : 'Ctrl K';
 
   // Keep floating header height available to sticky mobile elements and overlays.
   useLayoutEffect(() => {
@@ -452,24 +342,6 @@ export function MainLayout() {
   const closeThemeMenu = useCallback(() => setThemeMenuOpen(false), []);
   useMenuDismiss(languageMenuOpen, languageMenuRef, closeLanguageMenu);
   useMenuDismiss(themeMenuOpen, themeMenuRef, closeThemeMenu);
-
-  const toggleLanguageMenu = useCallback(() => {
-    setLanguageMenuOpen((prev) => !prev);
-    setThemeMenuOpen(false);
-  }, []);
-
-  const toggleThemeMenu = useCallback(() => {
-    setThemeMenuOpen((prev) => !prev);
-    setLanguageMenuOpen(false);
-  }, []);
-
-  const handleThemeSelect = useCallback(
-    (nextTheme: Theme) => {
-      setTheme(nextTheme);
-      setThemeMenuOpen(false);
-    },
-    [setTheme]
-  );
 
   const handleLanguageSelect = useCallback(
     (nextLanguage: string) => {
@@ -710,10 +582,11 @@ export function MainLayout() {
   ];
   const navItems = navGroups.flatMap((group) => flattenNavItems(group.items));
   const navOrder = navItems.map((item) => item.path);
+  const resolveItemLabel = (item: SidebarNavLinkItem) =>
+    item.label ?? (item.labelKey ? t(item.labelKey) : '');
+
   const getRouteOrder = (pathname: string) => {
-    const trimmedPath =
-      pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-    const normalizedPath = trimmedPath === '/dashboard' ? '/' : trimmedPath;
+    const normalizedPath = normalizePathname(pathname);
 
     const authFilesIndex = navOrder.indexOf('/auth-files');
     if (authFilesIndex !== -1) {
@@ -734,21 +607,25 @@ export function MainLayout() {
   };
 
   const getTransitionVariant = useCallback((fromPathname: string, toPathname: string) => {
-    const normalize = (pathname: string) => {
-      const trimmed =
-        pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-      return trimmed === '/dashboard' ? '/' : trimmed;
-    };
-
-    const from = normalize(fromPathname);
-    const to = normalize(toPathname);
+    const from = normalizePathname(fromPathname);
+    const to = normalizePathname(toPathname);
     const isAuthFiles = (pathname: string) =>
       pathname === '/auth-files' || pathname.startsWith('/auth-files/');
     if (isAuthFiles(from) && isAuthFiles(to)) return 'ios';
     return 'vertical';
   }, []);
 
+  const currentPath = normalizePathname(location.pathname);
+  const isCurrentItem = (item: SidebarNavLinkItem) =>
+    item.path === currentPath || (item.path !== '/' && currentPath.startsWith(`${item.path}/`));
+  const currentGroup = navGroups.find((group) => flattenNavItems(group.items).some(isCurrentItem));
+  const currentItem = currentGroup
+    ? flattenNavItems(currentGroup.items).find(isCurrentItem)
+    : undefined;
+
   const handleRefreshAll = async () => {
+    if (refreshing) return;
+    setRefreshing(true);
     clearCache();
     const results = await Promise.allSettled([
       fetchConfig(true),
@@ -756,6 +633,7 @@ export function MainLayout() {
       loadAuthFilesCount(),
       triggerHeaderRefresh(),
     ]);
+    setRefreshing(false);
     const rejected = results.find((result) => result.status === 'rejected');
     if (rejected && rejected.status === 'rejected') {
       const reason = rejected.reason;
@@ -823,30 +701,93 @@ export function MainLayout() {
     [hideRailTooltip, showRailTooltip]
   );
 
-  const isMac = useMemo(() => {
-    if (typeof navigator === 'undefined') return false;
-    const platform =
-      (navigator as unknown as { userAgentData?: { platform?: string } }).userAgentData?.platform ||
-      navigator.platform ||
-      navigator.userAgent ||
-      '';
-    return /(Mac|iPhone|iPod|iPad)/i.test(platform);
-  }, []);
+  const railTooltipHandlers = (targetID: string, label: string, meta?: string) =>
+    showSidebarLabels
+      ? {}
+      : {
+          onMouseEnter: (event: ReactMouseEvent<HTMLElement>) =>
+            handleRailTooltipMouseEnter(event, targetID, label, meta),
+          onMouseLeave: handleRailTooltipMouseLeave,
+          onFocus: (event: SyntheticEvent<HTMLElement>) =>
+            handleRailTooltipFocus(event, targetID, label, meta),
+          onBlur: (event: SyntheticEvent<HTMLElement>) =>
+            handleRailTooltipBlur(event, targetID, label, meta),
+        };
 
-  const shortcutText = getSidebarShortcutLabel(isMac);
+  const toggleSidebarCollapsed = useCallback(() => {
+    hideRailTooltip();
+    setSidebarCollapsed((prev) => !prev);
+  }, [hideRailTooltip]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (isCommandPaletteShortcut(event)) {
+        event.preventDefault();
+        setCommandPaletteOpen((prev) => !prev);
+        return;
+      }
       if (isSidebarToggleShortcut(event)) {
         event.preventDefault();
-        hideRailTooltip();
-        setSidebarCollapsed((prev) => !prev);
+        toggleSidebarCollapsed();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [hideRailTooltip]);
+  }, [toggleSidebarCollapsed]);
+
+  const commandItems: CommandItem[] = [
+    ...navGroups.flatMap((group) =>
+      flattenNavItems(group.items).map((item) => ({
+        id: `nav:${item.path}`,
+        label: resolveItemLabel(item),
+        group: t('shell.group_pages'),
+        icon: item.icon,
+        hint: t(group.labelKey),
+        keywords: [item.meta ?? (item.metaKey ? t(item.metaKey) : ''), item.path],
+        active: item.path === currentPath,
+        onSelect: () => navigate(item.path),
+      }))
+    ),
+    {
+      id: 'action:refresh',
+      label: t('header.refresh_all'),
+      group: t('shell.group_actions'),
+      icon: <IconRefreshCw size={16} />,
+      onSelect: () => void handleRefreshAll(),
+    },
+    {
+      id: 'action:sidebar',
+      label: sidebarCollapsed ? t('sidebar.toggle_expand') : t('sidebar.toggle_collapse'),
+      group: t('shell.group_actions'),
+      icon: <IconPanelLeft size={16} />,
+      hint: sidebarShortcutText,
+      onSelect: toggleSidebarCollapsed,
+    },
+    ...THEME_OPTIONS.map((option) => ({
+      id: `theme:${option.key}`,
+      label: `${t('theme.switch')}: ${t(option.labelKey)}`,
+      group: t('shell.group_preferences'),
+      icon: option.icon,
+      active: theme === option.key,
+      onSelect: () => setTheme(option.key),
+    })),
+    ...LANGUAGE_ORDER.map((lang) => ({
+      id: `language:${lang}`,
+      label: `${t('language.switch')}: ${t(LANGUAGE_LABEL_KEYS[lang])}`,
+      group: t('shell.group_preferences'),
+      icon: <IconGlobe size={16} />,
+      active: language === lang,
+      onSelect: () => handleLanguageSelect(lang),
+    })),
+    {
+      id: 'action:logout',
+      label: t('header.logout'),
+      group: t('shell.group_actions'),
+      icon: <IconLogOut size={16} />,
+      onSelect: logout,
+    },
+  ];
 
   const renderNavBadge = (badge?: number, badgeLabel?: string) =>
     typeof badge === 'number' ? (
@@ -861,7 +802,7 @@ export function MainLayout() {
     ) : null;
 
   const renderNavLink = (item: SidebarNavLinkItem, className = 'nav-item') => {
-    const itemLabel = item.label ?? (item.labelKey ? t(item.labelKey) : '');
+    const itemLabel = resolveItemLabel(item);
     const itemMeta = item.meta ?? (item.metaKey ? t(item.metaKey) : '');
     const accessibleLabel = item.badgeLabel ? `${itemLabel}, ${item.badgeLabel}` : itemLabel;
 
@@ -869,6 +810,7 @@ export function MainLayout() {
       <NavLink
         key={item.path}
         to={item.path}
+        end={item.path === '/'}
         className={({ isActive }) => `${className} ${isActive ? 'active' : ''}`}
         onClick={() => {
           focusedRailItemRef.current = null;
@@ -881,22 +823,7 @@ export function MainLayout() {
             ? NAV_TOOLTIP_ID
             : undefined
         }
-        onMouseEnter={
-          showSidebarLabels
-            ? undefined
-            : (event) => handleRailTooltipMouseEnter(event, item.path, itemLabel, itemMeta)
-        }
-        onMouseLeave={showSidebarLabels ? undefined : handleRailTooltipMouseLeave}
-        onFocus={
-          showSidebarLabels
-            ? undefined
-            : (event) => handleRailTooltipFocus(event, item.path, itemLabel, itemMeta)
-        }
-        onBlur={
-          showSidebarLabels
-            ? undefined
-            : (event) => handleRailTooltipBlur(event, item.path, itemLabel, itemMeta)
-        }
+        {...railTooltipHandlers(item.path, itemLabel, itemMeta)}
       >
         <span className="nav-icon">{item.icon}</span>
         {showSidebarLabels ? (
@@ -936,22 +863,7 @@ export function MainLayout() {
               : undefined
           }
           aria-expanded={isOpen}
-          onMouseEnter={
-            showSidebarLabels
-              ? undefined
-              : (event) => handleRailTooltipMouseEnter(event, item.id, item.label, item.meta)
-          }
-          onMouseLeave={showSidebarLabels ? undefined : handleRailTooltipMouseLeave}
-          onFocus={
-            showSidebarLabels
-              ? undefined
-              : (event) => handleRailTooltipFocus(event, item.id, item.label, item.meta)
-          }
-          onBlur={
-            showSidebarLabels
-              ? undefined
-              : (event) => handleRailTooltipBlur(event, item.id, item.label, item.meta)
-          }
+          {...railTooltipHandlers(item.id, item.label, item.meta)}
         >
           <span className="nav-icon">{item.icon}</span>
           {showSidebarLabels && (
@@ -975,10 +887,17 @@ export function MainLayout() {
   };
 
   const mobileSidebarToggleLabel = sidebarOpen
-    ? t('sidebar.toggle_collapse', { defaultValue: 'Close navigation' })
-    : t('sidebar.toggle_expand', { defaultValue: 'Open navigation' });
-
+    ? t('sidebar.toggle_collapse')
+    : t('sidebar.toggle_expand');
   const sidebarToggleLabel = sidebarCollapsed ? t('sidebar.expand') : t('sidebar.collapse');
+  const activeThemeOption =
+    THEME_OPTIONS.find((option) => option.key === theme) ?? THEME_OPTIONS[0];
+  const connectionLabel =
+    connectionStatus === 'connected'
+      ? t('common.connected_status')
+      : connectionStatus === 'connecting'
+        ? t('common.connecting_status')
+        : t('common.disconnected_status');
 
   return (
     <div
@@ -986,220 +905,249 @@ export function MainLayout() {
         isPluginResourcePage ? 'plugin-resource-shell' : ''
       } ${arrivingFromLogin ? 'app-shell--arriving' : ''}`}
     >
-      <div className="top-gradient-blur" aria-hidden="true" />
+      <button
+        type="button"
+        className={`sidebar-backdrop ${sidebarOpen ? 'visible' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+        aria-label={t('common.close')}
+        aria-hidden={!sidebarOpen}
+        tabIndex={sidebarOpen ? 0 : -1}
+      />
 
-      <header className="main-header" ref={headerRef}>
+      <aside
+        className={`sidebar ${sidebarOpen ? 'open' : ''} ${sidebarCollapsed ? 'collapsed' : ''}`}
+      >
+        <div className="sidebar-header">
+          <div className="sidebar-brand" title="CLI Proxy API Management Center">
+            <img src={INLINE_LOGO_JPEG} alt="" className="sidebar-brand-logo" />
+            {showSidebarLabels && (
+              <span className="sidebar-brand-text">
+                <span className="sidebar-brand-title">CLIProxyAPI</span>
+                {serverVersion ? (
+                  <span className="sidebar-brand-version">{serverVersion}</span>
+                ) : null}
+              </span>
+            )}
+          </div>
+          {sidebarOpen ? (
+            <button
+              type="button"
+              className="sidebar-icon-button sidebar-close"
+              onClick={() => setSidebarOpen(false)}
+              aria-label={t('common.close')}
+            >
+              <IconX size={16} />
+            </button>
+          ) : null}
+        </div>
+
         <button
           type="button"
-          className="sidebar-toggle-floating"
+          className="sidebar-search"
           onClick={() => {
-            hideRailTooltip();
-            setSidebarCollapsed((prev) => !prev);
+            setSidebarOpen(false);
+            setCommandPaletteOpen(true);
           }}
-          onMouseEnter={(event) =>
-            handleRailTooltipMouseEnter(event, 'sidebar-toggle', sidebarToggleLabel, shortcutText)
-          }
-          onMouseLeave={handleRailTooltipMouseLeave}
-          onFocus={(event) =>
-            handleRailTooltipFocus(event, 'sidebar-toggle', sidebarToggleLabel, shortcutText)
-          }
-          onBlur={(event) =>
-            handleRailTooltipBlur(event, 'sidebar-toggle', sidebarToggleLabel, shortcutText)
-          }
-          aria-label={`${sidebarToggleLabel} (${shortcutText})`}
-          aria-describedby={railTooltip?.targetID === 'sidebar-toggle' ? NAV_TOOLTIP_ID : undefined}
+          aria-label={t('shell.search')}
+          {...railTooltipHandlers('sidebar-search', t('shell.search'), commandShortcutText)}
         >
-          {sidebarCollapsed ? headerIcons.chevronRight : headerIcons.chevronLeft}
+          <IconSearch size={15} />
+          {showSidebarLabels ? (
+            <>
+              <span className="sidebar-search-label">{t('shell.search')}</span>
+              <kbd className="kbd">{commandShortcutText}</kbd>
+            </>
+          ) : null}
         </button>
 
-        <div className="mobile-sidebar-actions">
-          <Button
-            className="mobile-menu-btn"
-            variant="ghost"
-            size="sm"
-            onClick={() => setSidebarOpen((prev) => !prev)}
-            title={mobileSidebarToggleLabel}
-            aria-label={mobileSidebarToggleLabel}
-          >
-            {sidebarOpen ? headerIcons.close : headerIcons.menu}
-          </Button>
-        </div>
+        <nav className="nav-section" aria-label={t('shell.navigation')}>
+          {navGroups.map((group) => (
+            <div className="nav-group" key={group.id}>
+              {showSidebarLabels ? (
+                <div className="nav-group-label">{t(group.labelKey)}</div>
+              ) : (
+                <div className="nav-group-divider" aria-hidden="true" />
+              )}
+              {group.items.map((item) => renderNavItem(item))}
+            </div>
+          ))}
+        </nav>
 
-        <div className="header-actions floating-actions">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRefreshAll}
-            title={t('header.refresh_all')}
+        <div className="sidebar-footer">
+          <div
+            className={`sidebar-status sidebar-status--${connectionStatus}`}
+            title={`${connectionLabel} · ${apiBase}`}
           >
-            {headerIcons.refresh}
-          </Button>
-          <div className={`language-menu ${languageMenuOpen ? 'open' : ''}`} ref={languageMenuRef}>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguageMenu}
-              title={t('language.switch')}
-              aria-label={t('language.switch')}
-              aria-haspopup="menu"
-              aria-expanded={languageMenuOpen}
-            >
-              {headerIcons.language}
-            </Button>
-            {languageMenuOpen && (
-              <div
-                className="notification entering language-menu-popover"
-                role="menu"
-                aria-label={t('language.switch')}
-              >
-                {LANGUAGE_ORDER.map((lang) => (
-                  <button
-                    key={lang}
-                    type="button"
-                    className={`language-menu-option ${language === lang ? 'active' : ''}`}
-                    onClick={() => handleLanguageSelect(lang)}
-                    role="menuitemradio"
-                    aria-checked={language === lang}
-                  >
-                    <span>{t(LANGUAGE_LABEL_KEYS[lang])}</span>
-                    {language === lang ? <span className="language-menu-check">✓</span> : null}
-                  </button>
-                ))}
-              </div>
+            <span className="sidebar-status-dot" aria-hidden="true" />
+            {showSidebarLabels ? (
+              <span className="sidebar-status-text">
+                <span className="sidebar-status-host">{formatHost(apiBase)}</span>
+                <span className="sidebar-status-label">{connectionLabel}</span>
+              </span>
+            ) : (
+              <span className="sr-only">{connectionLabel}</span>
             )}
           </div>
-          <div className={`theme-menu ${themeMenuOpen ? 'open' : ''}`} ref={themeMenuRef}>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleThemeMenu}
-              title={t('theme.switch')}
-              aria-label={t('theme.switch')}
-              aria-haspopup="menu"
-              aria-expanded={themeMenuOpen}
-            >
-              {theme === 'auto'
-                ? headerIcons.autoTheme
-                : theme === 'dark'
-                  ? headerIcons.moon
-                  : theme === 'white'
-                    ? headerIcons.whiteTheme
-                    : headerIcons.sun}
-            </Button>
-            {themeMenuOpen && (
-              <div
-                className="notification entering theme-menu-popover"
-                role="menu"
+
+          <div className="sidebar-footer-actions">
+            <div className="sidebar-menu" ref={themeMenuRef}>
+              <button
+                type="button"
+                className="sidebar-icon-button"
+                onClick={() => {
+                  setThemeMenuOpen((prev) => !prev);
+                  setLanguageMenuOpen(false);
+                }}
                 aria-label={t('theme.switch')}
+                title={t('theme.switch')}
+                aria-haspopup="menu"
+                aria-expanded={themeMenuOpen}
               >
-                {THEME_CARDS.map((tc) => (
-                  <button
-                    key={tc.key}
-                    type="button"
-                    className={`theme-card ${theme === tc.key ? 'active' : ''}`}
-                    onClick={() => handleThemeSelect(tc.key)}
-                    role="menuitemradio"
-                    aria-checked={theme === tc.key}
-                  >
-                    <div
-                      className="theme-card-preview"
-                      style={{
-                        background: tc.colors.bg,
-                        border: `1px solid ${tc.colors.border}`,
+                {activeThemeOption.icon}
+              </button>
+              {themeMenuOpen && (
+                <div className="menu-popover" role="menu" aria-label={t('theme.switch')}>
+                  <div className="menu-popover-label">{t('theme.switch')}</div>
+                  {THEME_OPTIONS.map((option) => (
+                    <button
+                      key={option.key}
+                      type="button"
+                      className={`menu-option ${theme === option.key ? 'active' : ''}`}
+                      onClick={() => {
+                        setTheme(option.key);
+                        setThemeMenuOpen(false);
                       }}
+                      role="menuitemradio"
+                      aria-checked={theme === option.key}
                     >
-                      <div
-                        className="theme-card-header"
-                        style={{
-                          background: tc.colors.card,
-                          borderBottom: `1px solid ${tc.colors.border}`,
-                        }}
-                      />
-                      <div className="theme-card-body">
-                        <div
-                          className="theme-card-sidebar"
-                          style={{
-                            background: tc.colors.card,
-                            borderRight: `1px solid ${tc.colors.border}`,
-                          }}
-                        />
-                        <div className="theme-card-content" style={{ background: tc.colors.bg }}>
-                          <div
-                            className="theme-card-line"
-                            style={{ background: tc.colors.textMuted }}
-                          />
-                          <div
-                            className="theme-card-line short"
-                            style={{ background: tc.colors.textMuted }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <span className="theme-card-label">{t(tc.labelKey)}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <Button variant="ghost" size="sm" onClick={logout} title={t('header.logout')}>
-            {headerIcons.logout}
-          </Button>
-        </div>
-      </header>
-
-      <div className="main-body">
-        <button
-          type="button"
-          className={`sidebar-backdrop ${sidebarOpen ? 'visible' : ''}`}
-          onClick={() => setSidebarOpen(false)}
-          aria-label={t('common.close')}
-          aria-hidden={!sidebarOpen}
-          tabIndex={sidebarOpen ? 0 : -1}
-        />
-
-        <aside
-          className={`sidebar ${sidebarOpen ? 'open' : ''} ${sidebarCollapsed ? 'collapsed' : ''}`}
-        >
-          <div className="sidebar-header">
-            <div className="sidebar-brand" title={fullBrandName}>
-              <img src={INLINE_LOGO_JPEG} alt="CPAMC logo" className="sidebar-brand-logo" />
-              {showSidebarLabels && (
-                <span className="sidebar-brand-text">
-                  <span className="sidebar-brand-title">{abbrBrandName}</span>
-                  <span className="sidebar-brand-subtitle">{t('sidebar.subtitle')}</span>
-                </span>
+                      <span className="menu-option-icon">{option.icon}</span>
+                      <span className="menu-option-label">{t(option.labelKey)}</span>
+                      {theme === option.key ? <IconCheck size={14} /> : null}
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
-          </div>
 
-          <div className="nav-section">
-            {navGroups.map((group, idx) => (
-              <div className="nav-group" key={group.id}>
-                {showSidebarLabels ? (
-                  <div className="nav-group-label">{t(group.labelKey)}</div>
-                ) : (
-                  idx > 0 && <div className="nav-group-divider" aria-hidden="true" />
-                )}
-                {group.items.map((item) => renderNavItem(item))}
-              </div>
-            ))}
-          </div>
-        </aside>
+            <div className="sidebar-menu" ref={languageMenuRef}>
+              <button
+                type="button"
+                className="sidebar-icon-button"
+                onClick={() => {
+                  setLanguageMenuOpen((prev) => !prev);
+                  setThemeMenuOpen(false);
+                }}
+                aria-label={t('language.switch')}
+                title={t('language.switch')}
+                aria-haspopup="menu"
+                aria-expanded={languageMenuOpen}
+              >
+                <IconGlobe size={14} />
+              </button>
+              {languageMenuOpen && (
+                <div className="menu-popover" role="menu" aria-label={t('language.switch')}>
+                  <div className="menu-popover-label">{t('language.switch')}</div>
+                  {LANGUAGE_ORDER.map((lang) => (
+                    <button
+                      key={lang}
+                      type="button"
+                      className={`menu-option ${language === lang ? 'active' : ''}`}
+                      onClick={() => handleLanguageSelect(lang)}
+                      role="menuitemradio"
+                      aria-checked={language === lang}
+                    >
+                      <span className="menu-option-label">{t(LANGUAGE_LABEL_KEYS[lang])}</span>
+                      {language === lang ? <IconCheck size={14} /> : null}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-        {railTooltip && (
-          <div
-            ref={railTooltipRef}
-            id={NAV_TOOLTIP_ID}
-            className="nav-tooltip"
-            role="tooltip"
-            style={{ top: railTooltip.top }}
+            <button
+              type="button"
+              className="sidebar-icon-button"
+              onClick={logout}
+              aria-label={t('header.logout')}
+              title={t('header.logout')}
+            >
+              <IconLogOut size={14} />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {railTooltip && (
+        <div
+          ref={railTooltipRef}
+          id={NAV_TOOLTIP_ID}
+          className="nav-tooltip"
+          role="tooltip"
+          style={{ top: railTooltip.top }}
+        >
+          <span className="nav-tooltip-label" aria-hidden="true">
+            {railTooltip.label}
+          </span>
+          {railTooltip.meta ? <span className="nav-tooltip-meta">{railTooltip.meta}</span> : null}
+        </div>
+      )}
+
+      <div className="main-frame">
+        <header className="main-header" ref={headerRef}>
+          <button
+            type="button"
+            className="header-icon-button mobile-menu-btn"
+            onClick={() => setSidebarOpen((prev) => !prev)}
+            aria-label={mobileSidebarToggleLabel}
+            title={mobileSidebarToggleLabel}
           >
-            <span className="nav-tooltip-label" aria-hidden="true">
-              {railTooltip.label}
+            <IconMenu size={16} />
+          </button>
+          <button
+            type="button"
+            className="header-icon-button sidebar-toggle-button"
+            onClick={toggleSidebarCollapsed}
+            aria-label={`${sidebarToggleLabel} (${sidebarShortcutText})`}
+            title={`${sidebarToggleLabel} (${sidebarShortcutText})`}
+          >
+            <IconPanelLeft size={16} />
+          </button>
+
+          <nav className="breadcrumb" aria-label={t('shell.breadcrumb')}>
+            {currentGroup ? (
+              <>
+                <span className="breadcrumb-segment">{t(currentGroup.labelKey)}</span>
+                <IconChevronRight size={14} className="breadcrumb-separator" />
+              </>
+            ) : null}
+            <span className="breadcrumb-segment breadcrumb-current" aria-current="page">
+              {currentItem ? resolveItemLabel(currentItem) : t('nav.dashboard')}
             </span>
-            {railTooltip.meta ? <span className="nav-tooltip-meta">{railTooltip.meta}</span> : null}
+          </nav>
+
+          <div className="header-actions">
+            <button
+              type="button"
+              className="header-search-button"
+              onClick={() => setCommandPaletteOpen(true)}
+              aria-label={t('shell.search')}
+            >
+              <IconSearch size={14} />
+              <span className="header-search-label">{t('shell.search')}</span>
+              <kbd className="kbd">{commandShortcutText}</kbd>
+            </button>
+            <button
+              type="button"
+              className={`header-icon-button ${refreshing ? 'is-spinning' : ''}`}
+              onClick={() => void handleRefreshAll()}
+              aria-label={t('header.refresh_all')}
+              title={t('header.refresh_all')}
+              disabled={refreshing}
+            >
+              <IconRefreshCw size={15} />
+            </button>
           </div>
-        )}
+        </header>
 
         <div
           className={`content${isLogsPage ? ' content-logs' : ''}${
@@ -1221,6 +1169,12 @@ export function MainLayout() {
           </main>
         </div>
       </div>
+
+      <CommandPalette
+        open={commandPaletteOpen}
+        items={commandItems}
+        onClose={() => setCommandPaletteOpen(false)}
+      />
     </div>
   );
 }
