@@ -129,8 +129,8 @@ describe('providerLabel', () => {
     expect(providerLabel('gemini-interactions', 'Unattributed')).toBe('Interactions API');
   });
 
-  test('falls back to a capitalised id, and localises unknown', () => {
-    expect(providerLabel('somenewbrand', 'Unattributed')).toBe('Somenewbrand');
+  test('keeps user-defined ids as written, and localises unknown', () => {
+    expect(providerLabel('mock-openai', 'Unattributed')).toBe('mock-openai');
     expect(providerLabel('unknown', 'Unattributed')).toBe('Unattributed');
     expect(providerLabel('', 'Unattributed')).toBe('Unattributed');
   });

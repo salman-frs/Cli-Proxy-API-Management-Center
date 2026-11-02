@@ -24,7 +24,7 @@ const PROVIDER_LABELS: Record<string, string> = {
  */
 export function providerLabel(id: string, unknownLabel: string): string {
   if (id === 'unknown' || !id) return unknownLabel;
-  return PROVIDER_LABELS[id] ?? id.charAt(0).toUpperCase() + id.slice(1);
+  return PROVIDER_LABELS[id] ?? id;
 }
 
 export interface WindowParts {
@@ -45,7 +45,23 @@ export function bucketsToMinutes(bucketCount: number): number {
 
 export type MeterTone = 'good' | 'warning' | 'critical' | 'idle';
 
-/** 成功率 → 严重度。数值本身始终可见，颜色只是辅助通道。 */
+export type OverviewStatus =
+  'operational' | 'degraded' | 'failing' | 'idle' | 'connecting' | 'offline';
+
+export function overviewStatus(
+  connectionStatus: string,
+  successRate: number | null,
+  unavailableCredentials: number
+): OverviewStatus {
+  if (connectionStatus === 'connecting') return 'connecting';
+  if (connectionStatus !== 'connected') return 'offline';
+  const tone = toneForSuccessRate(successRate);
+  if (tone === 'critical') return 'failing';
+  if (tone === 'warning' || unavailableCredentials > 0) return 'degraded';
+  if (tone === 'idle') return 'idle';
+  return 'operational';
+}
+
 export function toneForSuccessRate(rate: number | null): MeterTone {
   if (rate === null) return 'idle';
   if (rate >= 95) return 'good';

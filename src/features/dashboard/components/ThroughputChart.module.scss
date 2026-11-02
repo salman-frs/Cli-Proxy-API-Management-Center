@@ -1,21 +1,52 @@
-@use '../../../styles/mixins' as *;
+.card {
+  --chart-height: 200px;
+  --bar-max-width: 28px;
+  --y-axis-width: 36px;
 
-.chart {
-  --chart-height: 208px;
-  --bar-max-width: 24px;
-
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-md;
+  container-type: inline-size;
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
 }
 
-/* ---------- 图例 ---------- */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 16px 20px 0;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.description {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
 
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: $spacing-lg;
+  gap: 16px;
+  margin: 0;
+  padding: 2px 0 0;
+  list-style: none;
   font-size: 13px;
   color: var(--text-secondary);
 }
@@ -23,19 +54,19 @@
 .legendItem {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: 6px;
 }
 
 .legendValue {
-  font-weight: 650;
+  font-weight: 600;
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
 
-.legendSwatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
   flex: none;
 }
 
@@ -47,24 +78,32 @@
   background: var(--viz-failure);
 }
 
-/* ---------- 绘图区 ---------- */
+.body {
+  padding: 16px 20px 20px;
+}
+
+.skeleton {
+  width: 100%;
+  height: calc(var(--chart-height) + 40px);
+  opacity: 0.6;
+}
+
+.chart {
+  margin: 0;
+  padding: 16px 20px 12px;
+}
 
 .plot {
   display: flex;
-  gap: $spacing-sm;
-  /* 给峰值直标留出空间：柱子顶到 100% 时标签仍落在这段留白里 */
-  padding-top: 22px;
+  gap: 8px;
+  padding-top: 16px;
 }
 
 .yAxis {
   position: relative;
-  width: 40px;
+  width: var(--y-axis-width);
   height: var(--chart-height);
   flex: none;
-
-  @include mobile {
-    width: 30px;
-  }
 }
 
 .yTick {
@@ -94,10 +133,10 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--border-color);
+  background: var(--border-subtle);
 
   &:last-child {
-    background: var(--border-primary);
+    background: var(--border-color);
   }
 }
 
@@ -122,40 +161,34 @@
   height: 100%;
   display: flex;
   align-items: flex-end;
-  /* 命中区域比柱体本身更大：整列高度都可悬停 */
-  cursor: default;
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  transition: background-color var(--dur-press) var(--ease-out-strong);
+}
+
+.columnActive {
+  background: var(--fill-hover);
 }
 
 .stack {
   position: relative;
-  width: 100%;
+  width: 64%;
   max-width: var(--bar-max-width);
   height: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  animation: barGrow 0.42s cubic-bezier(0.4, 0, 0.2, 1) both;
-  /* 级差由 TSX 按桶数归一化写入，整波 ≤360ms */
-  animation-delay: var(--bar-delay, 0ms);
-  transform-origin: bottom center;
-  transition: filter 120ms ease-out;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    transition: none;
-  }
-}
-
-.columnActive .stack {
-  filter: brightness(1.06);
 }
 
 .segment {
   display: block;
   width: 100%;
-  /* 数据末端 4px 圆角，基线端保持直角 */
-  border-radius: $radius-sm $radius-sm 0 0;
+  border-radius: 3px 3px 0 0;
+  transition: height 200ms var(--ease-out-strong);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .segmentSuccess {
@@ -168,7 +201,7 @@
 
 /* 堆叠段之间留 2px 表面色间隙 —— 用留白而不是描边来分隔 */
 .segmentGap {
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 /* 上方还有失败段时，成功段顶部不再圆角 */
@@ -180,8 +213,8 @@
   display: block;
   width: 100%;
   height: 2px;
-  border-radius: $radius-full;
-  background: var(--border-primary);
+  border-radius: var(--radius-full);
+  background: var(--border-color);
 }
 
 /* bottom 由 TSX 按柱高写入；柱子全部落定后再淡入 */
@@ -189,18 +222,13 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 650;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   pointer-events: none;
-  animation: peakFade 240ms ease-out 620ms backwards;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
 }
 
 .noRequests {
@@ -217,53 +245,49 @@
 /* ---------- 悬浮提示 ---------- */
 
 .tooltip {
-  --glass-blur: 10px;
-
   position: absolute;
   top: 4px;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: $spacing-sm $spacing-md;
-  min-width: 132px;
-  border-radius: $radius-md;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
-  box-shadow: var(--shadow-lg);
+  gap: 4px;
+  min-width: 148px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-popover);
   font-size: 12px;
   color: var(--text-secondary);
   pointer-events: none;
   /* 悬停换柱时滑到新位置（可中断，CSS transition 自然 retarget），入场只淡入 */
   transition:
-    left 200ms var(--ease-out-strong, ease-out),
-    transform 200ms var(--ease-out-strong, ease-out),
-    opacity 150ms ease-out;
+    left 150ms var(--ease-out-strong),
+    transform 150ms var(--ease-out-strong),
+    opacity 120ms var(--ease-out-strong);
 
   @starting-style {
     opacity: 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    transition: opacity 150ms ease-out;
+    transition: opacity 120ms ease-out;
   }
 }
 
 .tooltipTime {
-  font-weight: 650;
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
 }
 
 .tooltipRow {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: 6px;
 
   b {
     margin-left: auto;
+    font-weight: 600;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
   }
@@ -271,8 +295,8 @@
 
 .tooltipRate {
   margin-top: 2px;
-  padding-top: 4px;
-  border-top: 1px solid var(--border-color);
+  padding-top: 6px;
+  border-top: 1px solid var(--border-subtle);
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
 }
@@ -282,11 +306,8 @@
 .xAxis {
   position: relative;
   height: 16px;
-  margin-left: 48px;
-
-  @include mobile {
-    margin-left: 38px;
-  }
+  margin-top: 8px;
+  margin-left: calc(var(--y-axis-width) + 8px);
 }
 
 .xTick {
@@ -298,10 +319,21 @@
   white-space: nowrap;
 }
 
-/* ---------- 数据表 ---------- */
+.card .tableToggle {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  border-radius: 0;
+  background: transparent;
 
-.tableToggle {
-  font-size: 13px;
+  > summary {
+    padding: 10px 20px;
+    color: var(--text-secondary);
+  }
+}
+
+.tableScroll {
+  max-height: 320px;
+  overflow: auto;
 }
 
 .table {
@@ -312,67 +344,64 @@
 
   th,
   td {
-    padding: 5px $spacing-sm;
+    padding: 6px 20px;
     text-align: right;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-subtle);
     color: var(--text-secondary);
   }
 
+  thead th:first-child {
+    text-align: left;
+  }
+
   thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface-2);
     color: var(--text-tertiary);
-    font-weight: 600;
+    font-weight: 500;
     white-space: nowrap;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: none;
   }
 
   tbody th[scope='row'] {
     text-align: left;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-weight: 400;
     color: var(--text-primary);
   }
 }
 
-/* ---------- 无数据占位 ---------- */
-
-.placeholder {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-xs;
-  padding: $spacing-xl;
-  border-radius: $radius-lg;
-  border: 1px dashed var(--border-primary);
-  background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
-  text-align: center;
-}
-
-.placeholderTitle {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.placeholderHint {
-  margin: 0;
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-@keyframes barGrow {
-  from {
-    transform: scaleY(0.02);
-    opacity: 0;
+@container (max-width: 520px) {
+  .chart,
+  .body {
+    --chart-height: 168px;
+    --y-axis-width: 28px;
   }
-  to {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
 
-@keyframes peakFade {
-  from {
-    opacity: 0;
+  .header {
+    padding: 14px 16px 0;
   }
-  to {
-    opacity: 1;
+
+  .chart {
+    padding: 12px 16px 10px;
+  }
+
+  .body {
+    padding: 12px 16px 16px;
+  }
+
+  .card .tableToggle > summary {
+    padding: 10px 16px;
+  }
+
+  .table {
+    th,
+    td {
+      padding: 6px 12px;
+    }
   }
 }

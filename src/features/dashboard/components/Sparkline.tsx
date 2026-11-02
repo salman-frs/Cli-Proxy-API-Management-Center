@@ -54,9 +54,7 @@ export function Sparkline({ points, color, ariaLabel, className }: SparklineProp
     );
   }
 
-  const strokeColor = geometry.isFlat
-    ? 'var(--text-quaternary)'
-    : (color ?? 'var(--primary-color)');
+  const strokeColor = geometry.isFlat ? 'var(--text-quaternary)' : (color ?? 'var(--accent)');
 
   return (
     <svg
@@ -77,7 +75,7 @@ export function Sparkline({ points, color, ariaLabel, className }: SparklineProp
         d={geometry.line}
         fill="none"
         stroke={strokeColor}
-        strokeWidth={2}
+        strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
         vectorEffect="non-scaling-stroke"

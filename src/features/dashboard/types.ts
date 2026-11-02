@@ -2,6 +2,7 @@ import type { RecentRequestBucket } from '@/utils/recentRequests';
 
 /** 每个统计桶覆盖的分钟数（后端固定为 10 分钟 × 20 桶） */
 export const TRAFFIC_BUCKET_MINUTES = 10;
+export const TRAFFIC_BUCKET_COUNT = 20;
 
 /** 聚合后的整体流量窗口 */
 export interface TrafficWindow {

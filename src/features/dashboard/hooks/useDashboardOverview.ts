@@ -123,11 +123,16 @@ export function useDashboardOverview() {
   const connected = connectionStatus === 'connected';
   const resolveApiKeysForModels = useApiKeysForModels();
 
-  const { usageByProvider, refreshRecentRequests } = useProviderRecentRequests({
+  const {
+    usageByProvider,
+    isLoading: recentRequestsLoading,
+    refreshRecentRequests,
+  } = useProviderRecentRequests({
     enabled: connected,
   });
 
   const [authFiles, setAuthFiles] = useState<AuthFileItem[] | null>(null);
+  const [initialLoadSettled, setInitialLoadSettled] = useState(false);
 
   const loadAuthFiles = useCallback(async () => {
     if (!connected) return;
@@ -151,9 +156,9 @@ export function useDashboardOverview() {
 
   useEffect(() => {
     if (!connected) return;
-    void fetchConfig().catch(() => undefined);
-    void loadAuthFiles();
-    void loadModels();
+    void Promise.allSettled([fetchConfig(), loadAuthFiles(), loadModels()]).then(() =>
+      setInitialLoadSettled(true)
+    );
   }, [connected, fetchConfig, loadAuthFiles, loadModels]);
 
   const refresh = useCallback(async () => {
@@ -282,9 +287,14 @@ export function useDashboardOverview() {
     [config, providerKeyCounts, authFiles, models.length, modelsLoading, modelsError]
   );
 
+  const loading = connected && !initialLoadSettled;
+
   return {
     connectionStatus,
     connected,
+    loading,
+    trafficLoading: loading || (connected && recentRequestsLoading && traffic.buckets.length === 0),
+    modelsLoading: connected && modelsLoading,
     config,
     counts,
     providerKeyCounts,
