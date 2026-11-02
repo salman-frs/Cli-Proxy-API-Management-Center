@@ -2,11 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate } from 'motion/mini';
 
 /**
- * Premium 动效档位：入场 0.45s、减速曲线、无回弹。
+ * Premium 动效档位：入场 0.36s、减速曲线、无回弹。
  * 与 PageTransition 保持同一套自定义 easing 写法。
  */
-const REVEAL_DISTANCE = 24;
-const REVEAL_DURATION = 0.45;
+const REVEAL_DISTANCE = 8;
+const REVEAL_DURATION = 0.36;
 const COUNT_UP_DURATION = 900;
 /** 分组入场的级差与总预算：级差再大也不许整组拖过 360ms */
 const GROUP_STAGGER = 0.07;

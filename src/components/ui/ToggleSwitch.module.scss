@@ -24,9 +24,10 @@
 }
 
 .track {
-  width: 44px;
-  height: 24px;
-  background: var(--border-color);
+  width: 32px;
+  height: 18px;
+  flex-shrink: 0;
+  background: var(--border-strong);
   border-radius: $radius-full;
   position: relative;
   transition: background-color var(--dur-hover, 200ms) var(--ease-out-strong, ease-out);
@@ -34,8 +35,7 @@
 
 /* 隐藏的原生 checkbox 仍是焦点载体：键盘聚焦时把焦点环画到轨道上。 */
 .root input:focus-visible + .track {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
 }
 
 .disabled .track {
@@ -44,27 +44,28 @@
 
 .thumb {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
   background: #fff;
   border-radius: $radius-full;
-  box-shadow: $shadow-sm;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
   transition: transform var(--dur-hover, 200ms) var(--ease-out-strong, ease-out);
 }
 
 .root input:checked + .track {
-  background: var(--primary-color);
+  background: var(--accent);
 }
 
 .root input:checked + .track .thumb {
-  transform: translateX(20px);
+  transform: translateX(14px);
 }
 
 .label {
   color: var(--text-primary);
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 @media (prefers-reduced-motion: reduce) {

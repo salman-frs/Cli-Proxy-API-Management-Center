@@ -3,9 +3,9 @@
 
 .wrap {
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--bg-primary);
+  background: var(--surface-1);
 }
 
 .scroll {
@@ -21,15 +21,17 @@
 }
 
 .head {
-  background: var(--muted-bg);
+  background: var(--surface-2);
 
   th {
-    color: var(--muted-foreground);
+    color: var(--text-tertiary);
     font-weight: 500;
     font-size: 12px;
     text-align: left;
-    padding: 10px 14px;
+    height: 36px;
+    padding: 0 14px;
     border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
     vertical-align: middle;
   }
 
@@ -39,25 +41,25 @@
 }
 
 .body {
-  background: var(--bg-primary);
+  background: var(--surface-1);
 }
 
 .row {
   transition: background-color $transition-fast;
 
   td {
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border-subtle);
     vertical-align: top;
     line-height: 1.5;
   }
 
   &:hover td {
-    background: color-mix(in srgb, var(--accent-bg) 50%, transparent);
+    background: var(--fill-hover);
   }
 
   &.selected td {
-    background: var(--primary-8);
+    background: var(--accent-subtle);
   }
 }
 

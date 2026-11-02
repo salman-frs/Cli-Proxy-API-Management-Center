@@ -9,7 +9,6 @@ import type { Theme } from '@/types';
 import { STORAGE_KEY_THEME } from '@/utils/constants';
 
 type ResolvedTheme = 'light' | 'dark';
-type AppliedTheme = ResolvedTheme | 'white';
 
 interface ThemeState {
   theme: Theme;
@@ -25,35 +24,18 @@ const getSystemTheme = (): ResolvedTheme => {
   return 'light';
 };
 
-const resolveAutoTheme = (): AppliedTheme => {
-  return getSystemTheme() === 'dark' ? 'dark' : 'white';
-};
-
-const normalizeResolvedTheme = (theme: AppliedTheme): ResolvedTheme => {
+const resolveTheme = (theme: Theme): ResolvedTheme => {
+  if (theme === 'auto') {
+    return getSystemTheme();
+  }
   return theme === 'dark' ? 'dark' : 'light';
 };
 
-const resolveTheme = (theme: Theme): AppliedTheme => {
-  if (theme === 'auto') {
-    return resolveAutoTheme();
-  }
-  if (theme === 'white') {
-    return 'white';
-  }
-  return theme;
-};
-
-const applyTheme = (resolved: AppliedTheme) => {
+const applyTheme = (resolved: ResolvedTheme) => {
   if (resolved === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     return;
   }
-
-  if (resolved === 'white') {
-    document.documentElement.setAttribute('data-theme', 'white');
-    return;
-  }
-
   document.documentElement.removeAttribute('data-theme');
 };
 
@@ -64,12 +46,10 @@ export const useThemeStore = create<ThemeState>()(
       resolvedTheme: 'light',
 
       setTheme: (theme) => {
-        const resolved = resolveTheme(theme);
+        const normalizedTheme: Theme = theme === 'white' ? 'light' : theme;
+        const resolved = resolveTheme(normalizedTheme);
         applyTheme(resolved);
-        set({
-          theme,
-          resolvedTheme: normalizeResolvedTheme(resolved),
-        });
+        set({ theme: normalizedTheme, resolvedTheme: resolved });
       },
 
       initializeTheme: () => {
@@ -87,9 +67,9 @@ export const useThemeStore = create<ThemeState>()(
         const listener = () => {
           const { theme: currentTheme } = get();
           if (currentTheme === 'auto') {
-            const resolved = resolveAutoTheme();
+            const resolved = getSystemTheme();
             applyTheme(resolved);
-            set({ resolvedTheme: normalizeResolvedTheme(resolved) });
+            set({ resolvedTheme: resolved });
           }
         };
 

@@ -18,9 +18,8 @@ describe('log workspace layout contract', () => {
     expect(styles).not.toContain('resize: vertical');
     expect(styles).not.toMatch(/calc\(100vh\s*-/);
     expect(styles).not.toMatch(/\n\s*(?:height|min-height|max-height):\s*(?:360|420|480)px/);
-    expect(layout).toMatch(
-      /&\.content-logs\s*\{\s*height: 100dvh;\s*min-height: 0;\s*overflow: hidden;/
-    );
+    expect(layout).toMatch(/\.content \{\s*flex: 1;\s*min-height: 0;/);
+    expect(layout).toMatch(/&\.content-logs,\s*&\.content-plugin-resource\s*\{\s*overflow: hidden;/);
   });
 
   test('error archive and fullscreen share the flexible viewport contract', () => {

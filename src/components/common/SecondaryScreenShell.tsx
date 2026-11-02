@@ -1,11 +1,12 @@
 import { forwardRef, type ReactNode } from 'react';
-import { Button } from '@/components/ui/Button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { IconChevronLeft } from '@/components/ui/icons';
 import styles from './SecondaryScreenShell.module.scss';
 
 export type SecondaryScreenShellProps = {
   title: ReactNode;
+  description?: ReactNode;
   onBack?: () => void;
   backLabel?: string;
   backAriaLabel?: string;
@@ -22,6 +23,7 @@ export const SecondaryScreenShell = forwardRef<HTMLDivElement, SecondaryScreenSh
   function SecondaryScreenShell(
     {
       title,
+      description,
       onBack,
       backLabel = 'Back',
       backAriaLabel,
@@ -37,32 +39,22 @@ export const SecondaryScreenShell = forwardRef<HTMLDivElement, SecondaryScreenSh
   ) {
     const containerClassName = [styles.container, className].filter(Boolean).join(' ');
     const contentClasses = [styles.content, contentClassName].filter(Boolean).join(' ');
-    const titleTooltip = typeof title === 'string' ? title : undefined;
-    const resolvedBackAriaLabel = backAriaLabel ?? backLabel;
 
     return (
       <div className={containerClassName} ref={ref}>
         <div className={[styles.topBar, topBarClassName].filter(Boolean).join(' ')}>
-          {onBack ? (
-            <Button
-              variant="ghost"
-              size="sm"
+          {onBack && (
+            <button
+              type="button"
               onClick={onBack}
-              className={styles.backButton}
-              aria-label={resolvedBackAriaLabel}
+              className={styles.backLink}
+              aria-label={backAriaLabel}
             >
-              <span className={styles.backIcon}>
-                <IconChevronLeft size={18} />
-              </span>
-              <span className={styles.backText}>{backLabel}</span>
-            </Button>
-          ) : (
-            <div />
+              <IconChevronLeft size={16} aria-hidden="true" />
+              <span>{backLabel}</span>
+            </button>
           )}
-          <div className={styles.topBarTitle} title={titleTooltip}>
-            {title}
-          </div>
-          <div className={styles.rightSlot}>{rightAction}</div>
+          <PageHeader title={title} description={description} actions={rightAction} />
         </div>
 
         {isLoading ? (

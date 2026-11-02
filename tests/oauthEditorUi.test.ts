@@ -33,19 +33,25 @@ function renderMapping(overrides: { disabled?: boolean; canRemove?: boolean } = 
 }
 
 describe('OAuth editor UI', () => {
-  test('allows scoped toolbar styling without losing the full title or actions', () => {
+  test('renders one full page title with back link, description and actions', () => {
     const markup = render(
       createElement(SecondaryScreenShell, {
         title: 'Edit model aliases for a-long-provider-name',
+        description: 'Editor description',
         onBack: noop,
+        backLabel: 'Auth Files',
         topBarClassName: 'oauth-toolbar',
         rightAction: createElement('button', null, 'Save'),
       })
     );
     expect(markup).toContain('class="oauth-toolbar"');
-    expect(markup).toContain('title="Edit model aliases for a-long-provider-name"');
+    expect(markup).toMatch(/<h1[^>]*>Edit model aliases for a-long-provider-name<\/h1>/);
+    expect(markup.match(/<h1/g)).toHaveLength(1);
+    expect(markup).toContain('Editor description');
     expect(markup).toContain('<button>Save</button>');
-    expect(markup).toContain('aria-label="Back"');
+    expect(markup).toMatch(
+      /<button type="button"[^>]*><svg[^]*?<span>Auth Files<\/span><\/button>/
+    );
   });
 
   test('provider shortcuts expose normalized selection and an associated input label', () => {

@@ -1,39 +1,68 @@
-@use 'sass:color';
 @use './variables.scss' as *;
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-sm;
+  gap: 6px;
+  height: var(--control-h);
+  padding: 0 12px;
   border: 1px solid transparent;
-  border-radius: $radius-md;
-  padding: 10px 14px;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
-  transition: all $transition-fast;
-  background-color: var(--bg-secondary);
+  user-select: none;
+  background-color: var(--surface-1);
   color: var(--text-primary);
+  transition:
+    background-color var(--dur-hover) var(--ease-out-strong),
+    border-color var(--dur-hover) var(--ease-out-strong),
+    color var(--dur-hover) var(--ease-out-strong),
+    box-shadow var(--dur-hover) var(--ease-out-strong),
+    transform var(--dur-press) var(--ease-out-strong);
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
 
   &.btn-primary {
-    background-color: var(--primary-color);
-    color: var(--primary-contrast, #fff);
-    border-color: var(--primary-color);
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+    color: var(--btn-primary-fg);
 
-    &:hover {
-      background-color: var(--primary-hover);
-      border-color: var(--primary-hover);
+    &:hover:not(:disabled) {
+      background-color: var(--btn-primary-hover);
+      border-color: var(--btn-primary-hover);
     }
   }
 
   &.btn-secondary {
-    background-color: var(--bg-tertiary);
+    background-color: var(--surface-1);
     border-color: var(--border-color);
     color: var(--text-primary);
+    box-shadow: var(--shadow-xs);
 
-    &:hover {
-      background-color: var(--bg-hover, var(--bg-tertiary));
-      border-color: var(--border-hover);
+    &:hover:not(:disabled) {
+      background-color: var(--surface-3);
+      border-color: var(--border-strong);
     }
   }
 
@@ -42,19 +71,24 @@
     border-color: transparent;
     color: var(--text-secondary);
 
-    &:hover {
+    &:hover:not(:disabled) {
       color: var(--text-primary);
-      background: var(--bg-tertiary);
+      background: var(--fill-hover);
+    }
+
+    &:active:not(:disabled) {
+      background: var(--fill-active);
     }
   }
 
   &.btn-danger {
-    background-color: $error-color;
-    border-color: $error-color;
+    background-color: var(--danger);
+    border-color: var(--danger);
     color: #fff;
 
-    &:hover {
-      background-color: color.adjust($error-color, $lightness: -5%);
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--danger) 88%, #000);
+      border-color: color-mix(in srgb, var(--danger) 88%, #000);
     }
   }
 
@@ -63,69 +97,92 @@
   }
 
   &.btn-sm {
-    padding: 8px 10px;
-    font-size: 14px;
+    height: var(--control-h-sm);
+    padding: 0 10px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ── Form controls ──────────────────────────────────────────────────────────
+
+.input,
+textarea {
+  width: 100%;
+  min-height: var(--control-h);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 13px;
+  background-color: var(--surface-1);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--dur-hover) var(--ease-out-strong),
+    box-shadow var(--dur-hover) var(--ease-out-strong);
+
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  &:hover:not(:disabled):not(:focus) {
+    border-color: var(--border-strong);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
-}
 
-[data-theme='dark'] {
-  .btn {
-    color: #fff;
-  }
-
-  .btn.btn-secondary,
-  .btn.btn-ghost {
-    color: #fff;
+  &[aria-invalid='true'] {
+    border-color: var(--danger);
   }
 }
 
-.input,
+input.input {
+  height: var(--control-h);
+}
+
 textarea {
-  width: 100%;
-  border: 1px solid var(--border-color);
-  border-radius: $radius-md;
-  padding: 10px 12px;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  transition:
-    border-color $transition-fast,
-    box-shadow $transition-fast;
-
-  &:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba($primary-color, 0.18);
-  }
+  line-height: 1.5;
+  resize: vertical;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xs;
+  gap: 6px;
   margin-bottom: $spacing-md;
 
   label {
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     color: var(--text-primary);
   }
 
   .hint {
-    color: var(--text-secondary);
-    font-size: 13px;
+    color: var(--text-tertiary);
+    font-size: 12px;
   }
 }
 
 .card {
-  background-color: var(--bg-primary);
+  background-color: var(--surface-1);
   border: 1px solid var(--border-color);
-  border-radius: $radius-lg;
-  box-shadow: var(--shadow);
-  padding: $spacing-lg;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 20px;
 }
 
 .card-header {
@@ -143,9 +200,57 @@ textarea {
   .title {
     flex: 1 1 auto;
     min-width: 0;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
+  }
+}
+
+// ── Page header (shared by every page) ─────────────────────────────────────
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+  }
+
+  &__description {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 }
 
@@ -153,57 +258,75 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: $radius-full;
-  font-size: 13px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 500;
   border: 1px solid var(--border-color);
-  margin-bottom: $spacing-md;
-
-  // 确保后续内容换行显示
-  + * {
-    display: block;
-  }
+  background: var(--surface-2);
+  color: var(--text-secondary);
 
   &.success {
-    color: $success-color;
-    border-color: rgba($success-color, 0.35);
-    background: rgba($success-color, 0.08);
+    color: var(--success-text);
+    border-color: var(--success-border);
+    background: var(--success-subtle);
   }
 
   &.warning {
-    color: $warning-color;
-    border-color: rgba($warning-color, 0.35);
-    background: rgba($warning-color, 0.08);
+    color: var(--warning-fg);
+    border-color: var(--warning-line);
+    background: var(--warning-subtle);
   }
 
   &.error {
-    color: $error-color;
-    border-color: rgba($error-color, 0.35);
-    background: rgba($error-color, 0.08);
+    color: var(--danger-text);
+    border-color: var(--danger-border);
+    background: var(--danger-subtle);
   }
 
   &.muted {
-    color: var(--text-secondary);
+    color: var(--text-tertiary);
   }
 }
 
 .pill {
-  padding: 4px 10px;
-  border-radius: $radius-full;
-  background: var(--bg-secondary);
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  background: var(--surface-3);
   color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-subtle);
   font-size: 12px;
+  font-weight: 500;
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  color: var(--text-tertiary);
+  font-family: $font-family;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
 }
 
 .loading-spinner {
-  // Fallback: legacy white spinner (in case color-mix is unsupported)
-  border: 3px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-top-color: #fff;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  animation: spin 0.8s linear infinite;
+  width: 14px;
+  height: 14px;
+  animation: spin 0.7s linear infinite;
 }
 
 @supports (color: color-mix(in srgb, currentColor 22%, transparent)) {
@@ -222,10 +345,21 @@ textarea {
   }
 }
 
+.error-box {
+  background: var(--danger-subtle);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--danger-text);
+}
+
+// ── Modal ──────────────────────────────────────────────────────────────────
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--overlay-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,11 +367,11 @@ textarea {
   padding: $spacing-lg;
 
   &.modal-overlay-entering {
-    animation: modal-overlay-fade-in 0.25s ease-out forwards;
+    animation: modal-overlay-fade-in 0.18s ease-out forwards;
   }
 
   &.modal-overlay-closing {
-    animation: modal-overlay-fade-out 0.35s ease-in forwards;
+    animation: modal-overlay-fade-out 0.18s ease-in forwards;
   }
 }
 
@@ -260,32 +394,30 @@ textarea {
 }
 
 .modal {
-  background: var(--bg-primary);
-  border-radius: $radius-lg;
-  border: 1px solid var(--border-color);
-  box-shadow: $shadow-lg;
+  background: var(--surface-raised);
+  border-radius: var(--radius-lg);
+  border: 0;
+  box-shadow: var(--shadow-modal);
   max-width: 100%;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  // 关闭按钮中心位置: right 12px + 16px = 28px, top 12px + 16px = 28px
-  transform-origin: calc(100% - 28px) 28px;
 
   &.modal-entering {
-    animation: modal-scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: modal-scale-in 0.2s var(--ease-out-strong) forwards;
   }
 
   &.modal-closing {
-    animation: modal-collapse-to-close 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: modal-scale-out 0.18s ease-in forwards;
   }
 }
 
 @keyframes modal-scale-in {
   from {
     opacity: 0;
-    transform: scale(0.85) translateY(20px);
+    transform: scale(0.97) translateY(6px);
   }
   to {
     opacity: 1;
@@ -293,14 +425,14 @@ textarea {
   }
 }
 
-@keyframes modal-collapse-to-close {
-  0% {
+@keyframes modal-scale-out {
+  from {
     opacity: 1;
     transform: scale(1);
   }
-  100% {
+  to {
     opacity: 0;
-    transform: scale(0);
+    transform: scale(0.98);
   }
 }
 
@@ -308,21 +440,20 @@ textarea {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
+  background: transparent;
+  border: 0;
+  color: var(--text-tertiary);
   cursor: pointer;
-  border-radius: $radius-full;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition:
-    color 0.15s ease,
-    background-color 0.15s ease,
-    transform 0.15s ease;
+    color var(--dur-hover) ease,
+    background-color var(--dur-hover) ease;
   z-index: 10;
 
   svg {
@@ -331,53 +462,53 @@ textarea {
 
   &:hover {
     color: var(--text-primary);
-    background: var(--bg-tertiary);
-    transform: scale(1.1);
+    background: var(--fill-hover);
   }
 
-  &:active {
-    transform: scale(0.95);
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
   }
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
-    transform: none;
+    opacity: 0.5;
   }
 
   &:disabled:hover {
-    color: var(--text-secondary);
-    background: var(--bg-secondary);
-    transform: none;
+    color: var(--text-tertiary);
+    background: transparent;
   }
 }
 
 .modal-header {
   display: flex;
   align-items: center;
-  padding: $spacing-md $spacing-lg;
-  border-bottom: 1px solid var(--border-color);
+  min-height: 52px;
+  padding: 14px 52px 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
 
   .modal-title {
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
   }
 }
 
 .modal-body {
-  padding: $spacing-lg;
+  padding: 20px;
   overflow: auto;
   max-height: 65vh;
 }
 
 .modal-footer {
-  padding: $spacing-md $spacing-lg;
-  border-top: 1px solid var(--border-color);
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: flex-end;
   gap: $spacing-sm;
-  background: var(--bg-primary);
+  background: var(--surface-2);
 }
 
 @media (max-width: $breakpoint-mobile) {
@@ -387,7 +518,6 @@ textarea {
 
   .modal {
     max-height: calc(100vh - #{$spacing-md * 2});
-    border-radius: $radius-md;
   }
 
   @supports (height: 100dvh) {
@@ -397,8 +527,7 @@ textarea {
   }
 
   .modal-header {
-    padding: $spacing-md;
-    padding-right: 52px;
+    padding: 14px 52px 14px 16px;
   }
 
   .modal-body {
@@ -413,7 +542,7 @@ textarea {
   }
 
   .modal-footer {
-    padding: $spacing-md;
+    padding: 12px $spacing-md;
     flex-direction: column-reverse;
     align-items: stretch;
   }
@@ -436,55 +565,63 @@ textarea {
 
 .empty-state {
   border: 1px dashed var(--border-color);
-  border-radius: $radius-lg;
-  padding: $spacing-lg;
-  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  background: var(--surface-2);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   gap: $spacing-md;
   align-items: center;
+  text-align: center;
 
   .empty-content {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: $spacing-md;
+    gap: 12px;
   }
 
   .empty-icon {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    border-radius: $radius-full;
-    border: 2px solid var(--border-color);
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-xs);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 0;
-    color: var(--text-secondary);
+    color: var(--text-tertiary);
 
     svg {
       display: block;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       flex-shrink: 0;
     }
   }
 
   .empty-title {
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 500;
     color: var(--text-primary);
   }
 
   .empty-desc {
+    font-size: 13px;
     color: var(--text-secondary);
     margin-top: 4px;
+    max-width: 44ch;
   }
 
   .empty-action .btn > span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     line-height: 1;
   }
 
@@ -497,51 +634,47 @@ textarea {
 .item-list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-1);
 }
 
 .item-row {
-  border: 1px solid var(--border-color);
-  border-radius: $radius-md;
-  padding: $spacing-md;
-  background: var(--bg-primary);
+  padding: 12px 16px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-md;
   flex-wrap: wrap;
 
+  & + & {
+    border-top: 1px solid var(--border-subtle);
+  }
+
   .item-meta {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
 
   .item-title {
-    font-weight: 700;
+    font-weight: 500;
     color: var(--text-primary);
   }
 
   .item-subtitle {
     color: var(--text-secondary);
-    font-family:
-      ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-      'Courier New', monospace;
+    font-family: $font-mono;
+    font-size: 12px;
     word-break: break-all;
   }
 
   .item-actions {
     display: flex;
-    gap: $spacing-sm;
+    gap: 4px;
   }
-}
-
-.error-box {
-  background: rgba($error-color, 0.1);
-  border: 1px solid rgba($error-color, 0.4);
-  border-radius: $radius-md;
-  padding: $spacing-sm $spacing-md;
-  color: $error-color;
 }
 
 .stack {
@@ -552,4 +685,16 @@ textarea {
 
 .hint {
   color: var(--text-secondary);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
