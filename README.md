@@ -19,6 +19,32 @@ Manage providers, credentials, quotas, and logs — from a single HTML file.
 
 </div>
 
+## The redesign
+
+This fork restyles the whole panel and otherwise tracks upstream. See [FORK.md](FORK.md) for how it
+stays in sync and how to point CLI Proxy API at it.
+
+<p align="center">
+  <img src="docs/showcase/tour.webp" alt="A tour of the redesigned dashboard, providers, auth files, routing, logs and themes" width="100%">
+</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/showcase/dashboard.png" alt="Dashboard with live throughput and provider health"></td>
+    <td width="50%"><img src="docs/showcase/providers.png" alt="AI providers workbench"></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/showcase/auth-files.png" alt="Auth files with per-credential request health"></td>
+    <td width="50%"><img src="docs/showcase/routing.png" alt="Routing priority tiers"></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/showcase/logs.png" alt="Live log viewer"></td>
+    <td width="50%"><img src="docs/showcase/themes.png" alt="Dashboard in the light theme"></td>
+  </tr>
+</table>
+
+<sub>Captured from a local backend with demo accounts, placeholder keys and generated traffic.</sub>
+
 ---
 
 ## One place to manage your instance
